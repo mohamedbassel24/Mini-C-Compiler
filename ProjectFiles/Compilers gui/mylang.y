@@ -167,20 +167,18 @@ argList:  type IDENTIFIER commas // argumenets list
           | // it can be empty for print functions maybe
 	;
 
-commas:  COMMA type IDENTIFIER commas 
-	| 
-	;	   
-	   
-		
+commas:  COMMA type IDENTIFIER commas
+	|
+	;
 blockScope:	 OCBRACKET manyStatements CCBRACKET								{printf("blockScope\n");}
-			 | OCBRACKET CCBRACKET	
+			| OCBRACKET CCBRACKET
 		;
 
-switchScope:  OCBRACKET caseExpression CCBRACKET					    {printf("Switch Case block\n");}		
+switchScope:  OCBRACKET caseExpression CCBRACKET					    {printf("Switch Case block\n");}
 		;
 		
-manyStatements:  stmt 
-          | manyStatements stmt ;
+manyStatements:  stmt
+        | manyStatements stmt ;
 
 type:   INT
 	| FLOAT
@@ -196,24 +194,23 @@ equalFamily:   FLOATNUMBER                     { $$ = $1; }
 		| equalFamily MINUS equalFamily        { $$ = $1 - $3; }
 		| equalFamily MULTIPLY equalFamily     { $$ = $1 * $3; }
 		| equalFamily  DIVIDE	equalFamily    { $$ = $1 / $3; }
-		| equalFamily  REM	equalFamily        { $$ = $1 % $3; } 
-		| MINUS equalFamily %prec UMINUS       { $$ = -$1; }
-		| IDENTIFIER INC                       { $$ = $1+1; } 
+		| equalFamily  REM	equalFamily        { $$ = $1 % $3; }
+		| IDENTIFIER INC                       { $$ = $1+1; }
 		| IDENTIFIER DEC                       { $$ = $1+1; }
-		| ORBRACKET equalFamily CRBRACKET       { $$ = $2; } 
+		| ORBRACKET equalFamily CRBRACKET       { $$ = $2; }
 		;
 
 increments: IDENTIFIER  INC              { $$ = $1+1; }
-		 | IDENTIFIER DEC                { $$ = $1+1; }
-		 | IDENTIFIER PLUSEQUAL equalFamily    { $1 = $1+$3; }
-		 | IDENTIFIER MINUSEQUAL equalFamily    { $1 = $1-$3; }
-		 | IDENTIFIER MULTIPLYEQUAL equalFamily  { $1 = $1*$3; }
-		 | IDENTIFIER DIVIDEEQUAL equalFamily  { $1 = $1/$3; }
-		 ;
+		| IDENTIFIER DEC                { $$ = $1-1; }
+		| IDENTIFIER PLUSEQUAL equalFamily    { $1 = $1+$3; }
+		| IDENTIFIER MINUSEQUAL equalFamily    { $1 = $1-$3; }
+		| IDENTIFIER MULTIPLYEQUAL equalFamily  { $1 = $1*$3; }
+		| IDENTIFIER DIVIDEEQUAL equalFamily  { $1 = $1/$3; }
+		;
 
 
 forExpression : increments                 {$$=$1;}
-			   | IDENTIFIER ASSIGN equalFamily ;
+			| IDENTIFIER ASSIGN equalFamily ;
 		 
 booleanExpression: expression AND expression          { $$ = $1 && $3; }
 			| expression OR expression                { $$ = $1 || $3; }
@@ -226,9 +223,6 @@ booleanExpression: expression AND expression          { $$ = $1 && $3; }
 			| DataTypes EQUALEQUAL DataTypes                  { $$ = $1 == $3; }
 			| ORBRACKET booleanExpression CRBRACKET
 			;
-		
-
-		
 			
 DataTypes:equalFamily
 		| CHARACTER

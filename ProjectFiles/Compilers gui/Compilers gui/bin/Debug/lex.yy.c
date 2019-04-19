@@ -445,9 +445,9 @@ static char *yy_last_accepting_cpos;
 #define YY_MORE_ADJ 0
 #define YY_RESTORE_YY_MORE_OFFSET
 char *yytext;
-#line 1 "file.l"
+#line 1 "mylang.l"
 #define INITIAL 0
-#line 2 "file.l"
+#line 2 "mylang.l"
 	#include <stdlib.h>
 	#include <stdio.h>
 	#include "y.tab.h"
@@ -605,7 +605,7 @@ YY_DECL
 	register char *yy_cp, *yy_bp;
 	register int yy_act;
 
-#line 10 "file.l"
+#line 10 "mylang.l"
 
 #line 611 "lex.yy.c"
 
@@ -692,287 +692,287 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 11 "file.l"
+#line 11 "mylang.l"
 return OCBRACKET;   
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 12 "file.l"
+#line 12 "mylang.l"
 return CCBRACKET;
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 13 "file.l"
+#line 13 "mylang.l"
 return ORBRACKET;
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 14 "file.l"
+#line 14 "mylang.l"
 return CRBRACKET;
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 15 "file.l"
+#line 15 "mylang.l"
 return SEMICOLON;
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 16 "file.l"
+#line 16 "mylang.l"
 return COLON; 
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 17 "file.l"
+#line 17 "mylang.l"
 return COMMA;
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 18 "file.l"
+#line 18 "mylang.l"
 return INC;
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 19 "file.l"
+#line 19 "mylang.l"
 return DEC;
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 20 "file.l"
+#line 20 "mylang.l"
 return PLUSEQUAL;
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 21 "file.l"
+#line 21 "mylang.l"
 return MINUSEQUAL;
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 22 "file.l"
+#line 22 "mylang.l"
 return MULTIPLYEQUAL;
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 23 "file.l"
+#line 23 "mylang.l"
 return DIVIDEEQUAL;
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 24 "file.l"
+#line 24 "mylang.l"
 return GREATERTHAN;
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 25 "file.l"
+#line 25 "mylang.l"
 return LESSTHAN;
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 26 "file.l"
+#line 26 "mylang.l"
 return GREATERTHANOREQUAL;
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 27 "file.l"
+#line 27 "mylang.l"
 return LESSTHANOREQUAL;
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 28 "file.l"
+#line 28 "mylang.l"
 return EQUALEQUAL;
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 29 "file.l"
+#line 29 "mylang.l"
 return NOTEQUAL;
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 30 "file.l"
+#line 30 "mylang.l"
 return PLUS;
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 31 "file.l"
+#line 31 "mylang.l"
 return MINUS;
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 32 "file.l"
+#line 32 "mylang.l"
 return MULTIPLY;
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 33 "file.l"
+#line 33 "mylang.l"
 return DIVIDE;
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 34 "file.l"
+#line 34 "mylang.l"
 return ASSIGN;
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 35 "file.l"
+#line 35 "mylang.l"
 return REM;
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 36 "file.l"
+#line 36 "mylang.l"
 return AND;
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 37 "file.l"
+#line 37 "mylang.l"
 return OR;
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
-#line 38 "file.l"
+#line 38 "mylang.l"
 return NOT;
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
-#line 39 "file.l"
+#line 39 "mylang.l"
 return WHILE;
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
-#line 40 "file.l"
+#line 40 "mylang.l"
 return FOR;
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
-#line 41 "file.l"
+#line 41 "mylang.l"
 return IF;
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
-#line 42 "file.l"
+#line 42 "mylang.l"
 return ELSE;
 	YY_BREAK
 case 33:
 YY_RULE_SETUP
-#line 43 "file.l"
+#line 43 "mylang.l"
 return PRINT;
 	YY_BREAK
 case 34:
 YY_RULE_SETUP
-#line 44 "file.l"
+#line 44 "mylang.l"
 return BOOL;
 	YY_BREAK
 case 35:
 YY_RULE_SETUP
-#line 45 "file.l"
+#line 45 "mylang.l"
 return INT;
 	YY_BREAK
 case 36:
 YY_RULE_SETUP
-#line 46 "file.l"
+#line 46 "mylang.l"
 return FLOAT;
 	YY_BREAK
 case 37:
 YY_RULE_SETUP
-#line 47 "file.l"
+#line 47 "mylang.l"
 return CHAR;
 	YY_BREAK
 case 38:
 YY_RULE_SETUP
-#line 48 "file.l"
+#line 48 "mylang.l"
 return STRING;
 	YY_BREAK
 case 39:
 YY_RULE_SETUP
-#line 49 "file.l"
+#line 49 "mylang.l"
 return CONST;
 	YY_BREAK
 case 40:
 YY_RULE_SETUP
-#line 50 "file.l"
+#line 50 "mylang.l"
 return DO;
 	YY_BREAK
 case 41:
 YY_RULE_SETUP
-#line 51 "file.l"
+#line 51 "mylang.l"
 return BREAK;
 	YY_BREAK
 case 42:
 YY_RULE_SETUP
-#line 52 "file.l"
+#line 52 "mylang.l"
 return SWITCH;
 	YY_BREAK
 case 43:
 YY_RULE_SETUP
-#line 53 "file.l"
+#line 53 "mylang.l"
 return CASE;
 	YY_BREAK
 case 44:
 YY_RULE_SETUP
-#line 54 "file.l"
+#line 54 "mylang.l"
 return FALSE;
 	YY_BREAK
 case 45:
 YY_RULE_SETUP
-#line 55 "file.l"
+#line 55 "mylang.l"
 return TRUE;
 	YY_BREAK
 case 46:
 YY_RULE_SETUP
-#line 56 "file.l"
+#line 56 "mylang.l"
 return RETURN;
 	YY_BREAK
 case 47:
 YY_RULE_SETUP
-#line 57 "file.l"
+#line 57 "mylang.l"
 return EXIT;			
 	YY_BREAK
 case 48:
 YY_RULE_SETUP
-#line 58 "file.l"
+#line 58 "mylang.l"
 return DEFAULT;
 	YY_BREAK
 case 49:
 YY_RULE_SETUP
-#line 59 "file.l"
+#line 59 "mylang.l"
 {yylval = atoi(yytext); return INTEGER;}
 	YY_BREAK
 case 50:
 YY_RULE_SETUP
-#line 60 "file.l"
+#line 60 "mylang.l"
 {yylval = atof(yytext); return FLOATNUMBER;}
 	YY_BREAK
 case 51:
 YY_RULE_SETUP
-#line 61 "file.l"
+#line 61 "mylang.l"
 return TEXT;
 	YY_BREAK
 case 52:
 YY_RULE_SETUP
-#line 62 "file.l"
+#line 62 "mylang.l"
 return CHARACTER;
 	YY_BREAK
 case 53:
 YY_RULE_SETUP
-#line 63 "file.l"
+#line 63 "mylang.l"
 return IDENTIFIER; 
 	YY_BREAK
 case 54:
 YY_RULE_SETUP
-#line 64 "file.l"
+#line 64 "mylang.l"
 /* ignore whitespace */;
 	YY_BREAK
 case 55:
 YY_RULE_SETUP
-#line 65 "file.l"
+#line 65 "mylang.l"
 {yylineno = yylineno+1;}
 	YY_BREAK
 case 56:
 YY_RULE_SETUP
-#line 66 "file.l"
+#line 66 "mylang.l"
 {yyerror("UnExpectedToken");}
 	YY_BREAK
 case 57:
 YY_RULE_SETUP
-#line 67 "file.l"
+#line 67 "mylang.l"
 ECHO;
 	YY_BREAK
 #line 979 "lex.yy.c"
@@ -1861,7 +1861,7 @@ int main()
 	return 0;
 	}
 #endif
-#line 67 "file.l"
+#line 67 "mylang.l"
 
 
 int yywrap (void) {
