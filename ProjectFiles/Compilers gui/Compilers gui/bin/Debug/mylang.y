@@ -10,7 +10,7 @@
 	%token COLON // :
 	%token COMMA // , used in arguments lists 
 
-// Tokens for Increments used in loops m
+// Tokens for Increments used in loops 
 	%token PLUSEQUAL
 	%token MINUSEQUAL
 	%token MULTIPLYEQUAL
@@ -136,6 +136,12 @@ stmt:   type IDENTIFIER SEMICOLON	%prec IFX                 				{printf("Declara
 		  expression SEMICOLON
 		  forExpression CRBRACKET
 		  blockScope											  			{printf("For loop\n");}
+
+		| FOR ORBRACKET SEMICOLON SEMICOLON CRBRACKET
+		  blockScope														{printf("empty condition for loop \n");}
+
+		| FOR ORBRACKET SEMICOLON SEMICOLON CRBRACKET 
+		  SEMICOLON  														{printf("empty condition infinite for loop \n");}
 
 		
 		| IF ORBRACKET expression CRBRACKET blockScope %prec IFX 			{printf("If statement\n");}
