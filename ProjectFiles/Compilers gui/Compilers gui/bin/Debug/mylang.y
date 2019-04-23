@@ -233,7 +233,7 @@ booleanExpression: expression AND expression          { $$ = $1 && $3; }
 DataTypes:equalFamily
 		| CHARACTER
 		| FALSE 
-	    | TRUE
+	  | TRUE
 		| TEXT;
 			
 

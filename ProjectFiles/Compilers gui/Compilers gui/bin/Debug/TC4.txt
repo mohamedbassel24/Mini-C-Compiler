@@ -17,6 +17,9 @@ for(;;);
 while(i<5)
 {
 }
+do {
+  
+} while( x<5);
 x=x++;
 y=y++;
 y=y+1;
