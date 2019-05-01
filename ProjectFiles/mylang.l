@@ -58,9 +58,9 @@
 "default"										return DEFAULT;
 [0-9]+											{yylval = atoi(yytext); return INTEGER;}
 [0-9]+\.[0-9]+									{yylval = atof(yytext); return FLOATNUMBER;}
-\".*\"											return TEXT;
-\'.?\'											return CHARACTER;
-[a-zA-Z][_a-zA-Z0-9]*							return IDENTIFIER; 
+\".*\"											{strcpy(yylval.sValue,yytext);}return TEXT; // for copying the i/p token
+\'.?\'											{strcpy(yylval.cValue,yytext);}return CHARACTER;
+[a-zA-Z][_a-zA-Z0-9]*							{strcpy(yylval.id,yytext);}return IDENTIFIER; 
 [\t  ]+											/* ignore whitespace */;
 [\n]											{yylineno = yylineno+1;}
 .                                               {yyerror("UnExpectedToken");}
