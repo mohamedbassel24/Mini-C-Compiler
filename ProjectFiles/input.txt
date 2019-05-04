@@ -1,0 +1,5 @@
+{
+int weee;
+int y;
+int x;
+}

@@ -1,14 +1,15 @@
 #include"SymbolTable.h"
 struct SymbolNode * ListTop = NULL;
-struct SymbolData* setSymbol(int rType, int rValue, int rUsed, int Scope, char * Identifyier, permission perm)
+struct SymbolData* setSymbol(int rType, int rValue, int rUsed, int Scope, char * Identifyier)
 {
 	struct SymbolData *data = (struct SymbolData*) malloc(sizeof(struct SymbolData));
 	data->Type = rType;
 	data->Initilzation = rValue;
 	data->Used = rUsed;
 	data->BracesScope = Scope;
-	strcpy(data->IdentifierName, Identifyier);
-	data->symPerm = perm;
+	strcpy_s(data->IdentifierName, sizeof(Identifyier) ,Identifyier);
+	//data->IdentifierName =strdup( Identifyier);
+	//data->symPerm = perm;
 
 	return data;
 }
@@ -22,7 +23,7 @@ void pushSymbol(int index, struct SymbolData *data) {
 }
 
 SymbolNode* getSymbolNODE() {
-	if (!ListTop)return nullptr;
+	if (!ListTop)return NULL;
 	SymbolNode * SymbolPtr = ListTop;
 	// Move The head then
 	ListTop = ListTop->Next;
@@ -58,7 +59,7 @@ SymbolData * getSymbol(int rID)
 			return Walker->DATA;
 		}
 	}
-	return nullptr;
+	return NULL;
 }
 
 void printList(SymbolNode*rHead)
@@ -77,7 +78,7 @@ void printList(SymbolNode*rHead)
 void setTOKENNAME(int ID, char * Value)
 {
 	SymbolData*rData = getSymbol(ID);
-	strcpy(rData->IdentifierName, Value);
+	strcpy_s(rData->IdentifierName,sizeof(Value), Value);
 }
 
 void setUsed(int rID)

@@ -2,6 +2,7 @@
 	#include <stdlib.h>
 	#include <stdio.h>
 	#include "y.tab.h"
+	#include<string.h>
 	void yyerror (char *s);
 	int yylineno;
 	int yylex();
@@ -56,11 +57,13 @@
 "return"                						return RETURN;
 "exit"											return EXIT;			
 "default"										return DEFAULT;
-[0-9]+											{yylval = atoi(yytext); return INTEGER;}
-[0-9]+\.[0-9]+									{yylval = atof(yytext); return FLOATNUMBER;}
-\".*\"											{strcpy(yylval.sValue,yytext);}return TEXT; // for copying the i/p token
-\'.?\'											{strcpy(yylval.cValue,yytext);}return CHARACTER;
-[a-zA-Z][_a-zA-Z0-9]*							{strcpy(yylval.id,yytext);}return IDENTIFIER; 
+
+
+[0-9]+											{yylval.IntgerValue = atoi(yytext); return INTEGER;}
+[0-9]+\.[0-9]+									{yylval.FloatValue = atof(yytext); return FLOATNUMBER;}
+\".*\"											{yylval.StringValue=strdup(yytext);return TEXT;} // for copying the i/p token
+\'.?\'											{yylval.ChValue=strdup(yytext);return CHARACTER;}
+[a-zA-Z][_a-zA-Z0-9]*							{yylval.ID=strdup(yytext);return IDENTIFIER;} 
 [\t  ]+											/* ignore whitespace */;
 [\n]											{yylineno = yylineno+1;}
 .                                               {yyerror("UnExpectedToken");}

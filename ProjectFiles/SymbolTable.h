@@ -1,6 +1,9 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<stdbool.h>
+#include <stdarg.h>
+#include <string.h>
+#include <math.h>
 #include<string.h> 
 
 typedef enum { typeCon, typeId, typeOpr } nodeEnum;
@@ -24,8 +27,38 @@ typedef struct SymbolNode {
 	int ID;// representing the ID of the Symbol 
 	struct SymbolNode *Next;
 } SymbolNode;
+/* constants */
+typedef struct {
+	typeEnum type;                  	/* type of constant */
+	char * value;						/* value of constant as char array */
+} conNodeType;
+
+/* identifiers */
+typedef struct {
+	int         index;          				/* subscript to sym table  and brace table*/
+	typeEnum    type; 						/* type */
+	permission  per;
+	char *      name;
+} idNodeType;
+
+/* operators */
+typedef struct {
+	int oper;                   		/* operator */
+	int nops;                   		/* number of operands */
+	struct nodeTypeTag *op[1];			/* operands, extended at runtime */
+} oprNodeType;
+
+typedef struct nodeTypeTag {
+	nodeEnum type;              		/* type of node */
+
+	union {
+		conNodeType con;        		/* constants */
+		idNodeType id;          		/* identifiers */
+		oprNodeType opr;        		/* operators */
+	};
+} nodeType;
 //---------------------------------------- Needed Functions with the Linked List------------------
-struct SymbolData* setSymbol(int type, int init, int used, int brace, char * name, permission perm);// Get a Symbol Entity
+struct SymbolData* setSymbol(int type, int init, int used, int brace, char * name);// Get a Symbol Entity
 void pushSymbol(int ID, struct SymbolData* data);// to Insert a node in list
 struct SymbolNode* getSymbolNODE();// to delete a node in list and return this node
 int countNODE();// count the number of NODES
