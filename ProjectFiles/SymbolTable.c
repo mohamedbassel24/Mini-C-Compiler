@@ -1,13 +1,15 @@
 #include"SymbolTable.h"
 struct SymbolNode * ListTop = NULL;
-struct SymbolData* setSymbol(int rType, int rValue, int rUsed, int Scope, char * Identifyier)
+char* idtype[10] = { "Integer", "Float", "Char", "String", "Bool", "ConstIntger", "ConstFloat", "ConstChar", "ConstString", "ConstBool" };
+struct SymbolData* setSymbol(int rType, int rValue, bool rUsed, int Scope,char* Identifyier)
 {
 	struct SymbolData *data = (struct SymbolData*) malloc(sizeof(struct SymbolData));
 	data->Type = rType;
 	data->Initilzation = rValue;
 	data->Used = rUsed;
 	data->BracesScope = Scope;
-	strcpy_s(data->IdentifierName, sizeof(Identifyier) ,Identifyier);
+	data->IdentifierName = Identifyier;
+	//strcpy_s(data->IdentifierName , strlen(Identifyier), Identifyier);
 	//data->IdentifierName =strdup( Identifyier);
 	//data->symPerm = perm;
 
@@ -112,3 +114,115 @@ int getID(char * Identifiyer, int rBraceSCope)
 
 	return-1;
 }
+bool CheckIDENTIFYER(char * ID)
+{
+	SymbolNode * Walker = ListTop;
+
+	//start from the beginning
+	while (Walker)
+	{
+		if (strcmp(ID, Walker->DATA->IdentifierName) == 0)
+		{
+			return true;
+		}
+
+		Walker = Walker->Next;
+	}
+
+	return-false;
+
+}
+void PrintSymbolTable(FILE*F)
+{
+	printUsed(F);
+	printNotUsed(F);
+	printInitilized(F);
+	printNotInit(F);
+	
+}
+/*void DestroyList()
+{
+	SymbolNode * Walker = ListTop;
+
+	while (Walker)
+	{
+		SymbolNode *rD = Walker;
+		Walker = Walker->Next;
+		delete rD;
+
+	}
+	
+}*/
+void printUsed(FILE *f)
+{
+	SymbolNode * Walker = ListTop;
+	fprintf(f, "Used Identifiers :- \n");
+	while (Walker)
+	{
+		if (Walker->DATA->Used)
+		{
+			fprintf(f, "%s of type %s\n", Walker->DATA->IdentifierName, idtype[Walker->DATA->Type]);
+		}
+		Walker = Walker->Next;
+	}
+
+	fprintf(f, "\n");
+}
+void printNotUsed(FILE *f)
+{
+	SymbolNode * Walker = ListTop;
+	fprintf(f, "UnUsed Identifiers :- \n");
+	while (Walker)
+	{
+		if (!(Walker->DATA->Used))
+		{
+			fprintf(f, "%s of type %s\n", Walker->DATA->IdentifierName, idtype[Walker->DATA->Type]);
+		}
+		Walker = Walker->Next;
+	}
+
+	fprintf(f, "\n");
+}
+void printInitilized(FILE *f)
+{
+	SymbolNode * Walker = ListTop;
+	fprintf(f, "Initilized Identifiers :- \n");
+	while (Walker)
+	{
+		if (Walker->DATA->Initilzation)
+		{
+			fprintf(f, "%s of type %s\n", Walker->DATA->IdentifierName, idtype[Walker->DATA->Type]);
+		}
+		Walker = Walker->Next;
+	}
+
+	fprintf(f, "\n");
+}
+void printNotInit(FILE *f)
+{
+	SymbolNode * Walker = ListTop;
+	fprintf(f, "UnInitilized Identifiers :- \n");
+	while (Walker)
+	{
+		if (!(Walker->DATA->Initilzation))
+		{
+			fprintf(f, "%s of type %s\n", Walker->DATA->IdentifierName, idtype[Walker->DATA->Type]);
+		}
+		Walker = Walker->Next;
+	}
+
+	fprintf(f, "\n");
+}
+
+/*int main()
+{
+	// -- TEST CASE
+	SymbolData*rP = setSymbol(0, 5, false, 0, "X");
+	pushSymbol(1, rP);
+	pushSymbol(2, rP);
+	pushSymbol(3, rP);
+	pushSymbol(4, rP);
+	getID("Y", 0);
+	FILE *f = fopen("dummy.txt","w");
+	PrintSymbolTable(f); DestroyList();
+}*/

@@ -252,18 +252,15 @@ typedef union YYSTYPE
 	int yylex(void);
 	int yylineno;
 	int IDCount=0;
-int brace=0;
-extern struct SymbolData* setSymbol(int type, int init, int used, int brace, char * name);// Get a Symbol Entity
-extern void pushSymbol(int ID, struct SymbolData* data);// to Insert a node in list
-extern struct SymbolNode* getSymbolNODE();// to delete a node in list and return this node
-extern int getID(char * Identifiyer, int rBraceSCope);// given Variable NAME AND SCOPE return ID
+	int brace=0;
 	FILE * outFile;
 	FILE * inFile;
+	FILE *outSymbol;
 	void CreateID(int type , char*rName,int rID);	
 
 
 /* Line 264 of yacc.c  */
-#line 267 "y.tab.c"
+#line 264 "y.tab.c"
 
 #ifdef short
 # undef short
@@ -586,14 +583,14 @@ static const yytype_int8 yyrhs[] =
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint16 yyrline[] =
 {
-       0,   144,   144,   147,   148,   151,   153,   155,   157,   160,
-     162,   164,   170,   172,   174,   177,   179,   180,   182,   183,
-     187,   189,   191,   192,   193,   195,   196,   199,   200,   202,
-     203,   206,   209,   210,   212,   213,   214,   215,   216,   219,
-     220,   221,   222,   223,   224,   225,   226,   227,   228,   229,
-     232,   233,   234,   235,   236,   237,   241,   242,   244,   245,
-     246,   247,   248,   249,   250,   251,   252,   253,   256,   257,
-     258,   259,   260,   265,   266,   268,   269,   270
+       0,   141,   141,   144,   145,   148,   150,   152,   154,   157,
+     159,   161,   167,   169,   171,   174,   176,   177,   179,   180,
+     184,   186,   188,   189,   190,   192,   193,   196,   197,   199,
+     200,   203,   206,   207,   209,   210,   211,   212,   213,   216,
+     217,   218,   219,   220,   221,   222,   223,   224,   225,   226,
+     229,   230,   231,   232,   233,   234,   238,   239,   241,   242,
+     243,   244,   245,   246,   247,   248,   249,   250,   253,   254,
+     255,   256,   257,   262,   263,   265,   266,   267
 };
 #endif
 
@@ -1627,472 +1624,479 @@ yyreduce:
   YY_REDUCE_PRINT (yyn);
   switch (yyn)
     {
-        case 5:
+        case 3:
 
 /* Line 1455 of yacc.c  */
-#line 151 "mylang.y"
+#line 144 "mylang.y"
+    {PrintSymbolTable(outSymbol);}
+    break;
+
+  case 5:
+
+/* Line 1455 of yacc.c  */
+#line 148 "mylang.y"
     {(yyval.dummy)=NULL;CreateID((yyvsp[(1) - (3)].IntgerValue),(yyvsp[(2) - (3)].ID),0);printf("Declaration\n");IDCount=IDCount+1;}
     break;
 
   case 6:
 
 /* Line 1455 of yacc.c  */
-#line 153 "mylang.y"
+#line 150 "mylang.y"
     {(yyval.dummy)=NULL;printf("Assignment\n");}
     break;
 
   case 7:
 
 /* Line 1455 of yacc.c  */
-#line 155 "mylang.y"
+#line 152 "mylang.y"
     {(yyval.dummy)=NULL;printf("Declaration and Assignment\n");}
     break;
 
   case 8:
 
 /* Line 1455 of yacc.c  */
-#line 157 "mylang.y"
+#line 154 "mylang.y"
     {(yyval.dummy)=NULL;printf("Constant assignment\n");}
     break;
 
   case 9:
 
 /* Line 1455 of yacc.c  */
-#line 160 "mylang.y"
+#line 157 "mylang.y"
     {(yyval.dummy)=NULL;printf("While loop\n");}
     break;
 
   case 10:
 
 /* Line 1455 of yacc.c  */
-#line 162 "mylang.y"
+#line 159 "mylang.y"
     {(yyval.dummy)=NULL;printf("Do while\n");}
     break;
 
   case 11:
 
 /* Line 1455 of yacc.c  */
-#line 167 "mylang.y"
+#line 164 "mylang.y"
     {(yyval.dummy)=NULL;printf("For loop\n");}
     break;
 
   case 12:
 
 /* Line 1455 of yacc.c  */
-#line 170 "mylang.y"
+#line 167 "mylang.y"
     {(yyval.dummy)=NULL;printf("If statement\n");}
     break;
 
   case 13:
 
 /* Line 1455 of yacc.c  */
-#line 172 "mylang.y"
+#line 169 "mylang.y"
     {(yyval.dummy)=NULL;printf("If-Elsestatement\n");}
     break;
 
   case 14:
 
 /* Line 1455 of yacc.c  */
-#line 174 "mylang.y"
+#line 171 "mylang.y"
     {(yyval.dummy)=NULL;printf("Switch case\n");}
     break;
 
   case 15:
 
 /* Line 1455 of yacc.c  */
-#line 177 "mylang.y"
+#line 174 "mylang.y"
     {(yyval.dummy)=NULL;printf("Print\n");}
     break;
 
   case 16:
 
 /* Line 1455 of yacc.c  */
-#line 179 "mylang.y"
+#line 176 "mylang.y"
     {(yyval.dummy)=NULL;printf("Function Body\n");}
     break;
 
   case 17:
 
 /* Line 1455 of yacc.c  */
-#line 180 "mylang.y"
+#line 177 "mylang.y"
     {(yyval.dummy)=NULL;printf("Function Call\n");}
     break;
 
   case 18:
 
 /* Line 1455 of yacc.c  */
-#line 182 "mylang.y"
+#line 179 "mylang.y"
     {(yyval.dummy)=NULL;printf("New  block\n");}
     break;
 
   case 19:
 
 /* Line 1455 of yacc.c  */
-#line 183 "mylang.y"
+#line 180 "mylang.y"
     {(yyval.dummy)=NULL;}
     break;
 
   case 20:
 
 /* Line 1455 of yacc.c  */
-#line 187 "mylang.y"
+#line 184 "mylang.y"
     {(yyval.dummy)=NULL;printf("function\n");}
     break;
 
   case 27:
 
 /* Line 1455 of yacc.c  */
-#line 199 "mylang.y"
+#line 196 "mylang.y"
     {}
     break;
 
   case 29:
 
 /* Line 1455 of yacc.c  */
-#line 202 "mylang.y"
+#line 199 "mylang.y"
     {(yyval.dummy)=NULL; brace++;printf("blockScope\n");}
     break;
 
   case 30:
 
 /* Line 1455 of yacc.c  */
-#line 203 "mylang.y"
+#line 200 "mylang.y"
     {(yyval.dummy)=NULL;}
     break;
 
   case 31:
 
 /* Line 1455 of yacc.c  */
-#line 206 "mylang.y"
+#line 203 "mylang.y"
     {printf("Switch Case block\n");}
     break;
 
   case 32:
 
 /* Line 1455 of yacc.c  */
-#line 209 "mylang.y"
+#line 206 "mylang.y"
     {(yyval.dummy)=NULL;}
     break;
 
   case 33:
 
 /* Line 1455 of yacc.c  */
-#line 210 "mylang.y"
+#line 207 "mylang.y"
     {(yyval.dummy)=NULL;}
     break;
 
   case 34:
 
 /* Line 1455 of yacc.c  */
-#line 212 "mylang.y"
+#line 209 "mylang.y"
     {(yyval.IntgerValue)=0;}
     break;
 
   case 35:
 
 /* Line 1455 of yacc.c  */
-#line 213 "mylang.y"
+#line 210 "mylang.y"
     {(yyval.IntgerValue)=1;}
     break;
 
   case 36:
 
 /* Line 1455 of yacc.c  */
-#line 214 "mylang.y"
+#line 211 "mylang.y"
     {(yyval.IntgerValue)=2;}
     break;
 
   case 37:
 
 /* Line 1455 of yacc.c  */
-#line 215 "mylang.y"
+#line 212 "mylang.y"
     {(yyval.IntgerValue)=3;}
     break;
 
   case 38:
 
 /* Line 1455 of yacc.c  */
-#line 216 "mylang.y"
+#line 213 "mylang.y"
     {(yyval.IntgerValue)=4;}
     break;
 
   case 39:
 
 /* Line 1455 of yacc.c  */
-#line 219 "mylang.y"
+#line 216 "mylang.y"
     {(yyval.dummy)=NULL;}
     break;
 
   case 40:
 
 /* Line 1455 of yacc.c  */
-#line 220 "mylang.y"
+#line 217 "mylang.y"
     {(yyval.dummy)=NULL;}
     break;
 
   case 41:
 
 /* Line 1455 of yacc.c  */
-#line 221 "mylang.y"
+#line 218 "mylang.y"
     {(yyval.dummy)=NULL;}
     break;
 
   case 42:
 
 /* Line 1455 of yacc.c  */
-#line 222 "mylang.y"
+#line 219 "mylang.y"
     {(yyval.dummy)=NULL;}
     break;
 
   case 43:
 
 /* Line 1455 of yacc.c  */
-#line 223 "mylang.y"
+#line 220 "mylang.y"
     {(yyval.dummy)=NULL;}
     break;
 
   case 44:
 
 /* Line 1455 of yacc.c  */
-#line 224 "mylang.y"
+#line 221 "mylang.y"
     {(yyval.dummy)=NULL;}
     break;
 
   case 45:
 
 /* Line 1455 of yacc.c  */
-#line 225 "mylang.y"
+#line 222 "mylang.y"
     {(yyval.dummy)=NULL;}
     break;
 
   case 46:
 
 /* Line 1455 of yacc.c  */
-#line 226 "mylang.y"
+#line 223 "mylang.y"
     {(yyval.dummy)=NULL;}
     break;
 
   case 47:
 
 /* Line 1455 of yacc.c  */
-#line 227 "mylang.y"
+#line 224 "mylang.y"
     {(yyval.dummy)=NULL;}
     break;
 
   case 48:
 
 /* Line 1455 of yacc.c  */
-#line 228 "mylang.y"
+#line 225 "mylang.y"
     {(yyval.dummy)=NULL;}
     break;
 
   case 49:
 
 /* Line 1455 of yacc.c  */
-#line 229 "mylang.y"
+#line 226 "mylang.y"
     {(yyval.dummy)=NULL;}
     break;
 
   case 50:
 
 /* Line 1455 of yacc.c  */
-#line 232 "mylang.y"
+#line 229 "mylang.y"
     {(yyval.dummy)=NULL;}
     break;
 
   case 51:
 
 /* Line 1455 of yacc.c  */
-#line 233 "mylang.y"
+#line 230 "mylang.y"
     {(yyval.dummy)=NULL;}
     break;
 
   case 52:
 
 /* Line 1455 of yacc.c  */
-#line 234 "mylang.y"
+#line 231 "mylang.y"
     {(yyval.dummy)=NULL;}
     break;
 
   case 53:
 
 /* Line 1455 of yacc.c  */
-#line 235 "mylang.y"
+#line 232 "mylang.y"
     {(yyval.dummy)=NULL;}
     break;
 
   case 54:
 
 /* Line 1455 of yacc.c  */
-#line 236 "mylang.y"
+#line 233 "mylang.y"
     {(yyval.dummy)=NULL;}
     break;
 
   case 55:
 
 /* Line 1455 of yacc.c  */
-#line 237 "mylang.y"
+#line 234 "mylang.y"
     {(yyval.dummy)=NULL;}
     break;
 
   case 56:
 
 /* Line 1455 of yacc.c  */
-#line 241 "mylang.y"
+#line 238 "mylang.y"
     {(yyval.dummy)=NULL;}
     break;
 
   case 57:
 
 /* Line 1455 of yacc.c  */
-#line 242 "mylang.y"
+#line 239 "mylang.y"
     {(yyval.dummy)=NULL;}
     break;
 
   case 58:
 
 /* Line 1455 of yacc.c  */
-#line 244 "mylang.y"
+#line 241 "mylang.y"
     {(yyval.dummy)=NULL;}
     break;
 
   case 59:
 
 /* Line 1455 of yacc.c  */
-#line 245 "mylang.y"
+#line 242 "mylang.y"
     {(yyval.dummy)=NULL;}
     break;
 
   case 60:
 
 /* Line 1455 of yacc.c  */
-#line 246 "mylang.y"
+#line 243 "mylang.y"
     {(yyval.dummy)=NULL;}
     break;
 
   case 61:
 
 /* Line 1455 of yacc.c  */
-#line 247 "mylang.y"
+#line 244 "mylang.y"
     {(yyval.dummy)=NULL;}
     break;
 
   case 62:
 
 /* Line 1455 of yacc.c  */
-#line 248 "mylang.y"
+#line 245 "mylang.y"
     {(yyval.dummy)=NULL;}
     break;
 
   case 63:
 
 /* Line 1455 of yacc.c  */
-#line 249 "mylang.y"
+#line 246 "mylang.y"
     {(yyval.dummy)=NULL;}
     break;
 
   case 64:
 
 /* Line 1455 of yacc.c  */
-#line 250 "mylang.y"
+#line 247 "mylang.y"
     {(yyval.dummy)=NULL;}
     break;
 
   case 65:
 
 /* Line 1455 of yacc.c  */
-#line 251 "mylang.y"
+#line 248 "mylang.y"
     {(yyval.dummy)=NULL;}
     break;
 
   case 66:
 
 /* Line 1455 of yacc.c  */
-#line 252 "mylang.y"
+#line 249 "mylang.y"
     {(yyval.dummy)=NULL;}
     break;
 
   case 67:
 
 /* Line 1455 of yacc.c  */
-#line 253 "mylang.y"
+#line 250 "mylang.y"
     {(yyval.dummy)=NULL;}
     break;
 
   case 68:
 
 /* Line 1455 of yacc.c  */
-#line 256 "mylang.y"
+#line 253 "mylang.y"
     {(yyval.dummy)=NULL;}
     break;
 
   case 69:
 
 /* Line 1455 of yacc.c  */
-#line 257 "mylang.y"
+#line 254 "mylang.y"
     {(yyval.dummy)=NULL;}
     break;
 
   case 70:
 
 /* Line 1455 of yacc.c  */
-#line 258 "mylang.y"
+#line 255 "mylang.y"
     {(yyval.dummy)=NULL;}
     break;
 
   case 71:
 
 /* Line 1455 of yacc.c  */
-#line 259 "mylang.y"
+#line 256 "mylang.y"
     {(yyval.dummy)=NULL;}
     break;
 
   case 72:
 
 /* Line 1455 of yacc.c  */
-#line 260 "mylang.y"
+#line 257 "mylang.y"
     {(yyval.dummy)=NULL;}
     break;
 
   case 73:
 
 /* Line 1455 of yacc.c  */
-#line 265 "mylang.y"
+#line 262 "mylang.y"
     {{(yyval.dummy)=NULL;}}
     break;
 
   case 74:
 
 /* Line 1455 of yacc.c  */
-#line 266 "mylang.y"
+#line 263 "mylang.y"
     {{(yyval.dummy)=NULL;}}
     break;
 
   case 75:
 
 /* Line 1455 of yacc.c  */
-#line 268 "mylang.y"
+#line 265 "mylang.y"
     {(yyval.dummy)=NULL;printf(" Case Statment\n");}
     break;
 
   case 76:
 
 /* Line 1455 of yacc.c  */
-#line 269 "mylang.y"
+#line 266 "mylang.y"
     {(yyval.dummy)=NULL;printf(" Case Statment\n");}
     break;
 
   case 77:
 
 /* Line 1455 of yacc.c  */
-#line 270 "mylang.y"
+#line 267 "mylang.y"
     {(yyval.dummy)=NULL;printf(" Case Statment\n");}
     break;
 
 
 
 /* Line 1455 of yacc.c  */
-#line 2096 "y.tab.c"
+#line 2100 "y.tab.c"
       default: break;
     }
   YY_SYMBOL_PRINT ("-> $$ =", yyr1[yyn], &yyval, &yyloc);
@@ -2304,22 +2308,17 @@ yyreturn:
 
 
 /* Line 1675 of yacc.c  */
-#line 273 "mylang.y"
+#line 270 "mylang.y"
  
 void CreateID(int type , char*rName,int rID)
 {
-//printf(" Identifiyer is created with Name %s \n",rName);
-//	int mID=getID(rName,0);
-	
-	int mID=1;
-	if(mID!=-1)printf("Already Declared\n");
-	
-		SymbolData* rSymbol=setSymbol(type,-1,false,0,rName);
+	if(CheckIDENTIFYER(rName))printf("IDENTIFIER with Name %s is Already Declared \n",rName);
+	else
+	{
+		SymbolData* rSymbol=setSymbol(type,0,false,0,rName);
 		pushSymbol(rID,rSymbol);
 		printf(" Identifiyer is created with Name %s \n",rName);
-
-
-
+	}
 
 }
  int yyerror(char *s) {  int lineno=++yylineno;   fprintf(stderr, "line number : %d %s\n", lineno,s);     return 0; }
@@ -2329,7 +2328,7 @@ void CreateID(int type , char*rName,int rID)
 	inFile = fopen("input.txt", "r");
  
 	outFile=fopen("output.txt","w");
-	
+	outSymbol=fopen("mySymbols.txt","w");
 	if(!yyparse()) {
 		printf("\nParsing complete\n");
 		fprintf(outFile,"Completed");

@@ -2,4 +2,8 @@
 int weee;
 int y;
 int x;
+int z;
+float IM;
+char Complier;
+int x;
 }

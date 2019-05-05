@@ -127,13 +127,10 @@
 	int yylex(void);
 	int yylineno;
 	int IDCount=0;
-int brace=0;
-extern struct SymbolData* setSymbol(int type, int init, int used, int brace, char * name);// Get a Symbol Entity
-extern void pushSymbol(int ID, struct SymbolData* data);// to Insert a node in list
-extern struct SymbolNode* getSymbolNODE();// to delete a node in list and return this node
-extern int getID(char * Identifiyer, int rBraceSCope);// given Variable NAME AND SCOPE return ID
+	int brace=0;
 	FILE * outFile;
 	FILE * inFile;
+	FILE *outSymbol;
 	void CreateID(int type , char*rName,int rID);	
 %}
 
@@ -144,7 +141,7 @@ mystart	:
 		startProgram
 		;
 	
-startProgram :      startProgram stmt // here i want to call a quadrable function 
+startProgram :      startProgram stmt {PrintSymbolTable(outSymbol);}// here i want to call a quadrable function 
 		|
 		;
 		
@@ -273,18 +270,13 @@ caseExpression:	DEFAULT COLON manyStatements BREAK SEMICOLON    		     {$$=NULL;
 %% 
 void CreateID(int type , char*rName,int rID)
 {
-//printf(" Identifiyer is created with Name %s \n",rName);
-//	int mID=getID(rName,0);
-	
-	int mID=1;
-	if(mID!=-1)printf("Already Declared\n");
-	
-		SymbolData* rSymbol=setSymbol(type,-1,false,0,rName);
+	if(CheckIDENTIFYER(rName))printf("IDENTIFIER with Name %s is Already Declared \n",rName);
+	else
+	{
+		SymbolData* rSymbol=setSymbol(type,0,false,0,rName);
 		pushSymbol(rID,rSymbol);
 		printf(" Identifiyer is created with Name %s \n",rName);
-
-
-
+	}
 
 }
  int yyerror(char *s) {  int lineno=++yylineno;   fprintf(stderr, "line number : %d %s\n", lineno,s);     return 0; }
@@ -294,7 +286,7 @@ void CreateID(int type , char*rName,int rID)
 	inFile = fopen("input.txt", "r");
  
 	outFile=fopen("output.txt","w");
-	
+	outSymbol=fopen("mySymbols.txt","w");
 	if(!yyparse()) {
 		printf("\nParsing complete\n");
 		fprintf(outFile,"Completed");
