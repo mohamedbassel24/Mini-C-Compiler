@@ -3,9 +3,6 @@
 #include<stdbool.h>
 #include<string.h> 
 #pragma warning (disable : 4996)
-typedef enum { typeCon, typeId, typeOpr } nodeEnum;
-typedef enum { Integer, Float, Char, String, Bool, ConstIntger, ConstFloat, ConstChar, ConstString, ConstBool } typeEnum;
-typedef enum { Accepted, undeclared, Constant, OutOfScope } permission;// needed ?
 
 typedef struct SymbolData
 {
@@ -15,8 +12,8 @@ typedef struct SymbolData
 	int BracesScope;//representing the scope number that the variable is decleared
 	char * Value;// representing the value of assigned token
 	char * IdentifierName;// The name of Varible
-	permission symPerm;//needed in debuging and report handles
-		
+	bool Modifiable;// represent var constant or not 
+
 }SymbolData;
 //-------------------------------------------------Linked List Node -------------------------------
 typedef struct SymbolNode {
@@ -26,7 +23,7 @@ typedef struct SymbolNode {
 } SymbolNode;
 
 //---------------------------------------- Needed Functions with the Linked List------------------
-struct SymbolData* setSymbol(int type, int init, bool used, int brace, char * name);// Get a Symbol Entity
+struct SymbolData* setSymbol(int type, int init, bool used, int brace, char * name,bool Modifiable);// Get a Symbol Entity
 void pushSymbol(int ID, struct SymbolData* data);// to Insert a node in list
 struct SymbolNode* getSymbolNODE();// to delete a node in list and return this node
 int countNODE();// count the number of NODES
@@ -38,7 +35,7 @@ void printList(SymbolNode*rHead);//Print the SymbolTable in a recussive way
 void setUsed(int rID);
 void setInitilization(int rID);
 
-int getID(char * Identifiyer, int rBraceSCope);// given Variable NAME AND SCOPE return ID
+SymbolNode * getID(char * Identifiyer, int rBraceSCope);// given Variable NAME AND SCOPE return ID
 bool CheckIDENTIFYER(char * ID);//check weather identifuer is defined before or not
 // ----------------------------------------------PRINTING FUNCTIONS------------------------
 void printUsed(FILE *f);
@@ -46,3 +43,4 @@ void printNotUsed(FILE *f);
 void printInitilized(FILE *f);
 void printNotInit(FILE *f);
 void PrintSymbolTable(FILE*F);
+int getSymbolType(char*rID);

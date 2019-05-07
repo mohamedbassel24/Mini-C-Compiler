@@ -1,9 +1,15 @@
+int x=1;
+const int y=0;
+string s="beso l gamed";
+char c= 'a';
+int i=0;
+
 {
-int weee;
-int y;
-int x;
-int z;
-float IM;
-char Complier;
-int x;
+int o=0;
 }
+
+o=9;
+
+
+int z=3/0;
+

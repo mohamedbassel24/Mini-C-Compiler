@@ -1,20 +1,22 @@
 Used Identifiers :- 
 
 UnUsed Identifiers :- 
-Complier of type Char
-IM of type Float
 z of type Integer
+o of type Integer
+i of type Integer
+c of type Char
+s of type String
+y of type ConstIntger
 x of type Integer
-y of type Integer
-weee of type Integer
 
 Initilized Identifiers :- 
+z of type Integer
+o of type Integer
+i of type Integer
+c of type Char
+s of type String
+y of type ConstIntger
+x of type Integer
 
 UnInitilized Identifiers :- 
-Complier of type Char
-IM of type Float
-z of type Integer
-x of type Integer
-y of type Integer
-weee of type Integer
 

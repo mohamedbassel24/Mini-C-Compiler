@@ -1,7 +1,9 @@
 #include"SymbolTable.h"
-struct SymbolNode * ListTop = NULL;
+
+
 char* idtype[10] = { "Integer", "Float", "Char", "String", "Bool", "ConstIntger", "ConstFloat", "ConstChar", "ConstString", "ConstBool" };
-struct SymbolData* setSymbol(int rType, int rValue, bool rUsed, int Scope,char* Identifyier)
+struct SymbolNode * ListTop = NULL;
+struct SymbolData* setSymbol(int rType, int rValue, bool rUsed, int Scope,char* Identifyier,bool rModifiable)
 {
 	struct SymbolData *data = (struct SymbolData*) malloc(sizeof(struct SymbolData));
 	data->Type = rType;
@@ -9,9 +11,8 @@ struct SymbolData* setSymbol(int rType, int rValue, bool rUsed, int Scope,char* 
 	data->Used = rUsed;
 	data->BracesScope = Scope;
 	data->IdentifierName = Identifyier;
-	//strcpy_s(data->IdentifierName , strlen(Identifyier), Identifyier);
-	//data->IdentifierName =strdup( Identifyier);
-	//data->symPerm = perm;
+	data->Modifiable=rModifiable;// it can be set automatically 
+	
 
 	return data;
 }
@@ -96,7 +97,7 @@ void setInitilization(int rID)
 	if (!S)
 	S->Initilzation = true;
 }
-int getID(char * Identifiyer, int rBraceSCope)
+SymbolNode *  getID(char * Identifiyer, int rBraceSCope)
 {
 	SymbolNode * Walker = ListTop;
 	int index = -1;
@@ -104,15 +105,15 @@ int getID(char * Identifiyer, int rBraceSCope)
 	//start from the beginning
 	while (Walker)
 	{
-		if (strcmp(Identifiyer, Walker->DATA->IdentifierName)==0 && Walker->DATA->BracesScope==rBraceSCope)
+		if (strcmp(Identifiyer, Walker->DATA->IdentifierName)==0 )//&& Walker->DATA->BracesScope <=rBraceSCope)
 		{
-			return Walker->ID;
+			return Walker;
 		}
 
 		Walker = Walker->Next;
 	}
 
-	return-1;
+	return NULL;
 }
 bool CheckIDENTIFYER(char * ID)
 {
@@ -139,6 +140,21 @@ void PrintSymbolTable(FILE*F)
 	printInitilized(F);
 	printNotInit(F);
 	
+}
+int getSymbolType(char * rID)
+{
+	SymbolNode * Walker = ListTop;
+	while (Walker)
+	{
+		if (strcmp(rID, Walker->DATA->IdentifierName) == 0)//&& Walker->DATA->BracesScope <=rBraceSCope)
+		{
+			return Walker->DATA->Type;
+		}
+
+		Walker = Walker->Next;
+	}
+	return -1;
+
 }
 /*void DestroyList()
 {
