@@ -112,7 +112,7 @@
 %token <StringValue> TEXT 
 %token <ChValue> CHARACTER 
 %token <ID>     IDENTIFIER
-%type <IntgerValue> type equalFamily expression DataTypes
+%type <IntgerValue> type equalFamily expression DataTypes callFunction
 %type <dummy> stmt  increments forExpression  function  caseExpression 
 %type <dummy> booleanExpression blockScope manyStatements scopeOpen scopeClose
 //%type <nPtr> 
@@ -132,12 +132,15 @@
 	FILE * inFile;
 	FILE *outSymbol;
 	void ThrowError(char *Message, char *rVar);							//-- A Function to Terminate the Program and Report an Semantic Error
-	void CreateID(int type , char*rName,int rID);						// -- Create a Symbol given its type and Name 
+	void CreateID(int type , char*rName,int rID,int ScopeNum);						// -- Create a Symbol given its type and Name 
 	void  getIDENTIFIER(char*rName);									//-- set Symbol Value 
-	void usedIDENTIFIER(char*rName);									// set that Symbol is Used as a RHS in any operation 
+	void usedIDENTIFIER(char*rName,int ScopeNum );									// set that Symbol is Used as a RHS in any operation 
 	char * conctanteStr(char* str1,char*str2);							// -- a function to conctante two strings 
 	bool checktypeIDENTIFER(int LeftType,int RightType,char* Right);		//-- Check Left and Right hand side in Assigment operation;
 	char* idtypeString[10] = { "Integer", "Float", "Char", "String", "Bool", "ConstIntger", "ConstFloat", "ConstChar", "ConstString", "ConstBool" };
+	int FuncArgTypes[10];//Assuming Max 10 arguments 
+	int ArgCounter=0;
+	void CreateFunction(int type , char*rName,int rID,int ScopeNum,int rArgCounter,int *ArrOfTypes);
 %}
 
 
@@ -151,7 +154,7 @@ startProgram :      startProgram stmt
 		|
 		;
 		
-stmt:   type IDENTIFIER SEMICOLON	%prec IFX                 				{$$=NULL;CreateID($1,$2,IDCount++);printf("Declaration\n");}
+stmt:   type IDENTIFIER SEMICOLON	%prec IFX                 				{$$=NULL;CreateID($1,$2,IDCount++,SCOPE_Number);printf("Declaration\n");}
 
 		| IDENTIFIER ASSIGN expression SEMICOLON	          				{$$=NULL;
 																			if(checktypeIDENTIFER(getSymbolType($1),$3,$1))
@@ -168,7 +171,7 @@ stmt:   type IDENTIFIER SEMICOLON	%prec IFX                 				{$$=NULL;CreateI
 																			}
 
 		| type IDENTIFIER ASSIGN expression	SEMICOLON	      				{$$=NULL;
-																			CreateID($1,$2,IDCount++);
+																			CreateID($1,$2,IDCount++,SCOPE_Number);
 																			if(checktypeIDENTIFER(getSymbolType($2),$4,$2))
 																			{
 																			getIDENTIFIER($2);// setValue here 
@@ -185,7 +188,7 @@ stmt:   type IDENTIFIER SEMICOLON	%prec IFX                 				{$$=NULL;CreateI
 
 		| CONST type IDENTIFIER ASSIGN expression SEMICOLON   				{
 																				$$=NULL;
-																				CreateID($2+5,$3,IDCount++);
+																				CreateID($2+5,$3,IDCount++,SCOPE_Number);
 																			if(checktypeIDENTIFER(getSymbolType($3),$5,$3))
 																			{
 																				printf("Constant assignment\n");
@@ -204,44 +207,104 @@ stmt:   type IDENTIFIER SEMICOLON	%prec IFX                 				{$$=NULL;CreateI
 
 		| DO blockScope WHILE ORBRACKET expression CRBRACKET SEMICOLON		{$$=NULL;printf("Do while\n");}// need to check type to booealen
 
-		| FOR ORBRACKET INT IDENTIFIER ASSIGN INTEGER SEMICOLON 
+		| FOR ORBRACKET INT  create ASSIGN INTEGER SEMICOLON 
 		  expression SEMICOLON
 		  forExpression CRBRACKET
-		  blockScope											  			{$$=NULL;printf("For loop\n");CreateID(0,$4,IDCount++);getIDENTIFIER($4);}
+		  blockScope											  			{$$=NULL;printf("For loop\n");}//  TO-DO check types on expression must int 
 
 		
 		| IF ORBRACKET expression CRBRACKET blockScope %prec IFX 			{$$=NULL;printf("If statement\n");}
 
 		| IF ORBRACKET expression CRBRACKET blockScope	 ELSE blockScope	{$$=NULL;printf("If-Elsestatement\n");}
 
-		| SWITCH ORBRACKET IDENTIFIER CRBRACKET switchScope      			{$$=NULL;printf("Switch case\n");}
+		| SWITCH ORBRACKET IDENTIFIER CRBRACKET switchScope      			{$$=NULL;usedIDENTIFIER($3,SCOPE_Number);printf("Switch case\n");}
 
 		
-		| PRINT expression 	SEMICOLON	                        			{$$=NULL;printf("Print\n");}
+		| PRINT expression 	SEMICOLON	                        				{$$=NULL;printf("Print\n");}
 		
-		| function	                                            	         {$$=NULL;printf("Function Body\n");}
-		| callFunction	                                            	     {$$=NULL;printf("Function Call\n");}
+		| function	                                            		      {$$=NULL;printf("Function Body\n");}
+		|callFunction	                                    			      {$$=NULL;printf("Function Call\n");}
+		|IDENTIFIER ASSIGN callFunction	                                      {$$=NULL;
+																				if(checktypeIDENTIFER(getSymbolType($1),$3,$1))
+																				{
+																				getIDENTIFIER($1);
+																				printf("Function Call\n");}
+																				else 
+																				{
+																					char*str1=conctanteStr($1," of Type");
+																					char* str2=conctanteStr(str1,idtypeString[getSymbolType($1)]);
+																			
+																				ThrowError("Error: incompatible types ",str2);
+																				}
+																			}
+		|type IDENTIFIER ASSIGN callFunction	                              {$$=NULL;
+																				CreateID($1,$2,IDCount++,SCOPE_Number);
+																				if(checktypeIDENTIFER(getSymbolType($2),$4,$2))
+																				{
+		
+																					getIDENTIFIER($2);// setValue here 
+																					printf("Function Call\n");
+																				}
+																				else
+																				{
+																					char*str1=conctanteStr($2," of Type ");
+																					char* str2=conctanteStr(str1,idtypeString[getSymbolType($2)]);
+												
+																				ThrowError("Error: incompatible types ",str2);
+																				}
+																			}
 
 		| blockScope														{$$=NULL;printf("New  block\n");}
 		|increments SEMICOLON													{$$=NULL;}			
 		
 		;
-
-function : type IDENTIFIER ORBRACKET argList CRBRACKET OCBRACKET manyStatements RETURN  expression  SEMICOLON   CCBRACKET      {$$=NULL;printf("function\n");}
+create :IDENTIFIER {CreateID(0,$1 ,IDCount++,SCOPE_Number+1);getIDENTIFIER($1);}; // a rule to create int i; in For Loop // must be named i ? cant get IDENTIFUER Val 
+function : type IDENTIFIER ORBRACKET resetCounter argList CRBRACKET OCBRACKET scopeOpen manyStatements RETURN  expression  SEMICOLON   CCBRACKET scopeClose  
+																															{
+																																$$=NULL;
+																																if($1 !=$11)//check return types 
+																																{
+																																	ThrowError("Error: incompatible return types of Function ",$2);
+																																	ThrowError("Error: incompatible return types of Function ",$2);
+																																}
+																																else
+																																{
+																																	CreateFunction($1,$2,IDCount++,SCOPE_Number,ArgCounter,FuncArgTypes);
+																																	printf("function\n");
+																																}
+																															}// create a function symbol 
 	   ;
-callFunction: IDENTIFIER ORBRACKET callList CRBRACKET SEMICOLON
+callFunction: IDENTIFIER ORBRACKET resetCounter callList CRBRACKET SEMICOLON// To-DO check here
+																{
+																	$$=getSymbolType($1);
+																	int num =checkArgType(ArgCounter,FuncArgTypes,$1,SCOPE_Number);
+																	if(num==-25)
+																	{
+																		ThrowError("Error: undefined Function With Name ",$1);
+																	}
+																	else if(num== 0)
+																	{
+																		ThrowError("Error: mismatch argument number of function ",$1);
+																	}
+																	else if(num ==-1)
+																	{
+																		ThrowError("Error: incompatible types of Function ",$1);
+																	}
+																}
 			;
-callList : IDENTIFIER callList 
-		| IDENTIFIER COMMA callList
-		|			
-		;
-argList:  type IDENTIFIER commas  // argumenets list
-          | // it can be empty for print functions maybe
+
+callList:   IDENTIFIER COMMA callList {usedIDENTIFIER($1,SCOPE_Number); FuncArgTypes[ArgCounter++]=getSymbolType($1);}
+	      |  IDENTIFIER   {usedIDENTIFIER($1,SCOPE_Number);  FuncArgTypes[ArgCounter++]=getSymbolType($1);}
+		  | // it can be empty for print functions maybe
+	;		
+resetCounter: {ArgCounter=0;};
+argList:  type IDENTIFIER COMMA argList {CreateID($1,$2,IDCount++,SCOPE_Number+1); FuncArgTypes[ArgCounter++]=$1;}// bec the scope is yet not incremeneted
+	      | type IDENTIFIER   {CreateID($1,$2,IDCount++,SCOPE_Number+1); FuncArgTypes[ArgCounter++]=$1;}// bec the scope is yet not incremeneted
+		  | // it can be empty for print functions maybe 
+		  //TO DOcheck if , accept parsing? 
 	;
 
-commas:  COMMA type IDENTIFIER commas {}
-	|
-	;
+
 blockScope:	 OCBRACKET scopeOpen manyStatements CCBRACKET scopeClose								{$$=NULL;printf("blockScope\n");}
 			| OCBRACKET scopeOpen CCBRACKET scopeClose{$$=NULL;}
 		;
@@ -249,8 +312,8 @@ blockScope:	 OCBRACKET scopeOpen manyStatements CCBRACKET scopeClose								{$$=
 switchScope:  OCBRACKET scopeOpen caseExpression CCBRACKET	scopeClose				    {printf("Switch Case block\n");}
 		;
 scopeOpen :{$$=NULL; SCOPE_Number++;}
-scopeClose :{$$=NULL; SCOPE_Number--;}		
-manyStatements:  stmt {$$=$1;}
+scopeClose :{$$=NULL;DeadSymbols(SCOPE_Number); SCOPE_Number--;}		
+manyStatements:  stmt {$$=$1;} 
         | manyStatements stmt {$$=NULL;}
 
 type:   INT {$$=0;}
@@ -262,14 +325,14 @@ type:   INT {$$=0;}
 
 equalFamily:   FLOATNUMBER                     {$$=1;}// TO-DO needed to return the type of varible here
 		| INTEGER		                       {$$=0;}
-		| IDENTIFIER                           {$$=getSymbolType($1);usedIDENTIFIER($1);}// getType here
+		| IDENTIFIER                           {$$=getSymbolType($1);usedIDENTIFIER($1,SCOPE_Number);}// getType here
 		| equalFamily PLUS	equalFamily        {if($1==$3) $$=$1; else ThrowError("Conflict dataTypes in Addition \n "," "); }//TO -DO  create a message and a boolean variable indiactes type conflict
 		| equalFamily MINUS equalFamily        {if($1==$3) $$=$1; else ThrowError("Conflict dataTypes in Subtraction \n "," "); }// i cant get the Name of var result ?
 		| equalFamily MULTIPLY equalFamily     {if($1==$3) $$=$1; else ThrowError("Conflict dataTypes in Multipication \n "," "); }// check in con
 		| equalFamily  DIVIDE	equalFamily    {if($1==$3) $$=$1; else ThrowError("Conflict dataTypes in Divison \n "," "); }
 		| equalFamily  REM	equalFamily        {if($1==$3) $$=$1; else ThrowError("Conflict dataTypes in reminder \n "," "); }
-		| IDENTIFIER INC                       {$$=getSymbolType($1);usedIDENTIFIER($1);}// getSymbolType
-		| IDENTIFIER DEC                       {$$=getSymbolType($1);usedIDENTIFIER($1);}
+		| IDENTIFIER INC                       {$$=getSymbolType($1);usedIDENTIFIER($1,SCOPE_Number);}// getSymbolType
+		| IDENTIFIER DEC                       {$$=getSymbolType($1);usedIDENTIFIER($1,SCOPE_Number);}
 		| ORBRACKET equalFamily CRBRACKET       {$$=$2;}
 		;
 
@@ -283,7 +346,7 @@ increments: IDENTIFIER  INC            			  {$$=NULL;} // To DO add used here
 
 
 forExpression : increments                 {$$=NULL;}
-			| IDENTIFIER ASSIGN equalFamily {$$=NULL;};// add check type and initizlation
+			| IDENTIFIER ASSIGN equalFamily {$$=NULL; };// add check type and initizlation
 		 
 booleanExpression: expression AND expression          {$$=NULL;}
 			| expression OR expression                {$$=NULL;}
@@ -304,8 +367,9 @@ DataTypes:equalFamily{$$=$1;}
 		| TEXT{$$=3;}
 		;	
 
-		      
-
+/*		      
+dummyRules : {printf("ImHere \n");};// for debug
+*/
 expression:	DataTypes{{$$=$1;}}
 		| booleanExpression{{$$=4;}} ;
 
@@ -315,7 +379,7 @@ caseExpression:	DEFAULT COLON manyStatements BREAK SEMICOLON    		     {$$=NULL;
 		   ;
 
 %% 
-void CreateID(int type , char*rName,int rID)
+void CreateID(int type , char*rName,int rID,int ScopeNum)
 {
 	if(CheckIDENTIFYER(rName))
 	ThrowError("Already Declared IDENTIFIER with Name ",rName);
@@ -323,7 +387,7 @@ void CreateID(int type , char*rName,int rID)
 	else
 	{
 		bool isConstant=(type>4)?true:false;
-		SymbolData* rSymbol=setSymbol(type,0,false,0,rName,!isConstant);
+		SymbolData* rSymbol=setSymbol(type,0,false,0,rName,!isConstant,ScopeNum);
 		if(isConstant)
 		{
 			rSymbol->Initilzation=true;
@@ -335,6 +399,31 @@ void CreateID(int type , char*rName,int rID)
 			pushSymbol(rID,rSymbol);
 			printf(" Symbol is created with Name %s \n",rName);
 		}
+	}
+}
+void CreateFunction(int type , char*rName,int rID,int ScopeNum,int rArgCounter,int *ArrOfTypes)
+{
+	if(CheckIDENTIFYER(rName))
+	ThrowError("Already Declared IDENTIFIER with Name ",rName);
+	//printf("IDENTIFIER with Name %s is Already Declared \n",rName);
+	else
+	{
+		bool isConstant=(type>4)?true:false;// constant function ? XD
+		SymbolData* rSymbol=setSymbol(type,0,false,0,rName,!isConstant,ScopeNum);
+		if(isConstant)
+		{
+			rSymbol->Initilzation=true;
+			setFuncArg(rArgCounter,ArrOfTypes,rSymbol);
+			pushSymbol(rID,rSymbol);
+			printf("Constant Symbol Function is created with Name %s \n",rName);	
+		}
+		else 
+		{
+			setFuncArg(rArgCounter,ArrOfTypes,rSymbol);
+			pushSymbol(rID,rSymbol);
+			printf(" Symbol Function is created with Name %s \n",rName);
+		}
+		
 	}
 
 }
@@ -353,15 +442,15 @@ void getIDENTIFIER(char*rName)
 			rSymbol->DATA->Initilzation=true;
 	}
 }
-void usedIDENTIFIER(char*rName)
+void usedIDENTIFIER(char*rName,int ScopeNum)
 {
-	SymbolNode * rSymbol=getID(rName, 0);
+	SymbolNode * rSymbol=getID(rName, ScopeNum);
 	if(!rSymbol)
 	ThrowError("Not Declared in This Scope Identifiyer with Name \n ",rName);
 	else
 	{
 		printf("IDENTIFIER with Name is Used %s \n",rName);
-		if(!rSymbol->DATA->Initilzation)printf("Warning :IDENTIFIER with Name is not Initilized and Used %s \n",rName);// don't quit just a warning
+		if(!rSymbol->DATA->Initilzation)printf("Warning :IDENTIFIER with Name %s is not Initilized and is being used.  \n",rName);// don't quit just a warning
 		rSymbol->DATA->Used=true;
 	}
 }
@@ -415,6 +504,7 @@ void ThrowError(char *Message, char *rVar)
 	if(!yyparse()) {
 		printf("\nParsing complete\n");
 		PrintSymbolTable(outSymbol);
+		DestroyList();
 		fprintf(outFile,"Completed");
 	}
 	else {

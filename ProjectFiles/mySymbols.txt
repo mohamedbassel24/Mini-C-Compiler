@@ -1,22 +1,22 @@
 Used Identifiers :- 
+x2 of type Integer
+x1 of type Integer
+dummy of type Integer
 
 UnUsed Identifiers :- 
-z of type Integer
-o of type Integer
-i of type Integer
-c of type Char
-s of type String
-y of type ConstIntger
-x of type Integer
+x3 of type Integer
+Func of type Integer
+y1 of type Integer
+y2 of type Integer
 
 Initilized Identifiers :- 
-z of type Integer
-o of type Integer
-i of type Integer
-c of type Char
-s of type String
-y of type ConstIntger
-x of type Integer
+x3 of type Integer
+dummy of type Integer
 
 UnInitilized Identifiers :- 
+x2 of type Integer
+x1 of type Integer
+Func of type Integer
+y1 of type Integer
+y2 of type Integer
 

@@ -3,7 +3,7 @@
 
 char* idtype[10] = { "Integer", "Float", "Char", "String", "Bool", "ConstIntger", "ConstFloat", "ConstChar", "ConstString", "ConstBool" };
 struct SymbolNode * ListTop = NULL;
-struct SymbolData* setSymbol(int rType, int rValue, bool rUsed, int Scope,char* Identifyier,bool rModifiable)
+struct SymbolData* setSymbol(int rType, int rValue, bool rUsed, int Scope,char* Identifyier,bool rModifiable,int ScopeNum)
 {
 	struct SymbolData *data = (struct SymbolData*) malloc(sizeof(struct SymbolData));
 	data->Type = rType;
@@ -12,6 +12,8 @@ struct SymbolData* setSymbol(int rType, int rValue, bool rUsed, int Scope,char* 
 	data->BracesScope = Scope;
 	data->IdentifierName = Identifyier;
 	data->Modifiable=rModifiable;// it can be set automatically 
+	data->BracesScope = ScopeNum;
+	data->IsFunctionSymbol = false;
 	
 
 	return data;
@@ -24,14 +26,14 @@ void pushSymbol(int index, struct SymbolData *data) {
 	mySymbolNode->Next = ListTop;
 	ListTop = mySymbolNode;
 }
-
+/*
 SymbolNode* getSymbolNODE() {
 	if (!ListTop)return NULL;
 	SymbolNode * SymbolPtr = ListTop;
 	// Move The head then
 	ListTop = ListTop->Next;
 	return SymbolPtr;
-}
+}*/
 
 
 int countNODE()
@@ -100,12 +102,11 @@ void setInitilization(int rID)
 SymbolNode *  getID(char * Identifiyer, int rBraceSCope)
 {
 	SymbolNode * Walker = ListTop;
-	int index = -1;
-
 	//start from the beginning
+
 	while (Walker)
 	{
-		if (strcmp(Identifiyer, Walker->DATA->IdentifierName)==0 )//&& Walker->DATA->BracesScope <=rBraceSCope)
+		if ((strcmp(Identifiyer, Walker->DATA->IdentifierName)==0 ) && (Walker->DATA->BracesScope !=-1 ) )
 		{
 			return Walker;
 		}
@@ -156,7 +157,46 @@ int getSymbolType(char * rID)
 	return -1;
 
 }
-/*void DestroyList()
+void setFuncArg(int ArgCount, int * ArgTypes, SymbolData * rD)
+{
+	rD->ArrTypes = (int *)malloc(sizeof(int)*ArgCount);
+	int i;
+	for (i = 0; i < ArgCount; i++)
+	{
+		rD->ArrTypes[i] = ArgTypes[i];
+	}
+	rD->IsFunctionSymbol = true;
+	rD->ArgNum = ArgCount;
+
+}
+int checkArgType(int ArgCount, int * ArgTypes, char * rString,int Scope)
+{
+	SymbolNode * rD = getID(rString,Scope );
+	if (rD == NULL)return -25;// no Decleared Function with this Name
+	if (rD->DATA->ArgNum!= ArgCount)
+		return 0; //error indicates misArgumentsCount
+	int i;
+	for (i = 0; i < ArgCount; i++)
+	{
+		if (rD->DATA->ArrTypes[i] != ArgTypes[i])
+			return -1;// MisMatchArg
+	}
+	return 1;//Accepted		
+}
+void DeadSymbols(int Brace)
+{
+	SymbolNode * Walker = ListTop;
+	while (Walker)
+	{
+		if  (Walker->DATA->BracesScope == Brace)
+		{
+			Walker->DATA->BracesScope = -1;
+		}
+
+		Walker = Walker->Next;
+	}
+}
+void DestroyList()
 {
 	SymbolNode * Walker = ListTop;
 
@@ -164,11 +204,11 @@ int getSymbolType(char * rID)
 	{
 		SymbolNode *rD = Walker;
 		Walker = Walker->Next;
-		delete rD;
+		free (rD);
 
 	}
-	
-}*/
+
+}
 void printUsed(FILE *f)
 {
 	SymbolNode * Walker = ListTop;
