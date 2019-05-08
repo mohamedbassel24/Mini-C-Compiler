@@ -114,8 +114,7 @@
 %token <ID>     IDENTIFIER
 %type <IntgerValue> type equalFamily expression DataTypes callFunction
 %type <dummy> stmt  increments forExpression  function  caseExpression 
-%type <dummy> booleanExpression blockScope manyStatements scopeOpen scopeClose
-//%type <nPtr> 
+%type <dummy> booleanExpression blockScope manyStatements scopeOpen scopeClose 
 	
 %{ 
 	#include <stdio.h>
@@ -127,21 +126,23 @@
 	int yylex(void);
 	int yylineno;
 	int IDCount=0;
+	int QuadCount=0;
 	int SCOPE_Number=0;
 	FILE * outFile;
 	FILE * inFile;
 	FILE *outSymbol;
-	void ThrowError(char *Message, char *rVar);							//-- A Function to Terminate the Program and Report an Semantic Error
-	void CreateID(int type , char*rName,int rID,int ScopeNum);						// -- Create a Symbol given its type and Name 
-	void  getIDENTIFIER(char*rName);									//-- set Symbol Value 
-	void usedIDENTIFIER(char*rName,int ScopeNum );									// set that Symbol is Used as a RHS in any operation 
-	char * conctanteStr(char* str1,char*str2);							// -- a function to conctante two strings 
-	bool checktypeIDENTIFER(int LeftType,int RightType,char* Right);		//-- Check Left and Right hand side in Assigment operation;
+	void ThrowError(char *Message, char *rVar);							//--  A Function to Terminate the Program and Report an Semantic Error
+	void CreateID(int type , char*rName,int rID,int ScopeNum);			// -- Create a Symbol given its type and Name 
+	void  getIDENTIFIER(char*rName,int ScopeNum);						//--  set Symbol Value to be Initilized. 
+	void usedIDENTIFIER(char*rName,int ScopeNum );					    //--  set that Symbol is Used as a RHS in any operation 
+	char * conctanteStr(char* str1,char*str2);							//--  a function to conctante two strings 
+	bool checktypeIDENTIFER(int LeftType,int RightType,char* Right);	//--  Check Left and Right hand side in Assigment operation;
 	char* idtypeString[10] = { "Integer", "Float", "Char", "String", "Bool", "ConstIntger", "ConstFloat", "ConstChar", "ConstString", "ConstBool" };
-	int FuncArgTypes[10];//Assuming Max 10 arguments 
-	int ArgCounter=0;
-	void CreateFunction(int type , char*rName,int rID,int ScopeNum,int rArgCounter,int *ArrOfTypes);
-%}
+	int FuncArgTypes[10];												//Assuming Max 10 arguments 
+	int ArgCounter=0;													//Argument Counter
+	void CreateFunction(int type , char*rName,int rID,int ScopeNum,int rArgCounter,int *ArrOfTypes); // Create a Symbol For a Function
+	char*RightHandSide;
+	%}
 
 
 %%
@@ -154,13 +155,16 @@ startProgram :      startProgram stmt
 		|
 		;
 		
-stmt:   type IDENTIFIER SEMICOLON	%prec IFX                 				{$$=NULL;CreateID($1,$2,IDCount++,SCOPE_Number);printf("Declaration\n");}
+stmt:   type IDENTIFIER SEMICOLON	%prec IFX                 				{$$=NULL;CreateID($1,$2,IDCount++,SCOPE_Number);printf("Declaration\n");setQuad(0," "," ",$2,QuadCount++);}
 
-		| IDENTIFIER ASSIGN expression SEMICOLON	          				{$$=NULL;
+		| IDENTIFIER ASSIGN expression SEMICOLON	          				{
+																				$$=NULL;
 																			if(checktypeIDENTIFER(getSymbolType($1),$3,$1))
-																			{
-																				getIDENTIFIER($1);
-																				printf("Assignment\n");}
+																				{
+																					getIDENTIFIER($1,SCOPE_Number);
+																					printf("Assignment\n");
+																				//	setQuad(1,RightHandSide," ",$1,QuadCount++);
+																				}
 																			else 
 																				{
 																					char*str1=conctanteStr($1," of Type");
@@ -174,7 +178,7 @@ stmt:   type IDENTIFIER SEMICOLON	%prec IFX                 				{$$=NULL;CreateI
 																			CreateID($1,$2,IDCount++,SCOPE_Number);
 																			if(checktypeIDENTIFER(getSymbolType($2),$4,$2))
 																			{
-																			getIDENTIFIER($2);// setValue here 
+																			getIDENTIFIER($2,SCOPE_Number);// setValue here 
 																			printf("Declaration and Assignment\n");
 																			}
 																			else
@@ -224,25 +228,27 @@ stmt:   type IDENTIFIER SEMICOLON	%prec IFX                 				{$$=NULL;CreateI
 		
 		| function	                                            		      {$$=NULL;printf("Function Body\n");}
 		|callFunction	                                    			      {$$=NULL;printf("Function Call\n");}
-		|IDENTIFIER ASSIGN callFunction	                                      {$$=NULL;
+		|IDENTIFIER ASSIGN callFunction	                                      {
+																				$$=NULL;
 																				if(checktypeIDENTIFER(getSymbolType($1),$3,$1))
 																				{
-																				getIDENTIFIER($1);
-																				printf("Function Call\n");}
+																					getIDENTIFIER($1,SCOPE_Number);
+																					printf("Function Call\n");}
 																				else 
 																				{
 																					char*str1=conctanteStr($1," of Type");
 																					char* str2=conctanteStr(str1,idtypeString[getSymbolType($1)]);
 																			
-																				ThrowError("Error: incompatible types ",str2);
+																					ThrowError("Error: incompatible types ",str2);
 																				}
 																			}
-		|type IDENTIFIER ASSIGN callFunction	                              {$$=NULL;
+		|type IDENTIFIER ASSIGN callFunction	                              {	
+																				$$=NULL;
 																				CreateID($1,$2,IDCount++,SCOPE_Number);
 																				if(checktypeIDENTIFER(getSymbolType($2),$4,$2))
 																				{
 		
-																					getIDENTIFIER($2);// setValue here 
+																					getIDENTIFIER($2,SCOPE_Number);// setValue here 
 																					printf("Function Call\n");
 																				}
 																				else
@@ -254,11 +260,11 @@ stmt:   type IDENTIFIER SEMICOLON	%prec IFX                 				{$$=NULL;CreateI
 																				}
 																			}
 
-		| blockScope														{$$=NULL;printf("New  block\n");}
+		| blockScope															{$$=NULL;printf("New  block\n");}
 		|increments SEMICOLON													{$$=NULL;}			
 		
 		;
-create :IDENTIFIER {CreateID(0,$1 ,IDCount++,SCOPE_Number+1);getIDENTIFIER($1);}; // a rule to create int i; in For Loop // must be named i ? cant get IDENTIFUER Val 
+create :IDENTIFIER {CreateID(0,$1 ,IDCount++,SCOPE_Number+1);getIDENTIFIER($1,SCOPE_Number);}; 			// a rule to create IDENTIFIER in For Loop  
 function : type IDENTIFIER ORBRACKET resetCounter argList CRBRACKET OCBRACKET scopeOpen manyStatements RETURN  expression  SEMICOLON   CCBRACKET scopeClose  
 																															{
 																																$$=NULL;
@@ -306,15 +312,15 @@ argList:  type IDENTIFIER COMMA argList {CreateID($1,$2,IDCount++,SCOPE_Number+1
 
 
 blockScope:	 OCBRACKET scopeOpen manyStatements CCBRACKET scopeClose								{$$=NULL;printf("blockScope\n");}
-			| OCBRACKET scopeOpen CCBRACKET scopeClose{$$=NULL;}
+			| OCBRACKET scopeOpen CCBRACKET scopeClose												{$$=NULL;}
 		;
 
-switchScope:  OCBRACKET scopeOpen caseExpression CCBRACKET	scopeClose				    {printf("Switch Case block\n");}
+switchScope:  OCBRACKET scopeOpen caseExpression CCBRACKET	scopeClose				   			 {printf("Switch Case block\n");}
 		;
 scopeOpen :{$$=NULL; SCOPE_Number++;}
 scopeClose :{$$=NULL;DeadSymbols(SCOPE_Number); SCOPE_Number--;}		
-manyStatements:  stmt {$$=$1;} 
-        | manyStatements stmt {$$=NULL;}
+manyStatements:  stmt 				{$$=$1;} 
+        | manyStatements stmt 		{$$=NULL;}
 
 type:   INT {$$=0;}
 	| FLOAT {$$=1;}
@@ -323,8 +329,9 @@ type:   INT {$$=0;}
 	| BOOL	{$$=4;}
 	;
 
-equalFamily:   FLOATNUMBER                     {$$=1;}// TO-DO needed to return the type of varible here
-		| INTEGER		                       {$$=0;}
+equalFamily:   FLOATNUMBER                     {$$=1;}// return Type of Varible
+		| INTEGER		                       {$$=0;//itoa($1,RightHandSide,10)
+												}
 		| IDENTIFIER                           {$$=getSymbolType($1);usedIDENTIFIER($1,SCOPE_Number);}// getType here
 		| equalFamily PLUS	equalFamily        {if($1==$3) $$=$1; else ThrowError("Conflict dataTypes in Addition \n "," "); }//TO -DO  create a message and a boolean variable indiactes type conflict
 		| equalFamily MINUS equalFamily        {if($1==$3) $$=$1; else ThrowError("Conflict dataTypes in Subtraction \n "," "); }// i cant get the Name of var result ?
@@ -336,27 +343,27 @@ equalFamily:   FLOATNUMBER                     {$$=1;}// TO-DO needed to return 
 		| ORBRACKET equalFamily CRBRACKET       {$$=$2;}
 		;
 
-increments: IDENTIFIER  INC            			  {$$=NULL;} // To DO add used here 
-		| IDENTIFIER DEC               			 {$$=NULL;}
-		| IDENTIFIER PLUSEQUAL equalFamily    	{$$=NULL;}// check type here
-		| IDENTIFIER MINUSEQUAL equalFamily   	 {$$=NULL;}
-		| IDENTIFIER MULTIPLYEQUAL equalFamily  {$$=NULL;}
-		| IDENTIFIER DIVIDEEQUAL equalFamily {$$=NULL;}
+increments: IDENTIFIER  INC            			 	 {$$=NULL;usedIDENTIFIER($1,SCOPE_Number);}
+		| IDENTIFIER DEC               			     {$$=NULL;usedIDENTIFIER($1,SCOPE_Number);}
+		| IDENTIFIER PLUSEQUAL equalFamily    	     {$$=NULL;usedIDENTIFIER($1,SCOPE_Number);}
+		| IDENTIFIER MINUSEQUAL equalFamily   	     {$$=NULL;usedIDENTIFIER($1,SCOPE_Number);}
+		| IDENTIFIER MULTIPLYEQUAL equalFamily       {$$=NULL;usedIDENTIFIER($1,SCOPE_Number);}
+		| IDENTIFIER DIVIDEEQUAL equalFamily         {$$=NULL;usedIDENTIFIER($1,SCOPE_Number);}
 		;
 
 
 forExpression : increments                 {$$=NULL;}
-			| IDENTIFIER ASSIGN equalFamily {$$=NULL; };// add check type and initizlation
+			| IDENTIFIER ASSIGN equalFamily {$$=NULL; getIDENTIFIER($1,SCOPE_Number+1);};// Brace yet not open yet
 		 
-booleanExpression: expression AND expression          {$$=NULL;}
-			| expression OR expression                {$$=NULL;}
-			| NOT expression                          {$$=NULL;}// check types here 
-			| DataTypes GREATERTHAN DataTypes         {$$=NULL;}
-			| DataTypes LESSTHAN DataTypes            {$$=NULL;}
-			| DataTypes GREATERTHANOREQUAL DataTypes  {$$=NULL;}
-			| DataTypes LESSTHANOREQUAL DataTypes     {$$=NULL;}
-			| DataTypes NOTEQUAL DataTypes            {$$=NULL;}
-			| DataTypes EQUALEQUAL DataTypes          {$$=NULL;}
+booleanExpression: expression AND expression          {$$=NULL;if($1!=$3) ThrowError("Conflict dataTypes in AND Operation \n "," "); }
+			| expression OR expression                {$$=NULL;if($1!=$3) ThrowError("Conflict dataTypes in OR Operation \n "," "); }
+			| NOT expression                          {$$=NULL;}
+			| DataTypes GREATERTHAN DataTypes         {$$=NULL;if($1!=$3) ThrowError("Conflict dataTypes in GREATERTHAN Operation \n "," "); }
+			| DataTypes LESSTHAN DataTypes            {$$=NULL;if($1!=$3) ThrowError("Conflict dataTypes in LESSTHAN Operation \n "," "); }
+			| DataTypes GREATERTHANOREQUAL DataTypes  {$$=NULL;if($1!=$3) ThrowError("Conflict dataTypes in GREATERTHANOREQUAL Operation \n "," "); }
+			| DataTypes LESSTHANOREQUAL DataTypes     {$$=NULL;if($1!=$3) ThrowError("Conflict dataTypes in LESSTHANOREQUAL Operation \n "," "); }
+			| DataTypes NOTEQUAL DataTypes            {$$=NULL;if($1!=$3) ThrowError("Conflict dataTypes in NOTEQUAL Operation \n "," "); }
+			| DataTypes EQUALEQUAL DataTypes          {$$=NULL;if($1!=$3) ThrowError("Conflict dataTypes in EQUALEQUAL Operation \n "," "); }
 			| ORBRACKET booleanExpression CRBRACKET   {$$=NULL;}
 			;
 			
@@ -373,8 +380,8 @@ dummyRules : {printf("ImHere \n");};// for debug
 expression:	DataTypes{{$$=$1;}}
 		| booleanExpression{{$$=4;}} ;
 
-caseExpression:	DEFAULT COLON manyStatements BREAK SEMICOLON    		     {$$=NULL;printf(" Case Statment\n");}	  // with default and must end with default statment                    
-		| CASE INTEGER COLON manyStatements BREAK SEMICOLON caseExpression 	 {$$=NULL;printf(" Case Statment\n");}	 // without default
+caseExpression:	DEFAULT COLON manyStatements BREAK SEMICOLON    		     {$$=NULL;printf(" Case Statment\n");}	 	 // with default and must end with default statment                    
+		| CASE INTEGER COLON manyStatements BREAK SEMICOLON caseExpression 	 {$$=NULL;printf(" Case Statment\n");}	 	// without default
 		| CASE INTEGER COLON manyStatements  caseExpression					 {$$=NULL;printf(" Case Statment\n");}		// without break as break is not necessary
 		   ;
 
@@ -427,9 +434,9 @@ void CreateFunction(int type , char*rName,int rID,int ScopeNum,int rArgCounter,i
 	}
 
 }
-void getIDENTIFIER(char*rName)
+void getIDENTIFIER(char*rName,int ScopeNum)
 {
-	SymbolNode * rSymbol=getID(rName, 0);
+	SymbolNode * rSymbol=getID(rName, ScopeNum);
 	if(!rSymbol)
 	//printf("IDENTIFIER with Name %s is not Declared with this scope\n",rName);
 	ThrowError("Not Declared in This Scope Identifiyer with Name \n ",rName);
@@ -500,11 +507,14 @@ void ThrowError(char *Message, char *rVar)
 	
 	inFile = fopen("input.txt", "r");
 	outFile=fopen("output.txt","w");
+	FILE *TestQuad=fopen("Quad.txt","w");
 	outSymbol=fopen("mySymbols.txt","w");
 	if(!yyparse()) {
 		printf("\nParsing complete\n");
 		PrintSymbolTable(outSymbol);
 		DestroyList();
+		PrintQuadList(TestQuad);
+		// -- TO-DO DestroyQuadList() to free allocated memory .. 
 		fprintf(outFile,"Completed");
 	}
 	else {

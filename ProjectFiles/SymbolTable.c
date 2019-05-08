@@ -269,6 +269,51 @@ void printNotInit(FILE *f)
 
 	fprintf(f, "\n");
 }
+//-----------------------------------------------------------------------------------------------------
+QuadNode*TopPtr = NULL;
+void setQuad(int Op, char* Arg1, char* Arg2,char*Result,int rID)
+{
+	struct QuadData *data = (struct QuadData*) malloc(sizeof(struct QuadData));
+	data->OpCode = Op;
+	data->Arg1 = Arg1;
+	data->Arg2 = Arg2;
+	data->Result = Result;
+	InsertQuadruple(data, rID); // insert in list 
+	return ;
+}
+void InsertQuadruple(QuadData*rD, int ID)
+{
+	if (!TopPtr)
+	{
+	struct QuadNode *mySymbolNode = (struct QuadNode*) malloc(sizeof(struct QuadNode));
+	TopPtr = mySymbolNode;
+	mySymbolNode->ID = ID;
+	mySymbolNode->DATA = rD;
+	TopPtr->Next = NULL;
+	return;
+	}
+	struct QuadNode *Walker = TopPtr;
+	while (Walker->Next)
+		Walker = Walker->Next;// get last Node
+	struct QuadNode *mySymbolNode = (struct QuadNode*) malloc(sizeof(struct QuadNode));
+	mySymbolNode->ID = ID;
+	mySymbolNode->DATA = rD;
+	mySymbolNode->Next = NULL;
+	Walker->Next = mySymbolNode; // insert on end "Queue"
+}
+void PrintQuadList(FILE * f)
+{
+	struct QuadNode *Walker = TopPtr;
+	while (Walker)
+	{
+		fprintf(f, " OpCode: %d  Arg1:%s  Arg2: %s Result:%s ", Walker->DATA->OpCode, Walker->DATA->Arg1, Walker->DATA->Arg2, Walker->DATA->Result);
+		Walker = Walker->Next;
+	}
+}
+
+
+
+
 
 /*int main()
 {

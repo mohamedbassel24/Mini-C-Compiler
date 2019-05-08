@@ -50,3 +50,20 @@ void printNotInit(FILE *f);
 void PrintSymbolTable(FILE*F);
 //----------------------------------------------------------------------------------------------
 void DestroyList();
+//---------------------------------------QUADRABLES
+typedef struct QuadData
+{
+	int OpCode;	//					representing the type of the token or Function
+	char*Arg1;
+	char*Arg2;
+	char*Result;
+
+}QuadData;
+typedef struct QuadNode {
+	struct QuadData * DATA;
+	int ID;// representing the ID of the Symbol 
+	struct QuadNode *Next;
+} QuadNode;
+void InsertQuadruple(QuadData*rD, int ID);
+void setQuad(int Op, char* Arg1, char* Arg2, char*Result, int rID);// i only need to call this in  yacc
+void PrintQuadList(FILE * f);
