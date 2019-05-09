@@ -267,11 +267,12 @@ typedef union YYSTYPE
 	int FuncArgTypes[10];												//Assuming Max 10 arguments 
 	int ArgCounter=0;													//Argument Counter
 	void CreateFunction(int type , char*rName,int rID,int ScopeNum,int rArgCounter,int *ArrOfTypes); // Create a Symbol For a Function
-	char*RightHandSide;
+	char*RightHandSide[2];
+	int RightCount=0;
 	
 
 /* Line 264 of yacc.c  */
-#line 275 "y.tab.c"
+#line 276 "y.tab.c"
 
 #ifdef short
 # undef short
@@ -597,15 +598,15 @@ static const yytype_int8 yyrhs[] =
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint16 yyrline[] =
 {
-       0,   151,   151,   154,   155,   158,   160,   177,   193,   210,
-     212,   214,   220,   222,   224,   227,   229,   230,   231,   245,
-     263,   264,   267,   268,   283,   302,   303,   304,   306,   307,
-     308,   309,   314,   315,   318,   320,   321,   322,   323,   325,
-     326,   327,   328,   329,   332,   333,   335,   336,   337,   338,
-     339,   340,   341,   342,   343,   346,   347,   348,   349,   350,
-     351,   355,   356,   358,   359,   360,   361,   362,   363,   364,
-     365,   366,   367,   370,   371,   372,   373,   374,   380,   381,
-     383,   384,   385
+       0,   152,   152,   155,   156,   159,   166,   184,   202,   219,
+     221,   223,   229,   231,   233,   236,   238,   239,   240,   254,
+     272,   273,   276,   277,   292,   311,   312,   313,   315,   316,
+     317,   318,   323,   324,   327,   329,   330,   331,   332,   334,
+     335,   336,   337,   338,   341,   348,   354,   355,   356,   357,
+     358,   359,   360,   361,   362,   365,   366,   367,   368,   369,
+     370,   374,   375,   377,   378,   379,   380,   381,   382,   383,
+     384,   385,   386,   389,   390,   391,   392,   393,   399,   400,
+     402,   403,   404
 };
 #endif
 
@@ -1652,21 +1653,27 @@ yyreduce:
         case 5:
 
 /* Line 1455 of yacc.c  */
-#line 158 "mylang.y"
-    {(yyval.dummy)=NULL;CreateID((yyvsp[(1) - (3)].IntgerValue),(yyvsp[(2) - (3)].ID),IDCount++,SCOPE_Number);printf("Declaration\n");setQuad(0," "," ",(yyvsp[(2) - (3)].ID),QuadCount++);}
+#line 159 "mylang.y"
+    {
+																				(yyval.dummy)=NULL;
+																				CreateID((yyvsp[(1) - (3)].IntgerValue),(yyvsp[(2) - (3)].ID),IDCount++,SCOPE_Number);
+																				printf("Declaration\n");
+																				setQuad(0," "," ",(yyvsp[(2) - (3)].ID),QuadCount++);
+																			}
     break;
 
   case 6:
 
 /* Line 1455 of yacc.c  */
-#line 160 "mylang.y"
+#line 166 "mylang.y"
     {
 																				(yyval.dummy)=NULL;
+																			
 																			if(checktypeIDENTIFER(getSymbolType((yyvsp[(1) - (4)].ID)),(yyvsp[(3) - (4)].IntgerValue),(yyvsp[(1) - (4)].ID)))
 																				{
 																					getIDENTIFIER((yyvsp[(1) - (4)].ID),SCOPE_Number);
 																					printf("Assignment\n");
-																				//	setQuad(1,RightHandSide," ",$1,QuadCount++);
+																					setQuad(1,RightHandSide[0]," ",(yyvsp[(1) - (4)].ID),QuadCount++);
 																				}
 																			else 
 																				{
@@ -1681,8 +1688,10 @@ yyreduce:
   case 7:
 
 /* Line 1455 of yacc.c  */
-#line 177 "mylang.y"
-    {(yyval.dummy)=NULL;
+#line 184 "mylang.y"
+    {
+																			(yyval.dummy)=NULL;
+																			printf("%d ID  %d   expression\n",(yyvsp[(1) - (5)].IntgerValue),(yyvsp[(4) - (5)].IntgerValue));
 																			CreateID((yyvsp[(1) - (5)].IntgerValue),(yyvsp[(2) - (5)].ID),IDCount++,SCOPE_Number);
 																			if(checktypeIDENTIFER(getSymbolType((yyvsp[(2) - (5)].ID)),(yyvsp[(4) - (5)].IntgerValue),(yyvsp[(2) - (5)].ID)))
 																			{
@@ -1702,7 +1711,7 @@ yyreduce:
   case 8:
 
 /* Line 1455 of yacc.c  */
-#line 193 "mylang.y"
+#line 202 "mylang.y"
     {
 																				(yyval.dummy)=NULL;
 																				CreateID((yyvsp[(2) - (6)].IntgerValue)+5,(yyvsp[(3) - (6)].ID),IDCount++,SCOPE_Number);
@@ -1723,70 +1732,70 @@ yyreduce:
   case 9:
 
 /* Line 1455 of yacc.c  */
-#line 210 "mylang.y"
+#line 219 "mylang.y"
     {(yyval.dummy)=NULL;printf("While loop\n");}
     break;
 
   case 10:
 
 /* Line 1455 of yacc.c  */
-#line 212 "mylang.y"
+#line 221 "mylang.y"
     {(yyval.dummy)=NULL;printf("Do while\n");}
     break;
 
   case 11:
 
 /* Line 1455 of yacc.c  */
-#line 217 "mylang.y"
+#line 226 "mylang.y"
     {(yyval.dummy)=NULL;printf("For loop\n");}
     break;
 
   case 12:
 
 /* Line 1455 of yacc.c  */
-#line 220 "mylang.y"
+#line 229 "mylang.y"
     {(yyval.dummy)=NULL;printf("If statement\n");}
     break;
 
   case 13:
 
 /* Line 1455 of yacc.c  */
-#line 222 "mylang.y"
+#line 231 "mylang.y"
     {(yyval.dummy)=NULL;printf("If-Elsestatement\n");}
     break;
 
   case 14:
 
 /* Line 1455 of yacc.c  */
-#line 224 "mylang.y"
+#line 233 "mylang.y"
     {(yyval.dummy)=NULL;usedIDENTIFIER((yyvsp[(3) - (5)].ID),SCOPE_Number);printf("Switch case\n");}
     break;
 
   case 15:
 
 /* Line 1455 of yacc.c  */
-#line 227 "mylang.y"
+#line 236 "mylang.y"
     {(yyval.dummy)=NULL;printf("Print\n");}
     break;
 
   case 16:
 
 /* Line 1455 of yacc.c  */
-#line 229 "mylang.y"
+#line 238 "mylang.y"
     {(yyval.dummy)=NULL;printf("Function Body\n");}
     break;
 
   case 17:
 
 /* Line 1455 of yacc.c  */
-#line 230 "mylang.y"
+#line 239 "mylang.y"
     {(yyval.dummy)=NULL;printf("Function Call\n");}
     break;
 
   case 18:
 
 /* Line 1455 of yacc.c  */
-#line 231 "mylang.y"
+#line 240 "mylang.y"
     {
 																				(yyval.dummy)=NULL;
 																				if(checktypeIDENTIFER(getSymbolType((yyvsp[(1) - (3)].ID)),(yyvsp[(3) - (3)].IntgerValue),(yyvsp[(1) - (3)].ID)))
@@ -1806,7 +1815,7 @@ yyreduce:
   case 19:
 
 /* Line 1455 of yacc.c  */
-#line 245 "mylang.y"
+#line 254 "mylang.y"
     {	
 																				(yyval.dummy)=NULL;
 																				CreateID((yyvsp[(1) - (4)].IntgerValue),(yyvsp[(2) - (4)].ID),IDCount++,SCOPE_Number);
@@ -1829,28 +1838,28 @@ yyreduce:
   case 20:
 
 /* Line 1455 of yacc.c  */
-#line 263 "mylang.y"
+#line 272 "mylang.y"
     {(yyval.dummy)=NULL;printf("New  block\n");}
     break;
 
   case 21:
 
 /* Line 1455 of yacc.c  */
-#line 264 "mylang.y"
+#line 273 "mylang.y"
     {(yyval.dummy)=NULL;}
     break;
 
   case 22:
 
 /* Line 1455 of yacc.c  */
-#line 267 "mylang.y"
+#line 276 "mylang.y"
     {CreateID(0,(yyvsp[(1) - (1)].ID) ,IDCount++,SCOPE_Number+1);getIDENTIFIER((yyvsp[(1) - (1)].ID),SCOPE_Number);}
     break;
 
   case 23:
 
 /* Line 1455 of yacc.c  */
-#line 269 "mylang.y"
+#line 278 "mylang.y"
     {
 																																(yyval.dummy)=NULL;
 																																if((yyvsp[(1) - (14)].IntgerValue) !=(yyvsp[(11) - (14)].IntgerValue))//check return types 
@@ -1869,7 +1878,7 @@ yyreduce:
   case 24:
 
 /* Line 1455 of yacc.c  */
-#line 284 "mylang.y"
+#line 293 "mylang.y"
     {
 																	(yyval.IntgerValue)=getSymbolType((yyvsp[(1) - (6)].ID));
 																	int num =checkArgType(ArgCounter,FuncArgTypes,(yyvsp[(1) - (6)].ID),SCOPE_Number);
@@ -1891,400 +1900,410 @@ yyreduce:
   case 25:
 
 /* Line 1455 of yacc.c  */
-#line 302 "mylang.y"
+#line 311 "mylang.y"
     {usedIDENTIFIER((yyvsp[(1) - (3)].ID),SCOPE_Number); FuncArgTypes[ArgCounter++]=getSymbolType((yyvsp[(1) - (3)].ID));}
     break;
 
   case 26:
 
 /* Line 1455 of yacc.c  */
-#line 303 "mylang.y"
+#line 312 "mylang.y"
     {usedIDENTIFIER((yyvsp[(1) - (1)].ID),SCOPE_Number);  FuncArgTypes[ArgCounter++]=getSymbolType((yyvsp[(1) - (1)].ID));}
     break;
 
   case 28:
 
 /* Line 1455 of yacc.c  */
-#line 306 "mylang.y"
+#line 315 "mylang.y"
     {ArgCounter=0;}
     break;
 
   case 29:
 
 /* Line 1455 of yacc.c  */
-#line 307 "mylang.y"
+#line 316 "mylang.y"
     {CreateID((yyvsp[(1) - (4)].IntgerValue),(yyvsp[(2) - (4)].ID),IDCount++,SCOPE_Number+1); FuncArgTypes[ArgCounter++]=(yyvsp[(1) - (4)].IntgerValue);}
     break;
 
   case 30:
 
 /* Line 1455 of yacc.c  */
-#line 308 "mylang.y"
+#line 317 "mylang.y"
     {CreateID((yyvsp[(1) - (2)].IntgerValue),(yyvsp[(2) - (2)].ID),IDCount++,SCOPE_Number+1); FuncArgTypes[ArgCounter++]=(yyvsp[(1) - (2)].IntgerValue);}
     break;
 
   case 32:
 
 /* Line 1455 of yacc.c  */
-#line 314 "mylang.y"
+#line 323 "mylang.y"
     {(yyval.dummy)=NULL;printf("blockScope\n");}
     break;
 
   case 33:
 
 /* Line 1455 of yacc.c  */
-#line 315 "mylang.y"
+#line 324 "mylang.y"
     {(yyval.dummy)=NULL;}
     break;
 
   case 34:
 
 /* Line 1455 of yacc.c  */
-#line 318 "mylang.y"
+#line 327 "mylang.y"
     {printf("Switch Case block\n");}
     break;
 
   case 35:
 
 /* Line 1455 of yacc.c  */
-#line 320 "mylang.y"
+#line 329 "mylang.y"
     {(yyval.dummy)=NULL; SCOPE_Number++;}
     break;
 
   case 36:
 
 /* Line 1455 of yacc.c  */
-#line 321 "mylang.y"
+#line 330 "mylang.y"
     {(yyval.dummy)=NULL;DeadSymbols(SCOPE_Number); SCOPE_Number--;}
     break;
 
   case 37:
 
 /* Line 1455 of yacc.c  */
-#line 322 "mylang.y"
+#line 331 "mylang.y"
     {(yyval.dummy)=(yyvsp[(1) - (1)].dummy);}
     break;
 
   case 38:
 
 /* Line 1455 of yacc.c  */
-#line 323 "mylang.y"
+#line 332 "mylang.y"
     {(yyval.dummy)=NULL;}
     break;
 
   case 39:
 
 /* Line 1455 of yacc.c  */
-#line 325 "mylang.y"
+#line 334 "mylang.y"
     {(yyval.IntgerValue)=0;}
     break;
 
   case 40:
 
 /* Line 1455 of yacc.c  */
-#line 326 "mylang.y"
+#line 335 "mylang.y"
     {(yyval.IntgerValue)=1;}
     break;
 
   case 41:
 
 /* Line 1455 of yacc.c  */
-#line 327 "mylang.y"
+#line 336 "mylang.y"
     {(yyval.IntgerValue)=2;}
     break;
 
   case 42:
 
 /* Line 1455 of yacc.c  */
-#line 328 "mylang.y"
+#line 337 "mylang.y"
     {(yyval.IntgerValue)=3;}
     break;
 
   case 43:
 
 /* Line 1455 of yacc.c  */
-#line 329 "mylang.y"
+#line 338 "mylang.y"
     {(yyval.IntgerValue)=4;}
     break;
 
   case 44:
 
 /* Line 1455 of yacc.c  */
-#line 332 "mylang.y"
-    {(yyval.IntgerValue)=1;}
+#line 341 "mylang.y"
+    {
+												(yyval.IntgerValue)=1;
+												char c[3] = {};
+												//sprintf(c,"%f",$1);
+													gcvt((yyvsp[(1) - (1)].FloatValue),6,c);
+												RightHandSide[RightCount++]=c;
+											   }
     break;
 
   case 45:
 
 /* Line 1455 of yacc.c  */
-#line 333 "mylang.y"
-    {(yyval.IntgerValue)=0;//itoa($1,RightHandSide,10)
-												}
+#line 348 "mylang.y"
+    {
+												(yyval.IntgerValue)=0;
+												char c[3] = {}; 
+												sprintf(c,"%d",(yyvsp[(1) - (1)].IntgerValue));
+												RightHandSide[RightCount++]=c;
+											   }
     break;
 
   case 46:
 
 /* Line 1455 of yacc.c  */
-#line 335 "mylang.y"
-    {(yyval.IntgerValue)=getSymbolType((yyvsp[(1) - (1)].ID));usedIDENTIFIER((yyvsp[(1) - (1)].ID),SCOPE_Number);}
+#line 354 "mylang.y"
+    {(yyval.IntgerValue)=getSymbolType((yyvsp[(1) - (1)].ID));usedIDENTIFIER((yyvsp[(1) - (1)].ID),SCOPE_Number);RightHandSide[RightCount++]=(yyvsp[(1) - (1)].ID); }
     break;
 
   case 47:
 
 /* Line 1455 of yacc.c  */
-#line 336 "mylang.y"
-    {if((yyvsp[(1) - (3)].IntgerValue)==(yyvsp[(3) - (3)].IntgerValue)) (yyval.IntgerValue)=(yyvsp[(1) - (3)].IntgerValue); else ThrowError("Conflict dataTypes in Addition \n "," "); }
+#line 355 "mylang.y"
+    {if((yyvsp[(1) - (3)].IntgerValue)==(yyvsp[(3) - (3)].IntgerValue)){(yyval.IntgerValue)=(yyvsp[(1) - (3)].IntgerValue); }else ThrowError("Conflict dataTypes in Addition \n "," "); }
     break;
 
   case 48:
 
 /* Line 1455 of yacc.c  */
-#line 337 "mylang.y"
-    {if((yyvsp[(1) - (3)].IntgerValue)==(yyvsp[(3) - (3)].IntgerValue)) (yyval.IntgerValue)=(yyvsp[(1) - (3)].IntgerValue); else ThrowError("Conflict dataTypes in Subtraction \n "," "); }
+#line 356 "mylang.y"
+    {if((yyvsp[(1) - (3)].IntgerValue)==(yyvsp[(3) - (3)].IntgerValue)){(yyval.IntgerValue)=(yyvsp[(1) - (3)].IntgerValue); } else ThrowError("Conflict dataTypes in Subtraction \n "," "); }
     break;
 
   case 49:
 
 /* Line 1455 of yacc.c  */
-#line 338 "mylang.y"
-    {if((yyvsp[(1) - (3)].IntgerValue)==(yyvsp[(3) - (3)].IntgerValue)) (yyval.IntgerValue)=(yyvsp[(1) - (3)].IntgerValue); else ThrowError("Conflict dataTypes in Multipication \n "," "); }
+#line 357 "mylang.y"
+    {if((yyvsp[(1) - (3)].IntgerValue)==(yyvsp[(3) - (3)].IntgerValue)){(yyval.IntgerValue)=(yyvsp[(1) - (3)].IntgerValue); } else ThrowError("Conflict dataTypes in Multipication \n "," "); }
     break;
 
   case 50:
 
 /* Line 1455 of yacc.c  */
-#line 339 "mylang.y"
-    {if((yyvsp[(1) - (3)].IntgerValue)==(yyvsp[(3) - (3)].IntgerValue)) (yyval.IntgerValue)=(yyvsp[(1) - (3)].IntgerValue); else ThrowError("Conflict dataTypes in Divison \n "," "); }
+#line 358 "mylang.y"
+    {if((yyvsp[(1) - (3)].IntgerValue)==(yyvsp[(3) - (3)].IntgerValue)){(yyval.IntgerValue)=(yyvsp[(1) - (3)].IntgerValue); } else ThrowError("Conflict dataTypes in Divison \n "," "); }
     break;
 
   case 51:
 
 /* Line 1455 of yacc.c  */
-#line 340 "mylang.y"
-    {if((yyvsp[(1) - (3)].IntgerValue)==(yyvsp[(3) - (3)].IntgerValue)) (yyval.IntgerValue)=(yyvsp[(1) - (3)].IntgerValue); else ThrowError("Conflict dataTypes in reminder \n "," "); }
+#line 359 "mylang.y"
+    {if((yyvsp[(1) - (3)].IntgerValue)==(yyvsp[(3) - (3)].IntgerValue)){(yyval.IntgerValue)=(yyvsp[(1) - (3)].IntgerValue); } else ThrowError("Conflict dataTypes in reminder \n "," "); }
     break;
 
   case 52:
 
 /* Line 1455 of yacc.c  */
-#line 341 "mylang.y"
+#line 360 "mylang.y"
     {(yyval.IntgerValue)=getSymbolType((yyvsp[(1) - (2)].ID));usedIDENTIFIER((yyvsp[(1) - (2)].ID),SCOPE_Number);}
     break;
 
   case 53:
 
 /* Line 1455 of yacc.c  */
-#line 342 "mylang.y"
+#line 361 "mylang.y"
     {(yyval.IntgerValue)=getSymbolType((yyvsp[(1) - (2)].ID));usedIDENTIFIER((yyvsp[(1) - (2)].ID),SCOPE_Number);}
     break;
 
   case 54:
 
 /* Line 1455 of yacc.c  */
-#line 343 "mylang.y"
+#line 362 "mylang.y"
     {(yyval.IntgerValue)=(yyvsp[(2) - (3)].IntgerValue);}
     break;
 
   case 55:
 
 /* Line 1455 of yacc.c  */
-#line 346 "mylang.y"
+#line 365 "mylang.y"
     {(yyval.dummy)=NULL;usedIDENTIFIER((yyvsp[(1) - (2)].ID),SCOPE_Number);}
     break;
 
   case 56:
 
 /* Line 1455 of yacc.c  */
-#line 347 "mylang.y"
+#line 366 "mylang.y"
     {(yyval.dummy)=NULL;usedIDENTIFIER((yyvsp[(1) - (2)].ID),SCOPE_Number);}
     break;
 
   case 57:
 
 /* Line 1455 of yacc.c  */
-#line 348 "mylang.y"
+#line 367 "mylang.y"
     {(yyval.dummy)=NULL;usedIDENTIFIER((yyvsp[(1) - (3)].ID),SCOPE_Number);}
     break;
 
   case 58:
 
 /* Line 1455 of yacc.c  */
-#line 349 "mylang.y"
+#line 368 "mylang.y"
     {(yyval.dummy)=NULL;usedIDENTIFIER((yyvsp[(1) - (3)].ID),SCOPE_Number);}
     break;
 
   case 59:
 
 /* Line 1455 of yacc.c  */
-#line 350 "mylang.y"
+#line 369 "mylang.y"
     {(yyval.dummy)=NULL;usedIDENTIFIER((yyvsp[(1) - (3)].ID),SCOPE_Number);}
     break;
 
   case 60:
 
 /* Line 1455 of yacc.c  */
-#line 351 "mylang.y"
+#line 370 "mylang.y"
     {(yyval.dummy)=NULL;usedIDENTIFIER((yyvsp[(1) - (3)].ID),SCOPE_Number);}
     break;
 
   case 61:
 
 /* Line 1455 of yacc.c  */
-#line 355 "mylang.y"
+#line 374 "mylang.y"
     {(yyval.dummy)=NULL;}
     break;
 
   case 62:
 
 /* Line 1455 of yacc.c  */
-#line 356 "mylang.y"
+#line 375 "mylang.y"
     {(yyval.dummy)=NULL; getIDENTIFIER((yyvsp[(1) - (3)].ID),SCOPE_Number+1);}
     break;
 
   case 63:
 
 /* Line 1455 of yacc.c  */
-#line 358 "mylang.y"
+#line 377 "mylang.y"
     {(yyval.dummy)=NULL;if((yyvsp[(1) - (3)].IntgerValue)!=(yyvsp[(3) - (3)].IntgerValue)) ThrowError("Conflict dataTypes in AND Operation \n "," "); }
     break;
 
   case 64:
 
 /* Line 1455 of yacc.c  */
-#line 359 "mylang.y"
+#line 378 "mylang.y"
     {(yyval.dummy)=NULL;if((yyvsp[(1) - (3)].IntgerValue)!=(yyvsp[(3) - (3)].IntgerValue)) ThrowError("Conflict dataTypes in OR Operation \n "," "); }
     break;
 
   case 65:
 
 /* Line 1455 of yacc.c  */
-#line 360 "mylang.y"
+#line 379 "mylang.y"
     {(yyval.dummy)=NULL;}
     break;
 
   case 66:
 
 /* Line 1455 of yacc.c  */
-#line 361 "mylang.y"
+#line 380 "mylang.y"
     {(yyval.dummy)=NULL;if((yyvsp[(1) - (3)].IntgerValue)!=(yyvsp[(3) - (3)].IntgerValue)) ThrowError("Conflict dataTypes in GREATERTHAN Operation \n "," "); }
     break;
 
   case 67:
 
 /* Line 1455 of yacc.c  */
-#line 362 "mylang.y"
+#line 381 "mylang.y"
     {(yyval.dummy)=NULL;if((yyvsp[(1) - (3)].IntgerValue)!=(yyvsp[(3) - (3)].IntgerValue)) ThrowError("Conflict dataTypes in LESSTHAN Operation \n "," "); }
     break;
 
   case 68:
 
 /* Line 1455 of yacc.c  */
-#line 363 "mylang.y"
+#line 382 "mylang.y"
     {(yyval.dummy)=NULL;if((yyvsp[(1) - (3)].IntgerValue)!=(yyvsp[(3) - (3)].IntgerValue)) ThrowError("Conflict dataTypes in GREATERTHANOREQUAL Operation \n "," "); }
     break;
 
   case 69:
 
 /* Line 1455 of yacc.c  */
-#line 364 "mylang.y"
+#line 383 "mylang.y"
     {(yyval.dummy)=NULL;if((yyvsp[(1) - (3)].IntgerValue)!=(yyvsp[(3) - (3)].IntgerValue)) ThrowError("Conflict dataTypes in LESSTHANOREQUAL Operation \n "," "); }
     break;
 
   case 70:
 
 /* Line 1455 of yacc.c  */
-#line 365 "mylang.y"
+#line 384 "mylang.y"
     {(yyval.dummy)=NULL;if((yyvsp[(1) - (3)].IntgerValue)!=(yyvsp[(3) - (3)].IntgerValue)) ThrowError("Conflict dataTypes in NOTEQUAL Operation \n "," "); }
     break;
 
   case 71:
 
 /* Line 1455 of yacc.c  */
-#line 366 "mylang.y"
+#line 385 "mylang.y"
     {(yyval.dummy)=NULL;if((yyvsp[(1) - (3)].IntgerValue)!=(yyvsp[(3) - (3)].IntgerValue)) ThrowError("Conflict dataTypes in EQUALEQUAL Operation \n "," "); }
     break;
 
   case 72:
 
 /* Line 1455 of yacc.c  */
-#line 367 "mylang.y"
+#line 386 "mylang.y"
     {(yyval.dummy)=NULL;}
     break;
 
   case 73:
 
 /* Line 1455 of yacc.c  */
-#line 370 "mylang.y"
+#line 389 "mylang.y"
     {(yyval.IntgerValue)=(yyvsp[(1) - (1)].IntgerValue);}
     break;
 
   case 74:
 
 /* Line 1455 of yacc.c  */
-#line 371 "mylang.y"
+#line 390 "mylang.y"
     {(yyval.IntgerValue)=2;}
     break;
 
   case 75:
 
 /* Line 1455 of yacc.c  */
-#line 372 "mylang.y"
+#line 391 "mylang.y"
     {(yyval.IntgerValue)=4;}
     break;
 
   case 76:
 
 /* Line 1455 of yacc.c  */
-#line 373 "mylang.y"
+#line 392 "mylang.y"
     {(yyval.IntgerValue)=4;}
     break;
 
   case 77:
 
 /* Line 1455 of yacc.c  */
-#line 374 "mylang.y"
+#line 393 "mylang.y"
     {(yyval.IntgerValue)=3;}
     break;
 
   case 78:
 
 /* Line 1455 of yacc.c  */
-#line 380 "mylang.y"
+#line 399 "mylang.y"
     {{(yyval.IntgerValue)=(yyvsp[(1) - (1)].IntgerValue);}}
     break;
 
   case 79:
 
 /* Line 1455 of yacc.c  */
-#line 381 "mylang.y"
+#line 400 "mylang.y"
     {{(yyval.IntgerValue)=4;}}
     break;
 
   case 80:
 
 /* Line 1455 of yacc.c  */
-#line 383 "mylang.y"
+#line 402 "mylang.y"
     {(yyval.dummy)=NULL;printf(" Case Statment\n");}
     break;
 
   case 81:
 
 /* Line 1455 of yacc.c  */
-#line 384 "mylang.y"
+#line 403 "mylang.y"
     {(yyval.dummy)=NULL;printf(" Case Statment\n");}
     break;
 
   case 82:
 
 /* Line 1455 of yacc.c  */
-#line 385 "mylang.y"
+#line 404 "mylang.y"
     {(yyval.dummy)=NULL;printf(" Case Statment\n");}
     break;
 
 
 
 /* Line 1455 of yacc.c  */
-#line 2288 "y.tab.c"
+#line 2307 "y.tab.c"
       default: break;
     }
   YY_SYMBOL_PRINT ("-> $$ =", yyr1[yyn], &yyval, &yyloc);
@@ -2496,7 +2515,7 @@ yyreturn:
 
 
 /* Line 1675 of yacc.c  */
-#line 388 "mylang.y"
+#line 407 "mylang.y"
  
 void CreateID(int type , char*rName,int rID,int ScopeNum)
 {
@@ -2604,6 +2623,9 @@ void ThrowError(char *Message, char *rVar)
  	fprintf(outSymbol, "line number: %d %s : %s\n", yylineno,Message,rVar);
  	exit(0);
 };
+
+
+
 // needed ?
  int yyerror(char *s) {  int lineno=++yylineno;   fprintf(stderr, "line number : %d %s\n", lineno,s);     return 0; }
  
@@ -2626,6 +2648,7 @@ void ThrowError(char *Message, char *rVar)
 		PrintSymbolTable(outSymbol);
 		DestroyList();
 		PrintQuadList(TestQuad);
+		// -- TO-DO DestroyQuadList() to free allocated memory .. 
 		fprintf(outFile,"Completed");
 	}
 	else {

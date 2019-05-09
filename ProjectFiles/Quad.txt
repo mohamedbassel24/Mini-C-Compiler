@@ -1,1 +1,1 @@
- OpCode: 0  Arg1:   Arg2:   Result:X 
+ OpCode: 0  Arg1:   Arg2:   Result:X  OpCode: 0  Arg1:   Arg2:   Result:y  OpCode: 0  Arg1:   Arg2:   Result:w  OpCode: 1  Arg1:12.2  Arg2:   Result:w 

@@ -1,1 +1,4 @@
 int X;
+int y;
+float w;
+w=12.2;

@@ -141,7 +141,9 @@
 	int FuncArgTypes[10];												//Assuming Max 10 arguments 
 	int ArgCounter=0;													//Argument Counter
 	void CreateFunction(int type , char*rName,int rID,int ScopeNum,int rArgCounter,int *ArrOfTypes); // Create a Symbol For a Function
-	char*RightHandSide;
+	char*RightHandSide[2];
+	int RightCount=0;
+	bool manyExpressions=false;
 	%}
 
 
@@ -155,15 +157,21 @@ startProgram :      startProgram stmt
 		|
 		;
 		
-stmt:   type IDENTIFIER SEMICOLON	%prec IFX                 				{$$=NULL;CreateID($1,$2,IDCount++,SCOPE_Number);printf("Declaration\n");setQuad(0," "," ",$2,QuadCount++);}
+stmt:   type IDENTIFIER SEMICOLON	%prec IFX                 				{
+																				$$=NULL;
+																				CreateID($1,$2,IDCount++,SCOPE_Number);
+																				printf("Declaration\n");
+																				setQuad(0," "," ",$2,QuadCount++);
+																			}
 
 		| IDENTIFIER ASSIGN expression SEMICOLON	          				{
 																				$$=NULL;
+																			
 																			if(checktypeIDENTIFER(getSymbolType($1),$3,$1))
 																				{
 																					getIDENTIFIER($1,SCOPE_Number);
 																					printf("Assignment\n");
-																				//	setQuad(1,RightHandSide," ",$1,QuadCount++);
+																					setQuad(1,RightHandSide[0]," ",$1,QuadCount++);
 																				}
 																			else 
 																				{
@@ -174,7 +182,9 @@ stmt:   type IDENTIFIER SEMICOLON	%prec IFX                 				{$$=NULL;CreateI
 																				}
 																			}
 
-		| type IDENTIFIER ASSIGN expression	SEMICOLON	      				{$$=NULL;
+		| type IDENTIFIER ASSIGN expression	SEMICOLON	      				{
+																			$$=NULL;
+																			printf("%d ID  %d   expression\n",$1,$4);
 																			CreateID($1,$2,IDCount++,SCOPE_Number);
 																			if(checktypeIDENTIFER(getSymbolType($2),$4,$2))
 																			{
@@ -208,7 +218,7 @@ stmt:   type IDENTIFIER SEMICOLON	%prec IFX                 				{$$=NULL;CreateI
 
 		
 		| WHILE ORBRACKET expression CRBRACKET stmt							{$$=NULL;printf("While loop\n");}// need to check type to booealen
-
+		// TO-DO Create a dummy rule before stmt to tell quad that there is a while stmt  before stmt 
 		| DO blockScope WHILE ORBRACKET expression CRBRACKET SEMICOLON		{$$=NULL;printf("Do while\n");}// need to check type to booealen
 
 		| FOR ORBRACKET INT  create ASSIGN INTEGER SEMICOLON 
@@ -305,9 +315,9 @@ callList:   IDENTIFIER COMMA callList {usedIDENTIFIER($1,SCOPE_Number); FuncArgT
 	;		
 resetCounter: {ArgCounter=0;};
 argList:  type IDENTIFIER COMMA argList {CreateID($1,$2,IDCount++,SCOPE_Number+1); FuncArgTypes[ArgCounter++]=$1;}// bec the scope is yet not incremeneted
-	      | type IDENTIFIER   {CreateID($1,$2,IDCount++,SCOPE_Number+1); FuncArgTypes[ArgCounter++]=$1;}// bec the scope is yet not incremeneted
-		  | // it can be empty for print functions maybe 
-		  //TO DOcheck if , accept parsing? 
+	      | type IDENTIFIER 		    {CreateID($1,$2,IDCount++,SCOPE_Number+1); FuncArgTypes[ArgCounter++]=$1;}// bec the scope is yet not incremeneted
+		  |                              // it can be empty for print functions maybe 
+		  //TO DO check if func(int x ,) accept parsing? 
 	;
 
 
@@ -329,15 +339,25 @@ type:   INT {$$=0;}
 	| BOOL	{$$=4;}
 	;
 
-equalFamily:   FLOATNUMBER                     {$$=1;}// return Type of Varible
-		| INTEGER		                       {$$=0;//itoa($1,RightHandSide,10)
-												}
-		| IDENTIFIER                           {$$=getSymbolType($1);usedIDENTIFIER($1,SCOPE_Number);}// getType here
-		| equalFamily PLUS	equalFamily        {if($1==$3) $$=$1; else ThrowError("Conflict dataTypes in Addition \n "," "); }//TO -DO  create a message and a boolean variable indiactes type conflict
-		| equalFamily MINUS equalFamily        {if($1==$3) $$=$1; else ThrowError("Conflict dataTypes in Subtraction \n "," "); }// i cant get the Name of var result ?
-		| equalFamily MULTIPLY equalFamily     {if($1==$3) $$=$1; else ThrowError("Conflict dataTypes in Multipication \n "," "); }// check in con
-		| equalFamily  DIVIDE	equalFamily    {if($1==$3) $$=$1; else ThrowError("Conflict dataTypes in Divison \n "," "); }
-		| equalFamily  REM	equalFamily        {if($1==$3) $$=$1; else ThrowError("Conflict dataTypes in reminder \n "," "); }
+equalFamily:   FLOATNUMBER                     {
+												$$=1;
+												char c[3] = {};
+												//sprintf(c,"%f",$1);
+													gcvt($1,6,c);
+												RightHandSide[RightCount++]=c;
+											   }// return Type of Varible
+		| INTEGER		                       {
+												$$=0;
+												char c[3] = {}; 
+												sprintf(c,"%d",$1);
+												RightHandSide[RightCount++]=c;
+											   }
+		| IDENTIFIER                           {$$=getSymbolType($1);usedIDENTIFIER($1,SCOPE_Number);RightHandSide[RightCount++]=$1; }// getType here
+		| equalFamily PLUS	equalFamily        {if($1==$3){$$=$1; }else ThrowError("Conflict dataTypes in Addition \n "," "); }//TO -DO  create a message and a boolean variable indiactes type conflict
+		| equalFamily MINUS equalFamily        {if($1==$3){$$=$1; } else ThrowError("Conflict dataTypes in Subtraction \n "," "); }// i cant get the Name of var result ?
+		| equalFamily MULTIPLY equalFamily     {if($1==$3){$$=$1; } else ThrowError("Conflict dataTypes in Multipication \n "," "); }// check in con
+		| equalFamily  DIVIDE	equalFamily    {if($1==$3){$$=$1; } else ThrowError("Conflict dataTypes in Divison \n "," "); }
+		| equalFamily  REM	equalFamily        {if($1==$3){$$=$1; } else ThrowError("Conflict dataTypes in reminder \n "," "); }
 		| IDENTIFIER INC                       {$$=getSymbolType($1);usedIDENTIFIER($1,SCOPE_Number);}// getSymbolType
 		| IDENTIFIER DEC                       {$$=getSymbolType($1);usedIDENTIFIER($1,SCOPE_Number);}
 		| ORBRACKET equalFamily CRBRACKET       {$$=$2;}
@@ -492,6 +512,9 @@ void ThrowError(char *Message, char *rVar)
  	fprintf(outSymbol, "line number: %d %s : %s\n", yylineno,Message,rVar);
  	exit(0);
 };
+
+
+
 // needed ?
  int yyerror(char *s) {  int lineno=++yylineno;   fprintf(stderr, "line number : %d %s\n", lineno,s);     return 0; }
  

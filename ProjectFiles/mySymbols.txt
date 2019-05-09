@@ -1,10 +1,14 @@
 Used Identifiers :- 
 
 UnUsed Identifiers :- 
+w of type Float
+y of type Integer
 X of type Integer
 
 Initilized Identifiers :- 
+w of type Float
 
 UnInitilized Identifiers :- 
+y of type Integer
 X of type Integer
 
