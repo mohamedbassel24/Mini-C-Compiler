@@ -1,10 +1,14 @@
 Used Identifiers :- 
+z of type Integer
 y of type Integer
+x of type Integer
 
 UnUsed Identifiers :- 
 
 Initilized Identifiers :- 
+z of type Integer
 y of type Integer
+x of type Integer
 
 UnInitilized Identifiers :- 
 

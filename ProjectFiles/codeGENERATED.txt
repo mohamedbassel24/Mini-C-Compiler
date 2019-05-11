@@ -1,10 +1,8 @@
 MOV R0 ,   
-MOV y , R0 
-MOV R1 , 2 
-MOV y , R1 
-MOV R0 , y 
-MOV R2 , 2 
-DIV R2 
-MOV Temp1 , R0 
-MOV R2 , Temp2 
+MOV x , R0 
+MOV R1 , 5 
+MOV x , R1 
+MOV R2 ,   
 MOV y , R2 
+MOV R3 , 2 
+MOV y , R3 

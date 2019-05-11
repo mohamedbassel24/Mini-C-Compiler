@@ -1,1 +1,6 @@
-int z = 20/10;
+int x = 9;
+int y = 9;
+
+if (x && y){
+	int z = 9;
+}

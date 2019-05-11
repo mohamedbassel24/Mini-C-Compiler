@@ -1,2 +1,11 @@
-Syntax Error Could not parse quadruples
-line number : 0 Error: incompatible types for division 
+	 mov R0, 9 
+	 mov x, R0 
+	 mov R0, 9 
+	 mov y, R0 
+	 mov R0,x 
+	 mov R1,y 
+	 and R2, R0, R1 
+	jz	L000
+	 mov R3, 9 
+	 mov z, R3 
+L000:
