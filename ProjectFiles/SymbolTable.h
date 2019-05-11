@@ -7,7 +7,17 @@
 
 #define DECLARE_ 0
 #define ASSIGN_ 1
-#define ADD_ 2
+#define ADD_ 10
+#define MINUS_ 11
+#define MULTIPLY_ 12
+#define DIVIDE_ 13
+#define REM_ 14
+#define INC_ 15
+#define DEC_ 16
+#define WHILE_ 20
+#define FOR_ 21
+#define DOWHILE_ 22
+
 typedef struct TypeAndValue {
 	int Type;
 	char*  Value;

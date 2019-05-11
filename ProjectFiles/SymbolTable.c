@@ -358,7 +358,33 @@ void ExctractQuad(QuadNode* head,FILE *f)
 			free.var = ptr->DATA->Result;
 			SetReg(free);
 			ptr = ptr->Next;
-
+			break;
+		case MINUS_:
+			
+			break;
+		case MULTIPLY_:
+			
+			break;
+		case DIVIDE_:
+			
+			break;
+		case REM_:
+			
+			break;
+		case INC_:
+			
+			break;
+		case DEC_:
+			
+			break;
+		case WHILE_:
+			
+			break;
+		case FOR_:
+			
+			break;
+		case DOWHILE_:
+			
 			break;
 		default:
 			break;
