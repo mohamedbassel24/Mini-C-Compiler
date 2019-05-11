@@ -18,7 +18,7 @@
 #define FOR_ 21
 #define NOT_ 27
 #define GREATERTHANOREQUAL_ 30
-#define LESSTHANOREQUAL_ 30
+#define LESSTHANOREQUAL_ 31
 #define GREATERTHAN_ 28
 #define LESSTHAN_ 29
 #define IF_ 60
@@ -27,8 +27,10 @@
 #define MULTIPLY_ 12
 #define PRINT_ 62
 #define REM_ 14
-#define SWITCHDEFAULT_ 70
+#define SWITCHDEFAULT_ 71
+#define CLOSESWITCH_ 72
 #define SWITCH_ 61
+#define CASE_ 70
 #define WHILE_ 20
 #define ELSE_ 80
 #define CLOSEWHILE_ 90

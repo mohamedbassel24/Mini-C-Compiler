@@ -587,15 +587,17 @@ void ExctractQuad(QuadNode* head,FILE *f)
 			fprintf(f, "AND %s, %s , %s \n", ptr->DATA->Result, Aux.reg, free.reg);
 			ptr = ptr->Next;
 			break;
-		case FOR_:
-			
-			break;
 		case ELSE_:
 			fprintf(f, "%s \n", ptr->DATA->Arg1);
 			ptr = ptr->Next;
 			break;
 		case DOWHILE_:
-			
+			fprintf(f, "%s : \n", ptr->DATA->Result);
+			ptr = ptr->Next;
+			break;
+		case CLOSEDOWHILE_:
+			fprintf(f, "JC %s \n", "OpenDoWhile");
+			ptr = ptr->Next;
 			break;
 		case OR_:
 			free = CheckReg();
@@ -618,6 +620,16 @@ void ExctractQuad(QuadNode* head,FILE *f)
 			free.var = ptr->DATA->Arg2;
 			SetReg(free);
 			ptr = ptr->Next;
+			break;
+		case NOT_:
+			free = CheckReg();
+			fprintf(f, "MOV %s , %s \n", free.reg, ptr->DATA->Arg1);
+			fprintf(f, "NOT %s \n", free.reg);
+			fprintf(f, "MOV %s , %s \n", ptr->DATA->Result, free.reg);
+			free.used++;
+			free.var = ptr->DATA->Arg2;
+			ptr = ptr->Next;
+			SetReg(free);
 			break;
 		default:
 			break;

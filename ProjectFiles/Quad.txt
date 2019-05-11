@@ -1,6 +1,10 @@
  OpCode: 0  Arg1:   Arg2:   Result:x 
- OpCode: 29  Arg1:i  Arg2: 5 Result:Temp1 
- OpCode: 21  Arg1:0.000000  Arg2: Temp1 Result:OpenForLoop 
- OpCode: 15  Arg1:INC  Arg2: INC Result:i 
- OpCode: 1  Arg1:Temp1  Arg2:   Result:x 
- OpCode: 92  Arg1:  Arg2: OpenForLoop Result:CloseForLoop 
+ OpCode: 1  Arg1:0  Arg2:   Result:x 
+ OpCode: 33  Arg1:x  Arg2: 0 Result:Temp1 
+ OpCode: 60  Arg1:IF   Arg2: OpenIF Result: 
+ OpCode: 0  Arg1:   Arg2:   Result:y 
+ OpCode: 1  Arg1:Temp1  Arg2:   Result:y 
+ OpCode: 0  Arg1:   Arg2:   Result:z 
+ OpCode: 1  Arg1:5  Arg2:   Result:z 
+ OpCode: 60  Arg1:else  Arg2: n Result: 
+ OpCode: 60  Arg1:IF   Arg2: ELSE Result: 

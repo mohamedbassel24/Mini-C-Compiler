@@ -309,7 +309,7 @@ stmt:   type IDENTIFIER SEMICOLON	%prec IFX                 				{
 		|increments SEMICOLON													{$$=NULL;}			
 		
 		;
-create :IDENTIFIER {CreateID(0,$1 ,IDCount++,SCOPE_Number+1);getIDENTIFIER($1,SCOPE_Number);setQuad(1,," ",$1,QuadCount++);}; 			// a rule to create IDENTIFIER in For Loop  
+create :IDENTIFIER {CreateID(0,$1 ,IDCount++,SCOPE_Number+1);getIDENTIFIER($1,SCOPE_Number);}; 			// a rule to create IDENTIFIER in For Loop  
 function : type IDENTIFIER ORBRACKET resetCounter argList CRBRACKET OCBRACKET scopeOpen funcQuad manyStatements RETURN  expression  SEMICOLON   CCBRACKET scopeClose  
 																															{
 																																$$=NULL;
@@ -616,7 +616,7 @@ forQuad:expression SEMICOLON{char c[3] = {};sprintf(c,"%f",SCOPE_Number);setQuad
 funcQuad:{char c[3] = {};sprintf(c,"%f",SCOPE_Number);setQuad(23,c," ","FuncBody Begin ",QuadCount++);}
 switchQuad:IDENTIFIER{setQuad(61,"SwitchStart","",$1,QuadCount++);usedIDENTIFIER($1,SCOPE_Number);}
 ifQuad:expression {setQuad(60,"IF ","OpenIF","",QuadCount++);}
-elseQuad:blockScope{setQuad(60,"else","n","",QuadCount++);}	   
+elseQuad:blockScope{setQuad(81,"else","n","OpenElse",QuadCount++);}	   
 		   
 %% 
 void CreateID(int type , char*rName,int rID,int ScopeNum)
