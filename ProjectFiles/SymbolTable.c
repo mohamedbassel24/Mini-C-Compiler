@@ -311,6 +311,10 @@ void PrintQuadList(FILE * f)
 	}
 }
 //-------------------------------------------------------------------Quad Functions
+QuadNode*getTOP()
+{
+	return TopPtr; 
+}
 Reg CheckReg();
 void SetReg(Reg x);
 void ResetReg();

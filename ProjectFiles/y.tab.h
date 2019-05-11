@@ -161,7 +161,7 @@ typedef union YYSTYPE
 {
 
 /* Line 1676 of yacc.c  */
-#line 143 "mylang.y"
+#line 139 "mylang.y"
 
     int IntgerValue;                 /* integer value */
 	float FloatValue;               /* float Value */

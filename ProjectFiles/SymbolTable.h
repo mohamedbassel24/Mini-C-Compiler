@@ -22,6 +22,7 @@ typedef struct TypeAndValue {
 	int Type;
 	char*  Value;
 } TypeAndValue;
+
 typedef struct SymbolData
 {
 	int Type;	//					representing the type of the token or Function
@@ -91,3 +92,4 @@ typedef struct QuadNode {
 void InsertQuadruple(QuadData*rD, int ID);
 void setQuad(int Op, char* Arg1, char* Arg2, char*Result, int rID);// i only need to call this in  yacc
 void PrintQuadList(FILE * f);
+QuadNode*getTOP();
