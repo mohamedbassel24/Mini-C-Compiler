@@ -466,10 +466,69 @@ void ExctractQuad(QuadNode* head,FILE *f)
 			ptr = ptr->Next;
 			break;
 		case WHILE_:
-			fprintf(f, "JF %s \n", ptr->DATA->Result);
+			fprintf(f, "%s : \n", ptr->DATA->Result);
+			fprintf(f, "JF %s \n","CloseWhile");
+			ptr = ptr->Next;
+			break;
+		case CLOSEWHILE_:
+			fprintf(f, "JC %s \n", ptr->DATA->Arg2);
+			fprintf(f, "%s : \n",ptr->DATA->Result);
+			ptr = ptr->Next;
+			break;
+		case FOR_:
+			fprintf(f, "%s : \n", ptr->DATA->Result);
+			fprintf(f, "JF %s \n","CloseForLoop");
+			ptr = ptr->Next;
+			break;
+		case CLOSEFORLOOP_:
+			fprintf(f, "JC %s \n", ptr->DATA->Arg2);
+			fprintf(f, "%s : \n",ptr->DATA->Result);
+			ptr = ptr->Next;
 			break;
 		case IF_:
 			fprintf(f, "%s \n", ptr->DATA->Arg2);
+			ptr = ptr->Next;
+			break;
+		case LESSTHAN_:
+			free = CheckReg();
+			fprintf(f, "MOV %s , %s \n", free.reg, ptr->DATA->Arg1);
+			free.used++;
+			free.var = ptr->DATA->Arg1;
+			SetReg(free);
+			Aux = CheckReg();
+			fprintf(f, "MOV %s , %s \n", Aux.reg, ptr->DATA->Arg2);
+			Aux.used++;
+			Aux.var = ptr->DATA->Arg1;
+			SetReg(Aux);
+			fprintf(f, "CMPL %s, %s , %s \n", ptr->DATA->Result, Aux.reg, free.reg);
+			ptr = ptr->Next;
+			break;
+		case GREATERTHAN_:
+			free = CheckReg();
+			fprintf(f, "MOV %s , %s \n", free.reg, ptr->DATA->Arg1);
+			free.used++;
+			free.var = ptr->DATA->Arg1;
+			SetReg(free);
+			Aux = CheckReg();
+			fprintf(f, "MOV %s , %s \n", Aux.reg, ptr->DATA->Arg2);
+			Aux.used++;
+			Aux.var = ptr->DATA->Arg1;
+			SetReg(Aux);
+			fprintf(f, "CMPG %s, %s , %s \n", ptr->DATA->Result, Aux.reg, free.reg);
+			ptr = ptr->Next;
+			break;
+		case LESSTHANOREQUAL_:
+			free = CheckReg();
+			fprintf(f, "MOV %s , %s \n", free.reg, ptr->DATA->Arg1);
+			free.used++;
+			free.var = ptr->DATA->Arg1;
+			SetReg(free);
+			Aux = CheckReg();
+			fprintf(f, "MOV %s , %s \n", Aux.reg, ptr->DATA->Arg2);
+			Aux.used++;
+			Aux.var = ptr->DATA->Arg1;
+			SetReg(Aux);
+			fprintf(f, "CMPLEQ %s, %s , %s \n", ptr->DATA->Result, Aux.reg, free.reg);
 			ptr = ptr->Next;
 			break;
 		case GREATERTHANOREQUAL_:

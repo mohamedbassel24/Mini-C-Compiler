@@ -1,0 +1,2 @@
+MOV R0 ,   
+MOV x , R0 

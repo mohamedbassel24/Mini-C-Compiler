@@ -1766,21 +1766,21 @@ yyreduce:
 
 /* Line 1455 of yacc.c  */
 #line 255 "mylang.y"
-    {(yyval.dummy)=NULL;char c[3] = {};gcvt(SCOPE_Number,6,c);setQuad(20,c," ","CloseWhile",QuadCount++);printf("While loop\n");}
+    {(yyval.dummy)=NULL;char c[3] = {};gcvt(SCOPE_Number,6,c);setQuad(90,c,"OpenWhile","CloseWhile",QuadCount++);printf("While loop\n");}
     break;
 
   case 10:
 
 /* Line 1455 of yacc.c  */
 #line 257 "mylang.y"
-    {(yyval.dummy)=NULL;printf("Do while\n");setQuad(22,""," ","CloseDoWhile",QuadCount++);}
+    {(yyval.dummy)=NULL;printf("Do while\n");setQuad(91,""," ","CloseDoWhile",QuadCount++);}
     break;
 
   case 11:
 
 /* Line 1455 of yacc.c  */
 #line 261 "mylang.y"
-    {(yyval.dummy)=NULL;printf("For loop\n");setQuad(21,"","","CloseForLoop",QuadCount++);}
+    {(yyval.dummy)=NULL;printf("For loop\n");setQuad(92,"","OpenForLoop","CloseForLoop",QuadCount++);}
     break;
 
   case 12:
@@ -2879,7 +2879,7 @@ void ThrowError(char *Message, char *rVar)
 		DestroyList();
 		PrintQuadList(TestQuad);
 		QuadNode*R=getTOP();
-	//	ExctractQuad(R,mCode);
+		ExctractQuad(R,mCode);
 		
 		// -- TO-DO DestroyQuadList() to free allocated memory .. 
 		fprintf(outFile,"Completed");

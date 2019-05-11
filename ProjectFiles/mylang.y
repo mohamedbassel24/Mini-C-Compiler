@@ -309,7 +309,7 @@ stmt:   type IDENTIFIER SEMICOLON	%prec IFX                 				{
 		|increments SEMICOLON													{$$=NULL;}			
 		
 		;
-create :IDENTIFIER {CreateID(0,$1 ,IDCount++,SCOPE_Number+1);getIDENTIFIER($1,SCOPE_Number);}; 			// a rule to create IDENTIFIER in For Loop  
+create :IDENTIFIER {CreateID(0,$1 ,IDCount++,SCOPE_Number+1);getIDENTIFIER($1,SCOPE_Number);setQuad(1,," ",$1,QuadCount++);}; 			// a rule to create IDENTIFIER in For Loop  
 function : type IDENTIFIER ORBRACKET resetCounter argList CRBRACKET OCBRACKET scopeOpen funcQuad manyStatements RETURN  expression  SEMICOLON   CCBRACKET scopeClose  
 																															{
 																																$$=NULL;
@@ -753,7 +753,7 @@ void ThrowError(char *Message, char *rVar)
 		DestroyList();
 		PrintQuadList(TestQuad);
 		QuadNode*R=getTOP();
-	//	ExctractQuad(R,mCode);
+		ExctractQuad(R,mCode);
 		
 		// -- TO-DO DestroyQuadList() to free allocated memory .. 
 		fprintf(outFile,"Completed");

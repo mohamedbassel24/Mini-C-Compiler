@@ -16,7 +16,11 @@
 #define EQUALEQUAL_ 33
 #define NOTEQUAL_ 32
 #define FOR_ 21
+#define NOT_ 27
 #define GREATERTHANOREQUAL_ 30
+#define LESSTHANOREQUAL_ 30
+#define GREATERTHAN_ 28
+#define LESSTHAN_ 29
 #define IF_ 60
 #define INC_ 15
 #define MINUS_ 11
@@ -27,6 +31,9 @@
 #define SWITCH_ 61
 #define WHILE_ 20
 #define ELSE_ 80
+#define CLOSEWHILE_ 90
+#define CLOSEDOWHILE_ 91
+#define CLOSEFORLOOP_ 92
 
 
 typedef struct TypeAndValue {
