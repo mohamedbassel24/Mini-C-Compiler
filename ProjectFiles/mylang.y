@@ -256,7 +256,7 @@ stmt:   type IDENTIFIER SEMICOLON	%prec IFX                 				{
 
 		| DO dowhileQuad blockScope WHILE ORBRACKET expression CRBRACKET SEMICOLON		{$$=NULL;printf("Do while\n");setQuad(91,""," ","CloseDoWhile",QuadCount++);}// need to check type to booealen
 
-		| FOR ORBRACKET INT  create ASSIGN INTEGER SEMICOLON forQuad
+		| FOR ORBRACKET INT  create  SEMICOLON forQuad
 		  forExpression CRBRACKET
 		  blockScope											  			{$$=NULL;printf("For loop\n");setQuad(92,"","OpenForLoop","CloseForLoop",QuadCount++);}//  TO-DO check types on expression must int 
 
@@ -309,7 +309,7 @@ stmt:   type IDENTIFIER SEMICOLON	%prec IFX                 				{
 		|increments SEMICOLON													{$$=NULL;}			
 		
 		;
-create :IDENTIFIER {CreateID(0,$1 ,IDCount++,SCOPE_Number+1);getIDENTIFIER($1,SCOPE_Number);setQuad(1,," ",$1,QuadCount++);}; 			// a rule to create IDENTIFIER in For Loop  
+create :IDENTIFIER ASSIGN INTEGER{CreateID(0,$1 ,IDCount++,SCOPE_Number+1);getIDENTIFIER($1,SCOPE_Number);char c[3] = {};sprintf(c,"%d",$3);setQuad(1,c," ",$1,QuadCount++);}; 			// a rule to create IDENTIFIER in For Loop  
 function : type IDENTIFIER ORBRACKET resetCounter argList CRBRACKET OCBRACKET scopeOpen funcQuad manyStatements RETURN  expression  SEMICOLON   CCBRACKET scopeClose  
 																															{
 																																$$=NULL;
