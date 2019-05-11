@@ -1,8 +1,0 @@
-MOV R0 ,   
-MOV x , R0 
-MOV R1 , 5 
-MOV x , R1 
-MOV R2 ,   
-MOV y , R2 
-MOV R3 , 2 
-MOV y , R3 

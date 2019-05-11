@@ -153,11 +153,11 @@
 %token <StringValue> TEXT 
 %token <ChValue> CHARACTER 
 %token <ID>     IDENTIFIER
-%type <IntgerValue> type   callFunction
+%type <IntgerValue> type   
 %type <dummy> stmt  increments forExpression  function  caseExpression 
 %type <dummy>  blockScope manyStatements scopeOpen scopeClose 
 
-%type <X> equalFamily expression DataTypes booleanExpression
+%type <X> equalFamily expression DataTypes booleanExpression callFunction
 %%
 // All Capital Letters are terminals Tokens else are non terminals 
 mystart	: 
@@ -184,7 +184,7 @@ stmt:   type IDENTIFIER SEMICOLON	%prec IFX                 				{
 																					getIDENTIFIER($1,SCOPE_Number);
 																					printf("Assignment\n");
 																					if(TempIsUsed)
-																					setQuad(1,TempArr[TempCounter]," ",$1,QuadCount++);
+																					setQuad(1,TempArr[TempCounter-1]," ",$1,QuadCount++);
 																					else setQuad(1,$3->Value," ",$1,QuadCount++);
 																					TempCounter=0;
 																					TempIsUsed=false;
@@ -212,7 +212,7 @@ stmt:   type IDENTIFIER SEMICOLON	%prec IFX                 				{
 																			getIDENTIFIER($2,SCOPE_Number);// setValue here 
 																			setQuad(0," "," ",$2,QuadCount++);// Create  first IDENTIFIER
 																				if(TempIsUsed)
-																					setQuad(1,TempArr[TempCounter]," ",$2,QuadCount++);
+																					setQuad(1,TempArr[TempCounter-1]," ",$2,QuadCount++);
 																					else setQuad(1,$4->Value," ",$2,QuadCount++);
 																			printf("Declaration and Assignment\n");
 																					TempCounter=0;
@@ -232,10 +232,11 @@ stmt:   type IDENTIFIER SEMICOLON	%prec IFX                 				{
 																				CreateID($2+5,$3,IDCount++,SCOPE_Number);
 																			if(checktypeIDENTIFER(getSymbolType($3),$5->Type,$3))
 																			{
-																				getIDENTIFIER($3,SCOPE_Number);// setValue here 
+																				printf("weee\n");
+																				//getIDENTIFIER($3,SCOPE_Number);// setValue here 
 																				setQuad(0," "," ",$3,QuadCount++);// Create  first IDENTIFIER
 																				if(TempIsUsed)
-																					setQuad(1,TempArr[TempCounter]," ",$3,QuadCount++);
+																					setQuad(1,TempArr[TempCounter-1]," ",$3,QuadCount++);
 																					else setQuad(1,$5->Value," ",$3,QuadCount++);
 																					printf("Constant assignment\n");
 																					TempCounter=0;
@@ -251,32 +252,32 @@ stmt:   type IDENTIFIER SEMICOLON	%prec IFX                 				{
 																			;}
 
 		
-		| WHILE ORBRACKET expression CRBRACKET whileQuad stmt							{$$=NULL;char c[3] = {};gcvt(SCOPE_Number,6,c);setQuad(20,c," ","CloseWhile",QuadCount++);printf("While loop\n");}// need to check type to booealen
+		| WHILE ORBRACKET whileQuad CRBRACKET  stmt							{$$=NULL;char c[3] = {};gcvt(SCOPE_Number,6,c);setQuad(20,c," ","CloseWhile",QuadCount++);printf("While loop\n");}// need to check type to booealen
 
-		| DO dowhileQuad blockScope WHILE ORBRACKET expression CRBRACKET SEMICOLON		{$$=NULL;printf("Do while\n");}// need to check type to booealen
+		| DO dowhileQuad blockScope WHILE ORBRACKET expression CRBRACKET SEMICOLON		{$$=NULL;printf("Do while\n");setQuad(22,""," ","CloseDoWhile",QuadCount++);}// need to check type to booealen
 
 		| FOR ORBRACKET INT  create ASSIGN INTEGER SEMICOLON forQuad
-		  expression SEMICOLON
 		  forExpression CRBRACKET
-		  blockScope											  			{$$=NULL;printf("For loop\n");}//  TO-DO check types on expression must int 
+		  blockScope											  			{$$=NULL;printf("For loop\n");setQuad(21,"","","CloseForLoop",QuadCount++);}//  TO-DO check types on expression must int 
 
 		
-		| IF ORBRACKET expression CRBRACKET blockScope %prec IFX 			{$$=NULL;printf("If statement\n");}
+		| IF ORBRACKET ifQuad  CRBRACKET  blockScope %prec IFX 			{$$=NULL;printf("If statement\n");setQuad(60,"IF ","CheckFlags","",QuadCount++);}
 
-		| IF ORBRACKET expression CRBRACKET blockScope	 ELSE blockScope	{$$=NULL;printf("If-Elsestatement\n");}
+		| IF ORBRACKET ifQuad  CRBRACKET blockScope ELSE  elseQuad	{$$=NULL;printf("If-Elsestatement\n");setQuad(60,"IF ","ELSE","",QuadCount++);}
 
-		| SWITCH ORBRACKET IDENTIFIER CRBRACKET switchScope      			{$$=NULL;usedIDENTIFIER($3,SCOPE_Number);printf("Switch case\n");}
+		| SWITCH ORBRACKET switchQuad CRBRACKET switchScope      			{$$=NULL;printf("Switch case\n");}
 
 		
-		| PRINT expression 	SEMICOLON	                        				{$$=NULL;printf("Print\n");}
+		| PRINT expression 	SEMICOLON	                        				{$$=NULL;printf("Print\n");setQuad(62,"Print","",$2->Value,QuadCount++);}
 		
 		|  function	                                            		      {$$=NULL;printf("Function Body\n");}
-		|callFunction	                                    			      {$$=NULL;printf("Function Call\n");}
+		|callFunction	                                    			      {$$=NULL;setQuad(63,"FunctionCall",$1->Value,"",QuadCount++);printf("Function Call\n");}
 		|IDENTIFIER ASSIGN callFunction	                                      {
 																				$$=NULL;
-																				if(checktypeIDENTIFER(getSymbolType($1),$3,$1))
+																				if(checktypeIDENTIFER(getSymbolType($1),$3->Type,$1))
 																				{
 																					getIDENTIFIER($1,SCOPE_Number);
+																					setQuad(63,"FunctionCall",$3->Value,"",QuadCount++);
 																					printf("Function Call\n");}
 																				else 
 																				{
@@ -289,7 +290,7 @@ stmt:   type IDENTIFIER SEMICOLON	%prec IFX                 				{
 		|type IDENTIFIER ASSIGN callFunction	                              {	
 																				$$=NULL;
 																				CreateID($1,$2,IDCount++,SCOPE_Number);
-																				if(checktypeIDENTIFER(getSymbolType($2),$4,$2))
+																				if(checktypeIDENTIFER(getSymbolType($2),$4->Type,$2))
 																				{
 		
 																					getIDENTIFIER($2,SCOPE_Number);// setValue here 
@@ -309,23 +310,25 @@ stmt:   type IDENTIFIER SEMICOLON	%prec IFX                 				{
 		
 		;
 create :IDENTIFIER {CreateID(0,$1 ,IDCount++,SCOPE_Number+1);getIDENTIFIER($1,SCOPE_Number);}; 			// a rule to create IDENTIFIER in For Loop  
-function : type IDENTIFIER ORBRACKET resetCounter argList CRBRACKET OCBRACKET scopeOpen manyStatements RETURN  expression  SEMICOLON   CCBRACKET scopeClose  
+function : type IDENTIFIER ORBRACKET resetCounter argList CRBRACKET OCBRACKET scopeOpen funcQuad manyStatements RETURN  expression  SEMICOLON   CCBRACKET scopeClose  
 																															{
 																																$$=NULL;
-																																if($1 !=$11->Type)//check return types 
+																																if($1 !=$12->Type)//check return types 
 																																{
 																																	ThrowError("Error: incompatible return types of Function ",$2);
 																																}
 																																else
 																																{
 																																	CreateFunction($1,$2,IDCount++,SCOPE_Number,ArgCounter,FuncArgTypes);
+																																	
 																																	printf("function\n");
 																																}
 																															}// create a function symbol 
 	   ;
 callFunction: IDENTIFIER ORBRACKET resetCounter callList CRBRACKET SEMICOLON// To-DO check here
 																{
-																	$$=getSymbolType($1);
+																	$$->Type=getSymbolType($1);
+																	$$->Value=$1;
 																	int num =checkArgType(ArgCounter,FuncArgTypes,$1,SCOPE_Number);
 																	if(num==-25)
 																	{
@@ -376,8 +379,8 @@ equalFamily:   FLOATNUMBER                     {
 												$$=(struct TypeAndValue*) malloc(sizeof(struct TypeAndValue));
 												$$->Type=1;				
 												char c[3] = {};
-												//sprintf(c,"%f",$1);
-													gcvt($1,6,c);
+												sprintf(c,"%f",$1);
+													//gcvt($1,6,c);
 													$$->Value=c;
 											   }
 		| INTEGER		                       {
@@ -463,39 +466,35 @@ equalFamily:   FLOATNUMBER                     {
 
 increments: IDENTIFIER  INC            			 	 {$$=NULL;usedIDENTIFIER($1,SCOPE_Number);setQuad(15,"INC","INC",$1,QuadCount++);}// CREATE QUAD HERE 
 		| IDENTIFIER DEC               			     {$$=NULL;usedIDENTIFIER($1,SCOPE_Number);setQuad(16,"DEC","DEC",$1,QuadCount++);}
-		| IDENTIFIER PLUSEQUAL equalFamily    	     {$$=NULL;usedIDENTIFIER($1,SCOPE_Number);}//  DELETE THOSE 
-		| IDENTIFIER MINUSEQUAL equalFamily   	     {$$=NULL;usedIDENTIFIER($1,SCOPE_Number);}
-		| IDENTIFIER MULTIPLYEQUAL equalFamily       {$$=NULL;usedIDENTIFIER($1,SCOPE_Number);}
-		| IDENTIFIER DIVIDEEQUAL equalFamily         {$$=NULL;usedIDENTIFIER($1,SCOPE_Number);}
 		;
 
 
 forExpression : increments                 {$$=NULL;}
-			| IDENTIFIER ASSIGN equalFamily {$$=NULL; getIDENTIFIER($1,SCOPE_Number+1);};// Brace yet not open yet// delete this for simplicty
+				;
 		 
 booleanExpression: expression AND expression          {
 										
-														if($1->Type!=$3->Type) 
-															ThrowError("Conflict dataTypes in AND Operation \n "," "); 
-														{
+														//if($1->Type!=$3->Type) 
+														//	ThrowError("Conflict dataTypes in AND Operation \n "," "); 
+														//{
 															$$=(struct TypeAndValue*) malloc(sizeof(struct TypeAndValue));// Creating a new instance
 															$$->Type=$1->Type;// the result has the same type 
 															$$->Value=TempArr[TempCounter];// store  the Result in TEMP 
 															setQuad(25,$1->Value,$3->Value,TempArr[TempCounter++],QuadCount++);//Generate ADD Quadrable 
 															TempIsUsed=true;//Tell the Assigment test to Assign the last TEMP 
-														}
+													//	}
 														}
 															
 			| expression OR expression             	{
-														if($1->Type!=$3->Type) 
-															ThrowError("Conflict dataTypes in OR Operation \n "," "); 
-														{
+													//	if($1->Type!=$3->Type) 
+													//		ThrowError("Conflict dataTypes in OR Operation \n "," "); 
+													//	{
 															$$=(struct TypeAndValue*) malloc(sizeof(struct TypeAndValue));// Creating a new instance
 															$$->Type=$1->Type;// the result has the same type 
 															$$->Value=TempArr[TempCounter];// store  the Result in TEMP 
 															setQuad(26,$1->Value,$3->Value,TempArr[TempCounter++],QuadCount++);//Generate ADD Quadrable 
 															TempIsUsed=true;//Tell the Assigment test to Assign the last TEMP 
-														; }
+														;// }
 														}
 			| NOT expression                        {
 														
@@ -508,7 +507,7 @@ booleanExpression: expression AND expression          {
 														}
 			| DataTypes GREATERTHAN DataTypes         {
 														if($1->Type!=$3->Type) 
-															ThrowError("Conflict dataTypes in OR Operation \n "," "); 
+															ThrowError("Conflict dataTypes in GREATERTHAN Operation \n "," "); 
 														{
 															$$=(struct TypeAndValue*) malloc(sizeof(struct TypeAndValue));// Creating a new instance
 															$$->Type=$1->Type;// the result has the same type 
@@ -519,7 +518,7 @@ booleanExpression: expression AND expression          {
 														}
 			| DataTypes LESSTHAN DataTypes            {
 														if($1->Type!=$3->Type) 
-															ThrowError("Conflict dataTypes in OR Operation \n "," "); 
+															ThrowError("Conflict dataTypes in LESSTHAN Operation \n "," "); 
 														{
 															$$=(struct TypeAndValue*) malloc(sizeof(struct TypeAndValue));// Creating a new instance
 															$$->Type=$1->Type;// the result has the same type 
@@ -530,7 +529,7 @@ booleanExpression: expression AND expression          {
 														}
 			| DataTypes GREATERTHANOREQUAL DataTypes  {
 														if($1->Type!=$3->Type) 
-															ThrowError("Conflict dataTypes in OR Operation \n "," "); 
+															ThrowError("Conflict dataTypes in GREATERTHANOREQUAL Operation \n "," "); 
 														{
 															$$=(struct TypeAndValue*) malloc(sizeof(struct TypeAndValue));// Creating a new instance
 															$$->Type=$1->Type;// the result has the same type 
@@ -541,7 +540,7 @@ booleanExpression: expression AND expression          {
 														}
 			| DataTypes LESSTHANOREQUAL DataTypes     {
 														if($1->Type!=$3->Type) 
-															ThrowError("Conflict dataTypes in OR Operation \n "," "); 
+															ThrowError("Conflict dataTypes in LESSTHANOREQUAL Operation \n "," "); 
 														{
 															$$=(struct TypeAndValue*) malloc(sizeof(struct TypeAndValue));// Creating a new instance
 															$$->Type=$1->Type;// the result has the same type 
@@ -552,7 +551,7 @@ booleanExpression: expression AND expression          {
 														}
 			| DataTypes NOTEQUAL DataTypes              {
 														if($1->Type!=$3->Type) 
-															ThrowError("Conflict dataTypes in OR Operation \n "," "); 
+															ThrowError("Conflict dataTypes in NOTEQUAL Operation \n "," "); 
 														{
 															$$=(struct TypeAndValue*) malloc(sizeof(struct TypeAndValue));// Creating a new instance
 															$$->Type=$1->Type;// the result has the same type 
@@ -563,7 +562,7 @@ booleanExpression: expression AND expression          {
 														}
 			| DataTypes EQUALEQUAL DataTypes            {
 														if($1->Type!=$3->Type) 
-															ThrowError("Conflict dataTypes in OR Operation \n "," "); 
+															ThrowError("Conflict dataTypes in EQUALEQUAL Operation \n "," "); 
 														{
 															$$=(struct TypeAndValue*) malloc(sizeof(struct TypeAndValue));// Creating a new instance
 															$$->Type=$1->Type;// the result has the same type 
@@ -605,18 +604,19 @@ DataTypes:equalFamily{$$=$1;}
 expression:	DataTypes{{$$=$1;}}
 		| booleanExpression{{$$=$1; }} ;
 // GENERATE  QUAD HERE 
-caseExpression:	DEFAULT COLON manyStatements BREAK SEMICOLON    		     {$$=NULL;printf(" Case Statment\n");}	 	 // with default and must end with default statment                    
-		| CASE INTEGER COLON manyStatements BREAK SEMICOLON caseExpression 	 {$$=NULL;printf(" Case Statment\n");}	 	// without default
-		| CASE INTEGER COLON manyStatements  caseExpression					 {$$=NULL;printf(" Case Statment\n");}		// without break as break is not necessary
-		   ;
+caseExpression:	DEFAULT COLON{setQuad(70,""," ","DEFAULTCase",QuadCount++);}manyStatements BREAK SEMICOLON    		     {$$=NULL;printf(" Case Statment\n");}	 	 // with default and must end with default statment                    
+			  | CASE INTEGER COLON{char c[3] = {}; sprintf(c,"%d",$2);setQuad(70,c," ","case",QuadCount++);} manyStatements BREAK SEMICOLON caseExpression 	 {$$=NULL;printf(" Case Statment\n");}	 	// without default
+		      ;
 
 		   
 		   
-whileQuad:{char c[3] = {};gcvt(SCOPE_Number,6,c);setQuad(20,c," ","OpenWhile",QuadCount++);}
-dowhileQuad:{char c[3] = {};gcvt(SCOPE_Number,6,c);setQuad(22,c," ","OpenDoWhile",QuadCount++);}
-forQuad:{char c[3] = {};gcvt(SCOPE_Number,6,c);setQuad(21,c," ","OpenForLoop",QuadCount++);}
-//funcQuad:{char c[3] = {};gcvt(SCOPE_Number,6,c);setQuad(23,c," ","FuncBody",QuadCount++);}
-		   
+whileQuad:expression{char c[3] = {};sprintf(c,"%f",SCOPE_Number);setQuad(20,c,$1->Value,"OpenWhile",QuadCount++);}
+dowhileQuad:{char c[3] = {};sprintf(c,"%f",SCOPE_Number);setQuad(22,c," ","OpenDoWhile",QuadCount++);}
+forQuad:expression SEMICOLON{char c[3] = {};sprintf(c,"%f",SCOPE_Number);setQuad(21,c,$1->Value,"OpenForLoop",QuadCount++);}
+funcQuad:{char c[3] = {};sprintf(c,"%f",SCOPE_Number);setQuad(23,c," ","FuncBody Begin ",QuadCount++);}
+switchQuad:IDENTIFIER{setQuad(61,"SwitchStart","",$1,QuadCount++);usedIDENTIFIER($1,SCOPE_Number);}
+ifQuad:expression {setQuad(60,"IF ","CheckFlags","",QuadCount++);}
+elseQuad:blockScope{setQuad(60,"else","n","",QuadCount++);}	   
 		   
 %% 
 void CreateID(int type , char*rName,int rID,int ScopeNum)
@@ -753,7 +753,7 @@ void ThrowError(char *Message, char *rVar)
 		DestroyList();
 		PrintQuadList(TestQuad);
 		QuadNode*R=getTOP();
-		ExctractQuad(R,mCode);
+	//	ExctractQuad(R,mCode);
 		
 		// -- TO-DO DestroyQuadList() to free allocated memory .. 
 		fprintf(outFile,"Completed");
