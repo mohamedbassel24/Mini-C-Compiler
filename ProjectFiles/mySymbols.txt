@@ -1,10 +1,50 @@
 Used Identifiers :- 
+v of type Char
+i of type Integer
+a of type Float
+cufe of type String
+r of type Integer
+z of type Bool
 y of type Integer
+x of type Integer
 
 UnUsed Identifiers :- 
+Salah of type Integer
+Mufeed of type Integer
+Bassel of type Integer
+check of type Bool
+F of type ConstFloat
+weeee of type Char
+wel of type ConstChar
+welcome of type ConstString
+num2 of type ConstIntger
+num of type ConstFloat
+asd of type String
+compiling of type Bool
+compiler of type Integer
 
 Initilized Identifiers :- 
-y of type Integer
+v of type Char
+i of type Integer
+a of type Float
+check of type Bool
+cufe of type String
+F of type ConstFloat
+r of type Integer
+z of type Bool
+x of type Integer
+weeee of type Char
+wel of type ConstChar
+welcome of type ConstString
+num2 of type ConstIntger
+num of type ConstFloat
+compiler of type Integer
 
 UnInitilized Identifiers :- 
+Salah of type Integer
+Mufeed of type Integer
+Bassel of type Integer
+y of type Integer
+asd of type String
+compiling of type Bool
 
