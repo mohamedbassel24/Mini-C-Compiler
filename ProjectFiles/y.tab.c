@@ -2879,7 +2879,7 @@ void ThrowError(char *Message, char *rVar)
 		DestroyList();
 		PrintQuadList(TestQuad);
 		QuadNode*R=getTOP();
-//		ExctractQuad(R,mCode);
+		ExctractQuad(R,mCode);
 		
 		// -- TO-DO DestroyQuadList() to free allocated memory .. 
 		fprintf(outFile,"Completed");

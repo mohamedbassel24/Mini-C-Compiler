@@ -322,6 +322,7 @@ Reg reg[7];
 void ExctractQuad(QuadNode* head,FILE *f)
 {
 	QuadNode*ptr = head;
+	ResetReg();
 	Reg free;
 	while (ptr != NULL)
 	{
@@ -331,18 +332,18 @@ void ExctractQuad(QuadNode* head,FILE *f)
 			free = CheckReg();
 			if (ptr->DATA->Arg1 == " " && ptr->DATA->Arg2 == " ")
 			{
-				fprintf(f, "MOV %s , NULL\n", free.reg);
-				fprintf(f, "MOV %s , %s \n", ptr->DATA->Result,free.var);
+				fprintf(f, "MOV %s , NULL \n", free.reg);
+				fprintf(f, "MOV %s , %s \n", ptr->DATA->Result,free.reg);
 			}
 			else if (ptr->DATA->Arg1 != " ") {
-				fprintf(f, "MOV %s , %s\n", free.reg,ptr->DATA->Arg1);
-				fprintf(f, "MOV %s , %s \n", ptr->DATA->Result, free.var);
+				fprintf(f, "MOV %s , %s \n", free.reg,ptr->DATA->Arg1);
+				fprintf(f, "MOV %s , %s \n", ptr->DATA->Result, free.reg);
 			//	output.push_back("MOV " + free.reg + "," + (string)ptr->DATA->Arg1);
 			//	output.push_back("MOV " + (string)ptr->DATA->Result + "," + free.var);
 			}
 			else if (ptr->DATA->Arg2 != " ") {
-				fprintf(f, "MOV %s , %s\n", free.reg, ptr->DATA->Arg2);
-				fprintf(f, "MOV %s , %s \n", ptr->DATA->Result, free.var);
+				fprintf(f, "MOV %s , %s \n", free.reg, ptr->DATA->Arg2);
+				fprintf(f, "MOV %s , %s \n", ptr->DATA->Result, free.reg);
 			//	output.push_back("MOV " + free.reg + "," + (string)ptr->DATA->Arg2);
 			//	output.push_back("MOV " + (string)ptr->DATA->Result + "," + free.var);
 			}
@@ -355,8 +356,8 @@ void ExctractQuad(QuadNode* head,FILE *f)
 			break;
 		case ADD_:
 			// TO DO check if Integar value dont move and add directly
-			fprintf(f, "MOV %s , %s\n", free.reg, ptr->DATA->Arg1);
-			fprintf(f, "MOV %s , %s\n", free.reg, ptr->DATA->Arg2);
+			fprintf(f, "MOV %s , %s \n", free.reg, ptr->DATA->Arg1);
+			fprintf(f, "MOV %s , %s \n", free.reg, ptr->DATA->Arg2);
 			fprintf(f, "ADD %s , %s \n", free.reg, free.reg);// add new REGISTER ! 
 			free.used++;
 			free.var = ptr->DATA->Result;
@@ -401,10 +402,18 @@ void ResetReg()
 	for ( i = 0; i<7; i++)
 	{
 		Reg x;
-		x.reg = "R" + i;
 		x.var = "0";
 		x.used = 0;
+		reg[i].used=x.used;
+		reg[i].var=x.var;
 	}
+	reg[0].reg="R0";
+	reg[1].reg="R1";
+	reg[2].reg="R2";
+	reg[3].reg="R3";
+	reg[4].reg="R4";
+	reg[5].reg="R5";
+	reg[6].reg="R6";
 }
 void SetReg(Reg x)
 {

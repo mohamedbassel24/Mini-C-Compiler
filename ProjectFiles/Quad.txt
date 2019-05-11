@@ -1,15 +1,3 @@
- OpCode: 10  Arg1:5  Arg2: 6 Result:Temp1 
- OpCode: 11  Arg1:Temp1  Arg2: 7 Result:Temp2 
  OpCode: 0  Arg1:   Arg2:   Result:x 
- OpCode: 1  Arg1:Temp3  Arg2:   Result:x 
- OpCode: 11  Arg1:2  Arg2: 1 Result:Temp1 
  OpCode: 0  Arg1:   Arg2:   Result:y 
- OpCode: 1  Arg1:Temp2  Arg2:   Result:y 
- OpCode: 28  Arg1:x  Arg2: y Result:Temp1 
  OpCode: 0  Arg1:   Arg2:   Result:z 
- OpCode: 1  Arg1:Temp2  Arg2:   Result:z 
- OpCode: 28  Arg1:x  Arg2: 0 Result:Temp1 
- OpCode: 20  Arg1:0.  Arg2:   Result:OpenWhile 
- OpCode: 10  Arg1:x  Arg2: 1 Result:Temp2 
- OpCode: 1  Arg1:Temp3  Arg2:   Result:x 
- OpCode: 20  Arg1:0.  Arg2:   Result:CloseWhile 
