@@ -256,21 +256,21 @@ stmt:   type IDENTIFIER SEMICOLON	%prec IFX                 				{
 
 		| DO dowhileQuad blockScope WHILE ORBRACKET expression CRBRACKET SEMICOLON		{$$=NULL;printf("Do while\n");setQuad(91,""," ","CloseDoWhile",QuadCount++);}// need to check type to booealen
 
-		| FOR ORBRACKET INT  create ASSIGN INTEGER SEMICOLON forQuad
+		| FOR ORBRACKET INT  create  SEMICOLON forQuad
 		  forExpression CRBRACKET
 		  blockScope											  			{$$=NULL;printf("For loop\n");setQuad(92,"","OpenForLoop","CloseForLoop",QuadCount++);}//  TO-DO check types on expression must int 
 
 		
 		| IF ORBRACKET ifQuad  CRBRACKET  blockScope %prec IFX 			{$$=NULL;printf("If statement\n");setQuad(60,"IF ","CloseIF","",QuadCount++);}
 
-		| IF ORBRACKET ifQuad  CRBRACKET blockScope ELSE  elseQuad	{$$=NULL;printf("If-Elsestatement\n");setQuad(60,"IF ","ELSE","",QuadCount++);}
+		| IF ORBRACKET ifQuad  CRBRACKET blockScope ELSE  elseQuad	{$$=NULL;printf("If-Elsestatement\n");setQuad(81,"IF ","CloseELSE","",QuadCount++);}
 
-		| SWITCH ORBRACKET switchQuad CRBRACKET switchScope      			{$$=NULL;printf("Switch case\n");}
+		| SWITCH ORBRACKET switchQuad CRBRACKET switchScope      			{$$=NULL;printf("Switch case\n");setQuad(72,"IF ","ENDSWITCH","",QuadCount++);}
 
 		
 		| PRINT expression 	SEMICOLON	                        				{$$=NULL;printf("Print\n");setQuad(62,"Print","",$2->Value,QuadCount++);}
 		
-		|  function	                                            		      {$$=NULL;printf("Function Body\n");}
+		|  function	                                            		      {$$=NULL;printf("Function Body\n");setQuad(101,"RET","","",QuadCount++);}
 		|callFunction	                                    			      {$$=NULL;setQuad(63,"FunctionCall",$1->Value,"",QuadCount++);printf("Function Call\n");}
 		|IDENTIFIER ASSIGN callFunction	                                      {
 																				$$=NULL;
@@ -309,7 +309,7 @@ stmt:   type IDENTIFIER SEMICOLON	%prec IFX                 				{
 		|increments SEMICOLON													{$$=NULL;}			
 		
 		;
-create :IDENTIFIER {CreateID(0,$1 ,IDCount++,SCOPE_Number+1);getIDENTIFIER($1,SCOPE_Number);}; 			// a rule to create IDENTIFIER in For Loop  
+create :IDENTIFIER ASSIGN INTEGER{CreateID(0,$1 ,IDCount++,SCOPE_Number+1);getIDENTIFIER($1,SCOPE_Number);char c[3] = {};sprintf(c,"%d",$3);setQuad(1,c," ",$1,QuadCount++);}; 			// a rule to create IDENTIFIER in For Loop  
 function : type IDENTIFIER ORBRACKET resetCounter argList CRBRACKET OCBRACKET scopeOpen funcQuad manyStatements RETURN  expression  SEMICOLON   CCBRACKET scopeClose  
 																															{
 																																$$=NULL;
@@ -604,7 +604,7 @@ DataTypes:equalFamily{$$=$1;}
 expression:	DataTypes{{$$=$1;}}
 		| booleanExpression{{$$=$1; }} ;
 // GENERATE  QUAD HERE 
-caseExpression:	DEFAULT COLON{setQuad(70,""," ","DEFAULTCase",QuadCount++);}manyStatements BREAK SEMICOLON    		     {$$=NULL;printf(" Case Statment\n");}	 	 // with default and must end with default statment                    
+caseExpression:	DEFAULT COLON{setQuad(71,""," ","DEFAULTCase",QuadCount++);}manyStatements BREAK SEMICOLON    		     {$$=NULL;printf(" Case Statment\n");}	 	 // with default and must end with default statment                    
 			  | CASE INTEGER COLON{char c[3] = {}; sprintf(c,"%d",$2);setQuad(70,c," ","case",QuadCount++);} manyStatements BREAK SEMICOLON caseExpression 	 {$$=NULL;printf(" Case Statment\n");}	 	// without default
 		      ;
 
@@ -613,10 +613,10 @@ caseExpression:	DEFAULT COLON{setQuad(70,""," ","DEFAULTCase",QuadCount++);}many
 whileQuad:expression{char c[3] = {};sprintf(c,"%f",SCOPE_Number);setQuad(20,c,$1->Value,"OpenWhile",QuadCount++);}
 dowhileQuad:{char c[3] = {};sprintf(c,"%f",SCOPE_Number);setQuad(22,c," ","OpenDoWhile",QuadCount++);}
 forQuad:expression SEMICOLON{char c[3] = {};sprintf(c,"%f",SCOPE_Number);setQuad(21,c,$1->Value,"OpenForLoop",QuadCount++);}
-funcQuad:{char c[3] = {};sprintf(c,"%f",SCOPE_Number);setQuad(23,c," ","FuncBody Begin ",QuadCount++);}
+funcQuad:{char c[3] = {};sprintf(c,"%f",SCOPE_Number);setQuad(100,c," ","FuncBody Begin ",QuadCount++);}
 switchQuad:IDENTIFIER{setQuad(61,"SwitchStart","",$1,QuadCount++);usedIDENTIFIER($1,SCOPE_Number);}
 ifQuad:expression {setQuad(60,"IF ","OpenIF","",QuadCount++);}
-elseQuad:blockScope{setQuad(60,"else","n","",QuadCount++);}	   
+elseQuad:{setQuad(80,"else","n","",QuadCount++);}blockScope
 		   
 %% 
 void CreateID(int type , char*rName,int rID,int ScopeNum)
