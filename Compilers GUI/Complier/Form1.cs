@@ -29,7 +29,7 @@ namespace Complier
             txt.Close();
 
             // TODO: Change path acoordingly
-            System.Diagnostics.Process.Start("cmd.exe", "/C C: & cd C:\\Users\\Ahmed\\Desktop\\Complier & project & pause");
+            System.Diagnostics.Process.Start("cmd.exe", "/C C: & cd C:\\Users\\Ahmed\\Desktop\\Projects\\Compilers\\Mini-C-Compiler\\Compilers GUI & project & pause");
 
             richTextBox2.Text = File.ReadAllText(@"..\\..\\..\\output.txt");
             richTextBox3.Text = File.ReadAllText(@"..\\..\\..\\symbol.txt");

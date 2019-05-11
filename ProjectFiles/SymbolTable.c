@@ -324,6 +324,7 @@ void ExctractQuad(QuadNode* head,FILE *f)
 	QuadNode*ptr = head;
 	ResetReg();
 	Reg free;
+	Reg Aux;
 	while (ptr != NULL)
 	{
 		switch (ptr->DATA->OpCode)
@@ -332,7 +333,7 @@ void ExctractQuad(QuadNode* head,FILE *f)
 			free = CheckReg();
 			if (ptr->DATA->Arg1 == " " && ptr->DATA->Arg2 == " ")
 			{
-				fprintf(f, "MOV %s , NULL \n", free.reg);
+				fprintf(f, "MOV %s , %s \n", free.reg,"NULL");
 				fprintf(f, "MOV %s , %s \n", ptr->DATA->Result,free.reg);
 			}
 			else if (ptr->DATA->Arg1 != " ") {
@@ -353,34 +354,114 @@ void ExctractQuad(QuadNode* head,FILE *f)
 			ptr = ptr->Next;
 			break;
 		case ASSIGN_:
-			break;
-		case ADD_:
-			// TO DO check if Integar value dont move and add directly
-			fprintf(f, "MOV %s , %s \n", free.reg, ptr->DATA->Arg1);
-			fprintf(f, "MOV %s , %s \n", free.reg, ptr->DATA->Arg2);
-			fprintf(f, "ADD %s , %s \n", free.reg, free.reg);// add new REGISTER ! 
+			free = CheckReg();
+			if (ptr->DATA->Arg1 != " ") {
+				fprintf(f, "MOV %s , %s \n", free.reg,ptr->DATA->Arg1);
+				fprintf(f, "MOV %s , %s \n", ptr->DATA->Result, free.reg);
+			//	output.push_back("MOV " + free.reg + "," + (string)ptr->DATA->Arg1);
+			//	output.push_back("MOV " + (string)ptr->DATA->Result + "," + free.var);
+			}
+			else if (ptr->DATA->Arg2 != " ") {
+				fprintf(f, "MOV %s , %s \n", free.reg, ptr->DATA->Arg2);
+				fprintf(f, "MOV %s , %s \n", ptr->DATA->Result, free.reg);
+			//	output.push_back("MOV " + free.reg + "," + (string)ptr->DATA->Arg2);
+			//	output.push_back("MOV " + (string)ptr->DATA->Result + "," + free.var);
+			}
 			free.used++;
 			free.var = ptr->DATA->Result;
 			SetReg(free);
 			ptr = ptr->Next;
 			break;
+		case ADD_:
+			// TO DO check if Integar value dont move and add directly
+			free = CheckReg();
+			Aux = free;
+			fprintf(f, "MOV %s , %s \n", Aux.reg, ptr->DATA->Arg1);
+			Aux.used++;
+			Aux.var = ptr->DATA->Arg1;
+			SetReg(Aux);
+			free = CheckReg();
+			fprintf(f, "MOV %s , %s \n", free.reg, ptr->DATA->Arg2);
+			free.used++;
+			free.var = ptr->DATA->Arg2;
+			SetReg(free);
+			fprintf(f, "ADD %s , %s , %s\n", ptr->DATA->Result,Aux.reg, free.reg);// add new REGISTER ! 
+			ptr = ptr->Next;
+			break;
 		case MINUS_:
-			
+			free = CheckReg();
+			Aux = free;
+			fprintf(f, "MOV %s , %s \n", Aux.reg, ptr->DATA->Arg1);
+			Aux.used++;
+			Aux.var = ptr->DATA->Arg1;
+			SetReg(Aux);
+			free = CheckReg();
+			fprintf(f, "MOV %s , %s \n", free.reg, ptr->DATA->Arg2);
+			free.used++;
+			free.var = ptr->DATA->Arg2;
+			SetReg(free);
+			fprintf(f, "SUB %s , %s , %s\n", ptr->DATA->Result,Aux.reg, free.reg);// add new REGISTER ! 
+			ptr = ptr->Next;
 			break;
 		case MULTIPLY_:
-			
+			free = CheckReg();
+			Aux = free;
+			fprintf(f, "MOV %s , %s \n", Aux.reg, ptr->DATA->Arg1);
+			Aux.used++;
+			Aux.var = ptr->DATA->Arg1;
+			SetReg(Aux);
+			free = CheckReg();
+			fprintf(f, "MOV %s , %s \n", free.reg, ptr->DATA->Arg2);
+			free.used++;
+			free.var = ptr->DATA->Arg2;
+			SetReg(free);
+			fprintf(f, "IMUL %s , %s , %s\n", ptr->DATA->Result,Aux.reg, free.reg);// add new REGISTER ! 
+			ptr = ptr->Next;
 			break;
 		case DIVIDE_:
-			
+			fprintf(f, "MOV %s , %s \n", "R0", ptr->DATA->Arg1);
+			free = CheckReg();
+			if(free.reg == "R0")
+				free.reg = "R6";
+			fprintf(f, "MOV %s , %s \n", free.reg, ptr->DATA->Arg2);
+			fprintf(f, "DIV %s \n", free.reg);
+			fprintf(f, "MOV %s , %s \n", ptr->DATA->Result, "R0");
+			ptr = ptr->Next;
 			break;
 		case REM_:
-			
+			free = CheckReg();
+			Aux = free;
+			fprintf(f, "MOV %s , %s \n", Aux.reg, ptr->DATA->Arg1);
+			Aux.used++;
+			Aux.var = ptr->DATA->Arg1;
+			SetReg(Aux);
+			free = CheckReg();
+			fprintf(f, "MOV %s , %s \n", free.reg, ptr->DATA->Arg2);
+			free.used++;
+			free.var = ptr->DATA->Arg2;
+			SetReg(free);
+			fprintf(f, "REM %s , %s , %s\n", ptr->DATA->Result,Aux.reg, free.reg);// add new REGISTER ! 
+			ptr = ptr->Next;
 			break;
 		case INC_:
-			
+			free = CheckReg();
+			fprintf(f, "MOV %s , %s \n", free.reg, ptr->DATA->Result);
+			fprintf(f, "INC %s \n", free.reg);
+			fprintf(f, "MOV %s , %s \n", ptr->DATA->Result,free.reg);
+			free.used++;
+			free.var = ptr->DATA->Arg2;
+			SetReg(free);
+			ptr = ptr->Next;
 			break;
 		case DEC_:
-			
+			free = CheckReg();
+			fprintf(f, "MOV %s , %s \n", free.reg, ptr->DATA->Result);
+			fprintf(f, "DEC %s \n", free.reg);
+			fprintf(f, "MOV %s , %s \n", ptr->DATA->Result,free.reg);
+			free.used++;
+			free.var = ptr->DATA->Arg2;
+			SetReg(free);
+			ptr = ptr->Next;
 			break;
 		case WHILE_:
 			
@@ -443,7 +524,7 @@ Reg CheckReg()
 			{
 				return reg[i];
 			}
-			else if (reg[i].used <= min.used)
+			else if (reg[i].used < min.used)
 			{
 				min = reg[i];
 			}

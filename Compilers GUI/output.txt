@@ -1,0 +1,2 @@
+Syntax Error Could not parse quadruples
+line number : 0 Error: incompatible types for division 
