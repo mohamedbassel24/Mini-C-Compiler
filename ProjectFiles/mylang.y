@@ -134,11 +134,7 @@
 	bool manyExpressions=false;
 	bool TempIsUsed=false;
 	int TempCounter=0;
-	char*TempArr[4]={"Temp1","Temp2","Temp3","Temp4"};
-	
-
-	
-	
+	char*TempArr[16]={"Temp1","Temp2","Temp3","Temp4","TEMP5","TEMP6","TEMP7","TEMP8","TEMP9","TEMP10","TEMP11","TEMP12","TEMP13","TEMP14","TEMP15","TEMP16"};	
 	%}
 	%union {
     int IntgerValue;                 /* integer value */
@@ -157,11 +153,11 @@
 %token <StringValue> TEXT 
 %token <ChValue> CHARACTER 
 %token <ID>     IDENTIFIER
-%type <IntgerValue> type  expression DataTypes callFunction
+%type <IntgerValue> type   callFunction
 %type <dummy> stmt  increments forExpression  function  caseExpression 
-%type <dummy> booleanExpression blockScope manyStatements scopeOpen scopeClose 
+%type <dummy>  blockScope manyStatements scopeOpen scopeClose 
 
-%type <X> equalFamily
+%type <X> equalFamily expression DataTypes booleanExpression
 %%
 // All Capital Letters are terminals Tokens else are non terminals 
 mystart	: 
@@ -182,7 +178,7 @@ stmt:   type IDENTIFIER SEMICOLON	%prec IFX                 				{
 		| IDENTIFIER ASSIGN expression SEMICOLON	          				{
 																				$$=NULL;
 																		
-																			if(getSymbolType($1)==$3 || (getSymbolType($1)-5)==$3)
+																			if(getSymbolType($1)==$3->Type || (getSymbolType($1)-5)==$3->Type)
 																				{
 																				
 																					getIDENTIFIER($1,SCOPE_Number);
@@ -200,8 +196,6 @@ stmt:   type IDENTIFIER SEMICOLON	%prec IFX                 				{
 																					char*str1=conctanteStr($1," Has No Declread Type ");
 																					ThrowError("",str1);
 																					}
-																					
-																		
 																					char*str1=conctanteStr($1," of Type");
 												
 																					char* str2=conctanteStr(str1,idtypeString[getSymbolType($1)]);
@@ -212,9 +206,8 @@ stmt:   type IDENTIFIER SEMICOLON	%prec IFX                 				{
 
 		| type IDENTIFIER ASSIGN expression	SEMICOLON	      				{
 																			$$=NULL;
-																			printf("%d ID  %d   expression\n",$1,$4);
 																			CreateID($1,$2,IDCount++,SCOPE_Number);
-																			if(checktypeIDENTIFER(getSymbolType($2),$4,$2))
+																			if(checktypeIDENTIFER(getSymbolType($2),$4->Type,$2))
 																			{
 																			getIDENTIFIER($2,SCOPE_Number);// setValue here 
 																			setQuad(0," "," ",$2,QuadCount++);// Create  first IDENTIFIER
@@ -237,16 +230,16 @@ stmt:   type IDENTIFIER SEMICOLON	%prec IFX                 				{
 		| CONST type IDENTIFIER ASSIGN expression SEMICOLON   				{
 																				$$=NULL;
 																				CreateID($2+5,$3,IDCount++,SCOPE_Number);
-																			if(checktypeIDENTIFER(getSymbolType($3),$5,$3))
+																			if(checktypeIDENTIFER(getSymbolType($3),$5->Type,$3))
 																			{
 																				getIDENTIFIER($3,SCOPE_Number);// setValue here 
 																				setQuad(0," "," ",$3,QuadCount++);// Create  first IDENTIFIER
 																				if(TempIsUsed)
 																					setQuad(1,TempArr[TempCounter]," ",$3,QuadCount++);
 																					else setQuad(1,RightHandSide[0]," ",$3,QuadCount++);
-																				printf("Constant assignment\n");
+																					printf("Constant assignment\n");
 																					TempCounter=0;
-																				TempIsUsed=false;
+																					TempIsUsed=false;
 																			}
 																			else
 																				{
@@ -319,7 +312,7 @@ create :IDENTIFIER {CreateID(0,$1 ,IDCount++,SCOPE_Number+1);getIDENTIFIER($1,SC
 function : type IDENTIFIER ORBRACKET resetCounter argList CRBRACKET OCBRACKET scopeOpen manyStatements RETURN  expression  SEMICOLON   CCBRACKET scopeClose  
 																															{
 																																$$=NULL;
-																																if($1 !=$11)//check return types 
+																																if($1 !=$11->Type)//check return types 
 																																{
 																																	ThrowError("Error: incompatible return types of Function ",$2);
 																																}
@@ -478,32 +471,139 @@ increments: IDENTIFIER  INC            			 	 {$$=NULL;usedIDENTIFIER($1,SCOPE_Nu
 
 
 forExpression : increments                 {$$=NULL;}
-			| IDENTIFIER ASSIGN equalFamily {$$=NULL; getIDENTIFIER($1,SCOPE_Number+1);};// Brace yet not open yet
+			| IDENTIFIER ASSIGN equalFamily {$$=NULL; getIDENTIFIER($1,SCOPE_Number+1);};// Brace yet not open yet// delete this for simplicty
 		 
-booleanExpression: expression AND expression          {$$=NULL;if($1!=$3) ThrowError("Conflict dataTypes in AND Operation \n "," "); }
-			| expression OR expression                {$$=NULL;if($1!=$3) ThrowError("Conflict dataTypes in OR Operation \n "," "); }
-			| NOT expression                          {$$=NULL;}
-			| DataTypes GREATERTHAN DataTypes         {$$=NULL;if($1!=$3) ThrowError("Conflict dataTypes in GREATERTHAN Operation \n "," "); }
-			| DataTypes LESSTHAN DataTypes            {$$=NULL;if($1!=$3) ThrowError("Conflict dataTypes in LESSTHAN Operation \n "," "); }
-			| DataTypes GREATERTHANOREQUAL DataTypes  {$$=NULL;if($1!=$3) ThrowError("Conflict dataTypes in GREATERTHANOREQUAL Operation \n "," "); }
-			| DataTypes LESSTHANOREQUAL DataTypes     {$$=NULL;if($1!=$3) ThrowError("Conflict dataTypes in LESSTHANOREQUAL Operation \n "," "); }
-			| DataTypes NOTEQUAL DataTypes            {$$=NULL;if($1!=$3) ThrowError("Conflict dataTypes in NOTEQUAL Operation \n "," "); }
-			| DataTypes EQUALEQUAL DataTypes          {$$=NULL;if($1!=$3) ThrowError("Conflict dataTypes in EQUALEQUAL Operation \n "," "); }
-			| ORBRACKET booleanExpression CRBRACKET   {$$=NULL;}
+booleanExpression: expression AND expression          {
+										
+														if($1->Type!=$3->Type) 
+															ThrowError("Conflict dataTypes in AND Operation \n "," "); 
+														{
+															$$=(struct TypeAndValue*) malloc(sizeof(struct TypeAndValue));// Creating a new instance
+															$$->Type=$1->Type;// the result has the same type 
+															$$->Value=TempArr[TempCounter];// store  the Result in TEMP 
+															setQuad(25,$1->Value,$3->Value,TempArr[TempCounter++],QuadCount++);//Generate ADD Quadrable 
+															TempIsUsed=true;//Tell the Assigment test to Assign the last TEMP 
+														}
+														}
+															
+			| expression OR expression             	{
+														if($1->Type!=$3->Type) 
+															ThrowError("Conflict dataTypes in OR Operation \n "," "); 
+														{
+															$$=(struct TypeAndValue*) malloc(sizeof(struct TypeAndValue));// Creating a new instance
+															$$->Type=$1->Type;// the result has the same type 
+															$$->Value=TempArr[TempCounter];// store  the Result in TEMP 
+															setQuad(26,$1->Value,$3->Value,TempArr[TempCounter++],QuadCount++);//Generate ADD Quadrable 
+															TempIsUsed=true;//Tell the Assigment test to Assign the last TEMP 
+														; }
+														}
+			| NOT expression                        {
+														
+															$$=(struct TypeAndValue*) malloc(sizeof(struct TypeAndValue));// Creating a new instance
+															$$->Type=$2->Type;// the result has the same type 
+															$$->Value=TempArr[TempCounter];// store  the Result in TEMP 
+															setQuad(27,$2->Value," ",TempArr[TempCounter++],QuadCount++);//Generate ADD Quadrable 
+															TempIsUsed=true;//Tell the Assigment test to Assign the last TEMP 
+														
+														}
+			| DataTypes GREATERTHAN DataTypes         {
+														if($1->Type!=$3->Type) 
+															ThrowError("Conflict dataTypes in OR Operation \n "," "); 
+														{
+															$$=(struct TypeAndValue*) malloc(sizeof(struct TypeAndValue));// Creating a new instance
+															$$->Type=$1->Type;// the result has the same type 
+															$$->Value=TempArr[TempCounter];// store  the Result in TEMP 
+															setQuad(28,$1->Value,$3->Value,TempArr[TempCounter++],QuadCount++);//Generate ADD Quadrable 
+															TempIsUsed=true;//Tell the Assigment test to Assign the last TEMP 
+														 }
+														}
+			| DataTypes LESSTHAN DataTypes            {
+														if($1->Type!=$3->Type) 
+															ThrowError("Conflict dataTypes in OR Operation \n "," "); 
+														{
+															$$=(struct TypeAndValue*) malloc(sizeof(struct TypeAndValue));// Creating a new instance
+															$$->Type=$1->Type;// the result has the same type 
+															$$->Value=TempArr[TempCounter];// store  the Result in TEMP 
+															setQuad(29,$1->Value,$3->Value,TempArr[TempCounter++],QuadCount++);//Generate ADD Quadrable 
+															TempIsUsed=true;//Tell the Assigment test to Assign the last TEMP 
+														; }
+														}
+			| DataTypes GREATERTHANOREQUAL DataTypes  {
+														if($1->Type!=$3->Type) 
+															ThrowError("Conflict dataTypes in OR Operation \n "," "); 
+														{
+															$$=(struct TypeAndValue*) malloc(sizeof(struct TypeAndValue));// Creating a new instance
+															$$->Type=$1->Type;// the result has the same type 
+															$$->Value=TempArr[TempCounter];// store  the Result in TEMP 
+															setQuad(30,$1->Value,$3->Value,TempArr[TempCounter++],QuadCount++);//Generate ADD Quadrable 
+															TempIsUsed=true;//Tell the Assigment test to Assign the last TEMP 
+														; }
+														}
+			| DataTypes LESSTHANOREQUAL DataTypes     {
+														if($1->Type!=$3->Type) 
+															ThrowError("Conflict dataTypes in OR Operation \n "," "); 
+														{
+															$$=(struct TypeAndValue*) malloc(sizeof(struct TypeAndValue));// Creating a new instance
+															$$->Type=$1->Type;// the result has the same type 
+															$$->Value=TempArr[TempCounter];// store  the Result in TEMP 
+															setQuad(31,$1->Value,$3->Value,TempArr[TempCounter++],QuadCount++);//Generate ADD Quadrable 
+															TempIsUsed=true;//Tell the Assigment test to Assign the last TEMP 
+														; }
+														}
+			| DataTypes NOTEQUAL DataTypes              {
+														if($1->Type!=$3->Type) 
+															ThrowError("Conflict dataTypes in OR Operation \n "," "); 
+														{
+															$$=(struct TypeAndValue*) malloc(sizeof(struct TypeAndValue));// Creating a new instance
+															$$->Type=$1->Type;// the result has the same type 
+															$$->Value=TempArr[TempCounter];// store  the Result in TEMP 
+															setQuad(32,$1->Value,$3->Value,TempArr[TempCounter++],QuadCount++);//Generate ADD Quadrable 
+															TempIsUsed=true;//Tell the Assigment test to Assign the last TEMP 
+														; }
+														}
+			| DataTypes EQUALEQUAL DataTypes            {
+														if($1->Type!=$3->Type) 
+															ThrowError("Conflict dataTypes in OR Operation \n "," "); 
+														{
+															$$=(struct TypeAndValue*) malloc(sizeof(struct TypeAndValue));// Creating a new instance
+															$$->Type=$1->Type;// the result has the same type 
+															$$->Value=TempArr[TempCounter];// store  the Result in TEMP 
+															setQuad(33,$1->Value,$3->Value,TempArr[TempCounter++],QuadCount++);//Generate ADD Quadrable 
+															TempIsUsed=true;//Tell the Assigment test to Assign the last TEMP 
+														; }
+														}
+			| ORBRACKET booleanExpression CRBRACKET   {$$=$2;}
 			;
 			
-DataTypes:equalFamily{$$=$1->Type;}
-		| CHARACTER {$$=2;}
-		| FALSE {$$=4;}
-	    | TRUE{$$=4;}
-		| TEXT{$$=3;}
+DataTypes:equalFamily{$$=$1;}
+		| CHARACTER 					{
+											
+												$$=(struct TypeAndValue*) malloc(sizeof(struct TypeAndValue));
+												$$->Type=2;					
+												$$->Value=strdup($1);
+										}
+		| FALSE 						{
+											
+												$$=(struct TypeAndValue*) malloc(sizeof(struct TypeAndValue));
+												$$->Type=4;					
+												$$->Value=strdup("FALSE");
+										}
+	    | TRUE							{
+											
+												$$=(struct TypeAndValue*) malloc(sizeof(struct TypeAndValue));
+												$$->Type=4;					
+												$$->Value=strdup("TRUE");
+										}
+		| TEXT 							{
+											
+												$$=(struct TypeAndValue*) malloc(sizeof(struct TypeAndValue));
+												$$->Type=3;					
+												$$->Value=strdup($1);
+										}
 		;	
 
-/*		      
-dummyRules : {printf("ImHere \n");};// for debug
-*/
 expression:	DataTypes{{$$=$1;}}
-		| booleanExpression{{$$=4;}} ;
+		| booleanExpression{{$$=$1; }} ;
 // GENERATE  QUAD HERE 
 caseExpression:	DEFAULT COLON manyStatements BREAK SEMICOLON    		     {$$=NULL;printf(" Case Statment\n");}	 	 // with default and must end with default statment                    
 		| CASE INTEGER COLON manyStatements BREAK SEMICOLON caseExpression 	 {$$=NULL;printf(" Case Statment\n");}	 	// without default
@@ -645,12 +745,16 @@ void ThrowError(char *Message, char *rVar)
 	inFile = fopen("input.txt", "r");
 	outFile=fopen("output.txt","w");
 	FILE *TestQuad=fopen("Quad.txt","w");
+	FILE *mCode=fopen("codeGENERATED.txt","w");
 	outSymbol=fopen("mySymbols.txt","w");
 	if(!yyparse()) {
 		printf("\nParsing complete\n");
 		PrintSymbolTable(outSymbol);
 		DestroyList();
 		PrintQuadList(TestQuad);
+		QuadNode*R=getTOP();
+//		ExctractQuad(R,mCode);
+		
 		// -- TO-DO DestroyQuadList() to free allocated memory .. 
 		fprintf(outFile,"Completed");
 	}
