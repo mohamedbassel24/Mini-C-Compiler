@@ -261,7 +261,7 @@ stmt:   type IDENTIFIER SEMICOLON	%prec IFX                 				{
 		  blockScope											  			{$$=NULL;printf("For loop\n");setQuad(21,"","","CloseForLoop",QuadCount++);}//  TO-DO check types on expression must int 
 
 		
-		| IF ORBRACKET ifQuad  CRBRACKET  blockScope %prec IFX 			{$$=NULL;printf("If statement\n");setQuad(60,"IF ","CheckFlags","",QuadCount++);}
+		| IF ORBRACKET ifQuad  CRBRACKET  blockScope %prec IFX 			{$$=NULL;printf("If statement\n");setQuad(60,"IF ","CloseIF","",QuadCount++);}
 
 		| IF ORBRACKET ifQuad  CRBRACKET blockScope ELSE  elseQuad	{$$=NULL;printf("If-Elsestatement\n");setQuad(60,"IF ","ELSE","",QuadCount++);}
 
