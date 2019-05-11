@@ -319,12 +319,14 @@ Reg CheckReg();
 void SetReg(Reg x);
 void ResetReg();
 Reg reg[7];
+char* CurlyBraces[7];
 void ExctractQuad(QuadNode* head,FILE *f)
 {
 	QuadNode*ptr = head;
 	ResetReg();
 	Reg free;
-	Reg Aux;
+	Reg Aux; 
+	int CbraceCounterIF=0;
 	while (ptr != NULL)
 	{
 		switch (ptr->DATA->OpCode)
@@ -464,13 +466,99 @@ void ExctractQuad(QuadNode* head,FILE *f)
 			ptr = ptr->Next;
 			break;
 		case WHILE_:
-			
+			fprintf(f, "JF %s \n", ptr->DATA->Result);
+			break;
+		case IF_:
+			fprintf(f, "%s \n", ptr->DATA->Arg2);
+			ptr = ptr->Next;
+			break;
+		case GREATERTHANOREQUAL_:
+			free = CheckReg();
+			fprintf(f, "MOV %s , %s \n", free.reg, ptr->DATA->Arg1);
+			free.used++;
+			free.var = ptr->DATA->Arg1;
+			SetReg(free);
+			Aux = CheckReg();
+			fprintf(f, "MOV %s , %s \n", Aux.reg, ptr->DATA->Arg2);
+			Aux.used++;
+			Aux.var = ptr->DATA->Arg1;
+			SetReg(Aux);
+			fprintf(f, "CMPGEQ %s, %s , %s \n", ptr->DATA->Result, Aux.reg, free.reg);
+			ptr = ptr->Next;
+			break;
+		case EQUALEQUAL_:
+			free = CheckReg();
+			fprintf(f, "MOV %s , %s \n", free.reg, ptr->DATA->Arg1);
+			free.used++;
+			free.var = ptr->DATA->Arg1;
+			SetReg(free);
+			Aux = CheckReg();
+			fprintf(f, "MOV %s , %s \n", Aux.reg, ptr->DATA->Arg2);
+			Aux.used++;
+			Aux.var = ptr->DATA->Arg1;
+			SetReg(Aux);
+			fprintf(f, "CMPEQ %s, %s , %s \n", ptr->DATA->Result, Aux.reg, free.reg);
+			ptr = ptr->Next;
+			break;
+			case NOTEQUAL_:
+			free = CheckReg();
+			fprintf(f, "MOV %s , %s \n", free.reg, ptr->DATA->Arg1);
+			free.used++;
+			free.var = ptr->DATA->Arg1;
+			SetReg(free);
+			Aux = CheckReg();
+			fprintf(f, "MOV %s , %s \n", Aux.reg, ptr->DATA->Arg2);
+			Aux.used++;
+			Aux.var = ptr->DATA->Arg1;
+			SetReg(Aux);
+			fprintf(f, "CMPNEQ %s, %s , %s \n", ptr->DATA->Result, Aux.reg, free.reg);
+			ptr = ptr->Next;
+			break;
+		case AND_:
+			free = CheckReg();
+			fprintf(f, "MOV %s , %s \n", free.reg, ptr->DATA->Arg1);
+			free.used++;
+			free.var = ptr->DATA->Arg1;
+			SetReg(free);
+			Aux = CheckReg();
+			fprintf(f, "MOV %s , %s \n", Aux.reg, ptr->DATA->Arg2);
+			Aux.used++;
+			Aux.var = ptr->DATA->Arg1;
+			SetReg(Aux);
+			fprintf(f, "AND %s, %s , %s \n", ptr->DATA->Result, Aux.reg, free.reg);
+			ptr = ptr->Next;
 			break;
 		case FOR_:
 			
 			break;
+		case ELSE_:
+			fprintf(f, "%s \n", ptr->DATA->Arg1);
+			ptr = ptr->Next;
+			break;
 		case DOWHILE_:
 			
+			break;
+		case OR_:
+			free = CheckReg();
+			fprintf(f, "MOV %s , %s \n", free.reg, ptr->DATA->Arg1);
+			free.used++;
+			free.var = ptr->DATA->Arg1;
+			SetReg(free);
+			Aux = CheckReg();
+			fprintf(f, "MOV %s , %s \n", Aux.reg, ptr->DATA->Arg2);
+			Aux.used++;
+			Aux.var = ptr->DATA->Arg1;
+			SetReg(Aux);
+			fprintf(f, "OR %s, %s , %s \n", ptr->DATA->Result, Aux.reg, free.reg);
+			ptr = ptr->Next;
+			break;
+		case PRINT_:
+			free = CheckReg();
+			fprintf(f, "PRINT %s \n", free.reg);
+			free.used++;
+			free.var = ptr->DATA->Arg2;
+			SetReg(free);
+			ptr = ptr->Next;
 			break;
 		default:
 			break;
@@ -495,6 +583,14 @@ void ResetReg()
 	reg[4].reg="R4";
 	reg[5].reg="R5";
 	reg[6].reg="R6";
+	CurlyBraces[0]="L00";
+	CurlyBraces[1]="L01";
+	CurlyBraces[2]="L02";
+	CurlyBraces[3]="L03";
+	CurlyBraces[4]="L04";
+	CurlyBraces[5]="L05";
+	CurlyBraces[6]="L06";
+	CurlyBraces[7]="L07";
 }
 void SetReg(Reg x)
 {

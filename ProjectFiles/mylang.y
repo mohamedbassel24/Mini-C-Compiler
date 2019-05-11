@@ -252,13 +252,13 @@ stmt:   type IDENTIFIER SEMICOLON	%prec IFX                 				{
 																			;}
 
 		
-		| WHILE ORBRACKET whileQuad CRBRACKET  stmt							{$$=NULL;char c[3] = {};gcvt(SCOPE_Number,6,c);setQuad(20,c," ","CloseWhile",QuadCount++);printf("While loop\n");}// need to check type to booealen
+		| WHILE ORBRACKET whileQuad CRBRACKET  stmt							{$$=NULL;char c[3] = {};gcvt(SCOPE_Number,6,c);setQuad(90,c,"OpenWhile","CloseWhile",QuadCount++);printf("While loop\n");}// need to check type to booealen
 
-		| DO dowhileQuad blockScope WHILE ORBRACKET expression CRBRACKET SEMICOLON		{$$=NULL;printf("Do while\n");setQuad(22,""," ","CloseDoWhile",QuadCount++);}// need to check type to booealen
+		| DO dowhileQuad blockScope WHILE ORBRACKET expression CRBRACKET SEMICOLON		{$$=NULL;printf("Do while\n");setQuad(91,""," ","CloseDoWhile",QuadCount++);}// need to check type to booealen
 
 		| FOR ORBRACKET INT  create ASSIGN INTEGER SEMICOLON forQuad
 		  forExpression CRBRACKET
-		  blockScope											  			{$$=NULL;printf("For loop\n");setQuad(21,"","","CloseForLoop",QuadCount++);}//  TO-DO check types on expression must int 
+		  blockScope											  			{$$=NULL;printf("For loop\n");setQuad(92,"","OpenForLoop","CloseForLoop",QuadCount++);}//  TO-DO check types on expression must int 
 
 		
 		| IF ORBRACKET ifQuad  CRBRACKET  blockScope %prec IFX 			{$$=NULL;printf("If statement\n");setQuad(60,"IF ","CloseIF","",QuadCount++);}
@@ -615,7 +615,7 @@ dowhileQuad:{char c[3] = {};sprintf(c,"%f",SCOPE_Number);setQuad(22,c," ","OpenD
 forQuad:expression SEMICOLON{char c[3] = {};sprintf(c,"%f",SCOPE_Number);setQuad(21,c,$1->Value,"OpenForLoop",QuadCount++);}
 funcQuad:{char c[3] = {};sprintf(c,"%f",SCOPE_Number);setQuad(23,c," ","FuncBody Begin ",QuadCount++);}
 switchQuad:IDENTIFIER{setQuad(61,"SwitchStart","",$1,QuadCount++);usedIDENTIFIER($1,SCOPE_Number);}
-ifQuad:expression {setQuad(60,"IF ","CheckFlags","",QuadCount++);}
+ifQuad:expression {setQuad(60,"IF ","OpenIF","",QuadCount++);}
 elseQuad:blockScope{setQuad(60,"else","n","",QuadCount++);}	   
 		   
 %% 

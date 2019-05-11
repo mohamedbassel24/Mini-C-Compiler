@@ -5,18 +5,29 @@
 #pragma warning (disable : 4996)
 //QUADRABLES
 
-#define DECLARE_ 0
-#define ASSIGN_ 1
 #define ADD_ 10
+#define AND_ 25
+#define OR_ 26
+#define ASSIGN_ 1
+#define DECLARE_ 0
+#define DEC_ 16
+#define DIVIDE_ 13
+#define DOWHILE_ 22
+#define EQUALEQUAL_ 33
+#define NOTEQUAL_ 32
+#define FOR_ 21
+#define GREATERTHANOREQUAL_ 30
+#define IF_ 60
+#define INC_ 15
 #define MINUS_ 11
 #define MULTIPLY_ 12
-#define DIVIDE_ 13
+#define PRINT_ 62
 #define REM_ 14
-#define INC_ 15
-#define DEC_ 16
+#define SWITCHDEFAULT_ 70
+#define SWITCH_ 61
 #define WHILE_ 20
-#define FOR_ 21
-#define DOWHILE_ 22
+#define ELSE_ 80
+
 
 typedef struct TypeAndValue {
 	int Type;

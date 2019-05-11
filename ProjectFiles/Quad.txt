@@ -1,94 +1,13 @@
- OpCode: 0  Arg1:   Arg2:   Result:compiler 
- OpCode: 10  Arg1:5  Arg2: 6 Result:Temp1 
- OpCode: 10  Arg1:Temp1  Arg2: 4 Result:Temp2 
- OpCode: 10  Arg1:Temp2  Arg2: 3 Result:Temp3 
- OpCode: 1  Arg1:Temp3  Arg2:   Result:compiler 
- OpCode: 0  Arg1:   Arg2:   Result:compiling 
- OpCode: 0  Arg1:   Arg2:   Result:asd 
- OpCode: 0  Arg1:   Arg2:   Result:num 
- OpCode: 1  Arg1:0.200000  Arg2:   Result:num 
- OpCode: 0  Arg1:   Arg2:   Result:num2 
- OpCode: 1  Arg1:1000000  Arg2:   Result:num2 
- OpCode: 0  Arg1:   Arg2:   Result:welcome 
- OpCode: 1  Arg1:"Compilers"  Arg2:   Result:welcome 
- OpCode: 0  Arg1:   Arg2:   Result:wel 
- OpCode: 1  Arg1:'C'  Arg2:   Result:wel 
- OpCode: 0  Arg1:   Arg2:   Result:weeee 
- OpCode: 1  Arg1:'?'  Arg2:   Result:weeee 
- OpCode: 0  Arg1:   Arg2:   Result:x 
- OpCode: 1  Arg1:0  Arg2:   Result:x 
- OpCode: 15  Arg1:INC  Arg2: INC Result:x 
- OpCode: 10  Arg1:x  Arg2: 5 Result:Temp1 
- OpCode: 1  Arg1:Temp1  Arg2:   Result:x 
- OpCode: 0  Arg1:   Arg2:   Result:y 
- OpCode: 0  Arg1:   Arg2:   Result:z 
- OpCode: 13  Arg1:x  Arg2: y Result:Temp1 
- OpCode: 0  Arg1:   Arg2:   Result:r 
- OpCode: 1  Arg1:Temp1  Arg2:   Result:r 
- OpCode: 0  Arg1:   Arg2:   Result:F 
- OpCode: 1  Arg1:0.200000  Arg2:   Result:F 
  OpCode: 0  Arg1:   Arg2:   Result:cufe 
  OpCode: 1  Arg1:"fady"  Arg2:   Result:cufe 
+ OpCode: 0  Arg1:   Arg2:   Result:x 
+ OpCode: 1  Arg1:11  Arg2:   Result:x 
+ ////////////////////////////////////////////////////
  OpCode: 33  Arg1:cufe  Arg2: "fady" Result:Temp1 
  OpCode: 30  Arg1:x  Arg2: 10 Result:Temp2 
  OpCode: 25  Arg1:Temp1  Arg2: Temp2 Result:Temp3 
- OpCode: 60  Arg1:IF   Arg2: CheckFlags Result: 
+ ////////////////////////////////////////////////////
+ OpCode: 60  Arg1:IF   Arg2: OpenIF Result: 
  OpCode: 62  Arg1:Print  Arg2:  Result:cufe 
- OpCode: 60  Arg1:IF   Arg2: CheckFlags Result: 
- OpCode: 60  Arg1:IF   Arg2: CheckFlags Result: 
- OpCode: 1  Arg1:Temp3  Arg2:   Result:x 
- OpCode: 33  Arg1:x  Arg2: 5 Result:Temp1 
- OpCode: 60  Arg1:IF   Arg2: CheckFlags Result: 
- OpCode: 11  Arg1:0  Arg2: r Result:Temp2 
- OpCode: 1  Arg1:Temp2  Arg2:   Result:x 
- OpCode: 60  Arg1:IF   Arg2: CheckFlags Result: 
- OpCode: 11  Arg1:x  Arg2: r Result:Temp1 
- OpCode: 1  Arg1:Temp1  Arg2:   Result:x 
- OpCode: 60  Arg1:else  Arg2: n Result: 
- OpCode: 60  Arg1:IF   Arg2: ELSE Result: 
- OpCode: 11  Arg1:0  Arg2: y Result:Temp1 
- OpCode: 1  Arg1:Temp1  Arg2:   Result:x 
- OpCode: 12  Arg1:y  Arg2: 4 Result:Temp1 
- OpCode: 1  Arg1:Temp1  Arg2:   Result:r 
- OpCode: 0  Arg1:   Arg2:   Result:check 
- OpCode: 1  Arg1:FALSE  Arg2:   Result:check 
- OpCode: 33  Arg1:z  Arg2: TRUE Result:Temp1 
- OpCode: 26  Arg1:Temp1  Arg2: z Result:Temp2 
- OpCode: 20  Arg1:0.000000  Arg2: Temp2 Result:OpenWhile 
- OpCode: 1  Arg1:Temp2  Arg2:   Result:z 
- OpCode: 1  Arg1:TRUE  Arg2:   Result:check 
- OpCode: 20  Arg1:0.  Arg2:   Result:CloseWhile 
- OpCode: 0  Arg1:   Arg2:   Result:a 
- OpCode: 22  Arg1:0.000000  Arg2:   Result:OpenDoWhile 
- OpCode: 1  Arg1:0.200000  Arg2:   Result:a 
- OpCode: 29  Arg1:a  Arg2: 0.200000 Result:Temp1 
- OpCode: 22  Arg1:  Arg2:   Result:CloseDoWhile 
- OpCode: 62  Arg1:Print  Arg2:  Result:a 
- OpCode: 62  Arg1:Print  Arg2:  Result:"x = wee" 
- OpCode: 1  Arg1:Temp1  Arg2:   Result:x 
- OpCode: 29  Arg1:i  Arg2: 10 Result:Temp1 
- OpCode: 21  Arg1:0.000000  Arg2: Temp1 Result:OpenForLoop 
- OpCode: 15  Arg1:INC  Arg2: INC Result:i 
- OpCode: 15  Arg1:INC  Arg2: INC Result:x 
- OpCode: 33  Arg1:x  Arg2: 2 Result:Temp2 
- OpCode: 60  Arg1:IF   Arg2: CheckFlags Result: 
- OpCode: 1  Arg1:Temp2  Arg2:   Result:x 
- OpCode: 60  Arg1:IF   Arg2: CheckFlags Result: 
- OpCode: 21  Arg1:  Arg2:  Result:CloseForLoop 
- OpCode: 32  Arg1:x  Arg2: 100 Result:Temp1 
- OpCode: 60  Arg1:IF   Arg2: CheckFlags Result: 
- OpCode: 62  Arg1:Print  Arg2:  Result:x 
- OpCode: 60  Arg1:IF   Arg2: CheckFlags Result: 
- OpCode: 31  Arg1:x  Arg2: 3 Result:Temp2 
- OpCode: 60  Arg1:IF   Arg2: CheckFlags Result: 
- OpCode: 0  Arg1:   Arg2:   Result:v 
- OpCode: 1  Arg1:Temp2  Arg2:   Result:v 
- OpCode: 62  Arg1:Print  Arg2:  Result:v 
- OpCode: 60  Arg1:IF   Arg2: CheckFlags Result: 
- OpCode: 61  Arg1:SwitchStart  Arg2:  Result:x 
- OpCode: 70  Arg1:2  Arg2:   Result:case 
- OpCode: 0  Arg1:   Arg2:   Result:Bassel 
- OpCode: 70  Arg1:2  Arg2:   Result:case 
- OpCode: 0  Arg1:   Arg2:   Result:Mufeed 
- OpCode: 70  Arg1:  Arg2:   Result:DEFAULTCase 
- OpCode: 0  Arg1:   Arg2:   Result:Salah 
+ OpCode: 60  Arg1:IF   Arg2: CloseIF Result: 
+ ////////////////////////////////////////////////////////

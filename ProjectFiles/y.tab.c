@@ -1787,7 +1787,7 @@ yyreduce:
 
 /* Line 1455 of yacc.c  */
 #line 264 "mylang.y"
-    {(yyval.dummy)=NULL;printf("If statement\n");setQuad(60,"IF ","CheckFlags","",QuadCount++);}
+    {(yyval.dummy)=NULL;printf("If statement\n");setQuad(60,"IF ","CloseIF","",QuadCount++);}
     break;
 
   case 13:
@@ -2518,7 +2518,7 @@ yyreduce:
 
 /* Line 1455 of yacc.c  */
 #line 618 "mylang.y"
-    {setQuad(60,"IF ","CheckFlags","",QuadCount++);}
+    {setQuad(60,"IF ","OpenIF","",QuadCount++);}
     break;
 
   case 85:
