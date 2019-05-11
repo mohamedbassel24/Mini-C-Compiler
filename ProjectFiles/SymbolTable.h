@@ -3,7 +3,15 @@
 #include<stdbool.h>
 #include<string.h> 
 #pragma warning (disable : 4996)
+//QUADRABLES
 
+#define DECLARE_ 0
+#define ASSIGN_ 1
+#define ADD_ 2
+typedef struct TypeAndValue {
+	int Type;
+	char*  Value;
+} TypeAndValue;
 typedef struct SymbolData
 {
 	int Type;	//					representing the type of the token or Function
@@ -51,6 +59,12 @@ void PrintSymbolTable(FILE*F);
 //----------------------------------------------------------------------------------------------
 void DestroyList();
 //---------------------------------------QUADRABLES
+typedef struct Reg
+{
+	char* reg;
+	char* var;
+	int used;
+}Reg;
 typedef struct QuadData
 {
 	int OpCode;	//					representing the type of the token or Function

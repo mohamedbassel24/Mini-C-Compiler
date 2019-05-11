@@ -306,11 +306,112 @@ void PrintQuadList(FILE * f)
 	struct QuadNode *Walker = TopPtr;
 	while (Walker)
 	{
-		fprintf(f, " OpCode: %d  Arg1:%s  Arg2: %s Result:%s ", Walker->DATA->OpCode, Walker->DATA->Arg1, Walker->DATA->Arg2, Walker->DATA->Result);
+		fprintf(f, " OpCode: %d  Arg1:%s  Arg2: %s Result:%s \n", Walker->DATA->OpCode, Walker->DATA->Arg1, Walker->DATA->Arg2, Walker->DATA->Result);
 		Walker = Walker->Next;
 	}
 }
+//-------------------------------------------------------------------Quad Functions
+Reg CheckReg();
+void SetReg(Reg x);
+void ResetReg();
+Reg reg[7];
+void ExctractQuad(QuadNode* head,FILE *f)
+{
+	QuadNode*ptr = head;
+	Reg free;
+	while (ptr != NULL)
+	{
+		switch (ptr->DATA->OpCode)
+		{
+		case DECLARE_:
+			free = CheckReg();
+			if (ptr->DATA->Arg1 == " " && ptr->DATA->Arg2 == " ")
+			{
+				fprintf(f, "MOV %s , NULL\n", free.reg);
+				fprintf(f, "MOV %s , %s \n", ptr->DATA->Result,free.var);
+			}
+			else if (ptr->DATA->Arg1 != " ") {
+				fprintf(f, "MOV %s , %s\n", free.reg,ptr->DATA->Arg1);
+				fprintf(f, "MOV %s , %s \n", ptr->DATA->Result, free.var);
+			//	output.push_back("MOV " + free.reg + "," + (string)ptr->DATA->Arg1);
+			//	output.push_back("MOV " + (string)ptr->DATA->Result + "," + free.var);
+			}
+			else if (ptr->DATA->Arg2 != " ") {
+				fprintf(f, "MOV %s , %s\n", free.reg, ptr->DATA->Arg2);
+				fprintf(f, "MOV %s , %s \n", ptr->DATA->Result, free.var);
+			//	output.push_back("MOV " + free.reg + "," + (string)ptr->DATA->Arg2);
+			//	output.push_back("MOV " + (string)ptr->DATA->Result + "," + free.var);
+			}
+			free.used++;
+			free.var = ptr->DATA->Result;
+			SetReg(free);
+			ptr = ptr->Next;
+			break;
+		case ASSIGN_:
+			break;
+		case ADD_:
+			// TO DO check if Integar value dont move and add directly
+			fprintf(f, "MOV %s , %s\n", free.reg, ptr->DATA->Arg1);
+			fprintf(f, "MOV %s , %s\n", free.reg, ptr->DATA->Arg2);
+			fprintf(f, "ADD %s , %s \n", free.reg, free.reg);// add new REGISTER ! 
+			free.used++;
+			free.var = ptr->DATA->Result;
+			SetReg(free);
+			ptr = ptr->Next;
 
+			break;
+		default:
+			break;
+		}
+	}
+}
+void ResetReg()
+{
+	int i;// for c
+	for ( i = 0; i<7; i++)
+	{
+		Reg x;
+		x.reg = "R" + i;
+		x.var = "0";
+		x.used = 0;
+	}
+}
+void SetReg(Reg x)
+{
+	int i;
+	for ( i = 0; i<7; i++)
+	{
+		if (reg[i].reg == x.reg)
+		{
+			reg[i].used = x.used;
+			reg[i].var = x.var;
+		}
+	}
+}
+Reg CheckReg()
+{
+	Reg min = reg[0];
+	if (min.var == "0")
+	{
+		return min;
+	}
+	else
+	{
+		int i;
+		for ( i = 0; i<7; i++)
+		{
+			if (reg[i].var == "0")
+			{
+				return reg[i];
+			}
+			else if (reg[i].used <= min.used)
+			{
+				min = reg[i];
+			}
+		}
+		return min;
+	}
+}
 
 
 
