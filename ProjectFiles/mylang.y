@@ -616,7 +616,7 @@ forQuad:expression SEMICOLON{char c[3] = {};sprintf(c,"%f",SCOPE_Number);setQuad
 funcQuad:{char c[3] = {};sprintf(c,"%f",SCOPE_Number);setQuad(23,c," ","FuncBody Begin ",QuadCount++);}
 switchQuad:IDENTIFIER{setQuad(61,"SwitchStart","",$1,QuadCount++);usedIDENTIFIER($1,SCOPE_Number);}
 ifQuad:expression {setQuad(60,"IF ","OpenIF","",QuadCount++);}
-elseQuad:blockScope{setQuad(81,"else","n","OpenElse",QuadCount++);}	   
+elseQuad:blockScope{setQuad(60,"else","n","",QuadCount++);}	   
 		   
 %% 
 void CreateID(int type , char*rName,int rID,int ScopeNum)
