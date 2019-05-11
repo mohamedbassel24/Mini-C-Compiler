@@ -29,10 +29,10 @@ namespace Complier
             txt.Close();
 
             // TODO: Change path acoordingly
-            System.Diagnostics.Process.Start("cmd.exe", "/C C: & cd C:\\Users\\Ahmed\\Desktop\\Projects\\Compilers\\Mini-C-Compiler\\Compilers GUI & project & pause");
+            System.Diagnostics.Process.Start("cmd.exe", "/C C: & cd C:\\Users\\Mohamed\\Documents\\GitHub\\Mini-C-Compiler\\Compilers GUI & CMD.bat & pause");
 
-            richTextBox2.Text = File.ReadAllText(@"..\\..\\..\\output.txt");
-            richTextBox3.Text = File.ReadAllText(@"..\\..\\..\\symbol.txt");
+            richTextBox2.Text = File.ReadAllText(@"C:\\Users\\Mohamed\\Documents\\GitHub\\Mini-C-Compiler\\Compilers GUI\\Quad.txt");
+            richTextBox3.Text = File.ReadAllText(@"C:\\Users\\Mohamed\\Documents\\GitHub\\Mini-C-Compiler\\Compilers GUI\\mySymbols.txt");
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -54,6 +54,11 @@ namespace Complier
         private void button4_Click(object sender, EventArgs e)
         {
             richTextBox1.Text = undo;
+        }
+
+        private void richTextBox1_TextChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }
