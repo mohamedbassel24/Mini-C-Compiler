@@ -185,7 +185,7 @@ stmt:   type IDENTIFIER SEMICOLON	%prec IFX                 				{
 																					printf("Assignment\n");
 																					if(TempIsUsed)
 																					setQuad(1,TempArr[TempCounter]," ",$1,QuadCount++);
-																					else setQuad(1,RightHandSide[0]," ",$1,QuadCount++);
+																					else setQuad(1,$3->Value," ",$1,QuadCount++);
 																					TempCounter=0;
 																					TempIsUsed=false;
 																				}
@@ -213,7 +213,7 @@ stmt:   type IDENTIFIER SEMICOLON	%prec IFX                 				{
 																			setQuad(0," "," ",$2,QuadCount++);// Create  first IDENTIFIER
 																				if(TempIsUsed)
 																					setQuad(1,TempArr[TempCounter]," ",$2,QuadCount++);
-																					else setQuad(1,RightHandSide[0]," ",$2,QuadCount++);
+																					else setQuad(1,$4->Value," ",$2,QuadCount++);
 																			printf("Declaration and Assignment\n");
 																					TempCounter=0;
 																				TempIsUsed=false;
@@ -236,7 +236,7 @@ stmt:   type IDENTIFIER SEMICOLON	%prec IFX                 				{
 																				setQuad(0," "," ",$3,QuadCount++);// Create  first IDENTIFIER
 																				if(TempIsUsed)
 																					setQuad(1,TempArr[TempCounter]," ",$3,QuadCount++);
-																					else setQuad(1,RightHandSide[0]," ",$3,QuadCount++);
+																					else setQuad(1,$5->Value," ",$3,QuadCount++);
 																					printf("Constant assignment\n");
 																					TempCounter=0;
 																					TempIsUsed=false;

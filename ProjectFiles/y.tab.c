@@ -1689,7 +1689,7 @@ yyreduce:
 																					printf("Assignment\n");
 																					if(TempIsUsed)
 																					setQuad(1,TempArr[TempCounter]," ",(yyvsp[(1) - (4)].ID),QuadCount++);
-																					else setQuad(1,RightHandSide[0]," ",(yyvsp[(1) - (4)].ID),QuadCount++);
+																					else setQuad(1,(yyvsp[(3) - (4)].X)->Value," ",(yyvsp[(1) - (4)].ID),QuadCount++);
 																					TempCounter=0;
 																					TempIsUsed=false;
 																				}
@@ -1722,7 +1722,7 @@ yyreduce:
 																			setQuad(0," "," ",(yyvsp[(2) - (5)].ID),QuadCount++);// Create  first IDENTIFIER
 																				if(TempIsUsed)
 																					setQuad(1,TempArr[TempCounter]," ",(yyvsp[(2) - (5)].ID),QuadCount++);
-																					else setQuad(1,RightHandSide[0]," ",(yyvsp[(2) - (5)].ID),QuadCount++);
+																					else setQuad(1,(yyvsp[(4) - (5)].X)->Value," ",(yyvsp[(2) - (5)].ID),QuadCount++);
 																			printf("Declaration and Assignment\n");
 																					TempCounter=0;
 																				TempIsUsed=false;
@@ -1750,7 +1750,7 @@ yyreduce:
 																				setQuad(0," "," ",(yyvsp[(3) - (6)].ID),QuadCount++);// Create  first IDENTIFIER
 																				if(TempIsUsed)
 																					setQuad(1,TempArr[TempCounter]," ",(yyvsp[(3) - (6)].ID),QuadCount++);
-																					else setQuad(1,RightHandSide[0]," ",(yyvsp[(3) - (6)].ID),QuadCount++);
+																					else setQuad(1,(yyvsp[(5) - (6)].X)->Value," ",(yyvsp[(3) - (6)].ID),QuadCount++);
 																					printf("Constant assignment\n");
 																					TempCounter=0;
 																					TempIsUsed=false;

@@ -1,6 +1,2 @@
 MOV R0 ,   
 MOV x , R0 
-MOV R1 ,   
-MOV y , R1 
-MOV R2 ,   
-MOV z , R2 

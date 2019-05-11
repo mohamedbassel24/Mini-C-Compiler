@@ -6,9 +6,9 @@ y of type Integer
 x of type Integer
 
 Initilized Identifiers :- 
-
-UnInitilized Identifiers :- 
 z of type Integer
 y of type Integer
 x of type Integer
+
+UnInitilized Identifiers :- 
 
