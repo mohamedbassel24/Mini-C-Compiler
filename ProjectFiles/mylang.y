@@ -134,6 +134,7 @@
 	bool manyExpressions=false;
 	bool TempIsUsed=false;
 	int TempCounter=0;
+	char* SwitchValue;
 	char*TempArr[16]={"Temp1","Temp2","Temp3","Temp4","TEMP5","TEMP6","TEMP7","TEMP8","TEMP9","TEMP10","TEMP11","TEMP12","TEMP13","TEMP14","TEMP15","TEMP16"};	
 	%}
 	%union {
@@ -144,6 +145,7 @@
 	char * ID ;                    /*IDENTIFIER Value */
 	int* dummy;
 	struct TypeAndValue * X;
+	
 
 
 };
@@ -605,7 +607,7 @@ expression:	DataTypes{{$$=$1;}}
 		| booleanExpression{{$$=$1; }} ;
 // GENERATE  QUAD HERE 
 caseExpression:	DEFAULT COLON{setQuad(71,""," ","DEFAULTCase",QuadCount++);}manyStatements BREAK SEMICOLON    		     {$$=NULL;printf(" Case Statment\n");}	 	 // with default and must end with default statment                    
-			  | CASE INTEGER COLON{char c[3] = {}; sprintf(c,"%d",$2);setQuad(70,c," ","case",QuadCount++);} manyStatements BREAK SEMICOLON caseExpression 	 {$$=NULL;printf(" Case Statment\n");}	 	// without default
+			  | CASE INTEGER COLON{char c[3] = {}; sprintf(c,"%d",$2); setQuad(70,c,"case",SwitchValue,QuadCount++);} manyStatements BREAK SEMICOLON caseExpression 	 {$$=NULL;printf(" Case Statment\n");}	 	// without default
 		      ;
 
 		   
@@ -614,7 +616,7 @@ whileQuad:expression{char c[3] = {};sprintf(c,"%f",SCOPE_Number);setQuad(20,c,$1
 dowhileQuad:{char c[3] = {};sprintf(c,"%f",SCOPE_Number);setQuad(22,c," ","OpenDoWhile",QuadCount++);}
 forQuad:expression SEMICOLON{char c[3] = {};sprintf(c,"%f",SCOPE_Number);setQuad(21,c,$1->Value,"OpenForLoop",QuadCount++);}
 funcQuad:{char c[3] = {};sprintf(c,"%f",SCOPE_Number);setQuad(100,c," ","FuncBody Begin ",QuadCount++);}
-switchQuad:IDENTIFIER{setQuad(61,"SwitchStart","",$1,QuadCount++);usedIDENTIFIER($1,SCOPE_Number);}
+switchQuad:IDENTIFIER{SwitchValue=strdup($1);setQuad(61,"SwitchStart","",$1,QuadCount++);usedIDENTIFIER($1,SCOPE_Number);}
 ifQuad:expression {setQuad(60,"IF ","OpenIF","",QuadCount++);}
 elseQuad:{setQuad(80,"else","n","",QuadCount++);}blockScope
 		   
