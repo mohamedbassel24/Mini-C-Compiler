@@ -313,7 +313,7 @@ void PrintQuadList(FILE * f)
 //-------------------------------------------------------------------Quad Functions
 QuadNode*getTOP()
 {
-	return TopPtr; 
+	return TopPtr;
 }
 Reg CheckReg();
 void SetReg(Reg x);
@@ -325,7 +325,8 @@ void ExctractQuad(QuadNode* head,FILE *f)
 	QuadNode*ptr = head;
 	ResetReg();
 	Reg free;
-	Reg Aux; 
+	Reg Aux;
+	Reg SwitchReg;
 	int CbraceCounterIF=0;
 	while (ptr != NULL)
 	{
@@ -465,6 +466,38 @@ void ExctractQuad(QuadNode* head,FILE *f)
 			SetReg(free);
 			ptr = ptr->Next;
 			break;
+		case SWITCH_:
+			free = CheckReg();
+			fprintf(f, "StartCase: \n");
+			fprintf(f, "MOV %s , %s \n", free.reg, ptr->DATA->Result);
+			fprintf(f, "COMPEQVAL %s \n", free.reg);
+			fprintf(f, "JNZ Case \n");
+			free.used++;
+			free.var = ptr->DATA->Arg2;
+			SetReg(free);
+			ptr = ptr->Next;
+			break;
+		case CASE_:
+			fprintf(f, "JMP CloseCase \n");
+			free = CheckReg();
+			fprintf(f, "Case: \n");
+			fprintf(f, "MOV %s , %s \n", free.reg, ptr->DATA->Result);
+			fprintf(f, "COMPEQVAL %s \n", free.reg);
+			fprintf(f, "JNZ Case \n");
+			free.used++;
+			free.var = ptr->DATA->Arg2;
+			SetReg(free);
+			ptr = ptr->Next;
+			break;
+		case SWITCHDEFAULT_:
+			fprintf(f, "JMP CloseCase \n");
+			fprintf(f, "DefaultCase: \n");
+			ptr = ptr->Next;
+			break;
+		case CLOSESWITCH_:
+			fprintf(f, "CloseSwitch: \n");
+			ptr = ptr->Next;
+			break;
 		case WHILE_:
 			fprintf(f, "%s : \n", ptr->DATA->Result);
 			fprintf(f, "JF %s \n","CloseWhile");
@@ -588,7 +621,12 @@ void ExctractQuad(QuadNode* head,FILE *f)
 			ptr = ptr->Next;
 			break;
 		case ELSE_:
-			fprintf(f, "%s \n", ptr->DATA->Arg1);
+			fprintf(f, "%s \n", "CloseIf");
+			fprintf(f, "%s \n", "OpenElse");
+			ptr = ptr->Next;
+			break;
+		case CLOSEELSE_:
+			fprintf(f, "%s \n", "CloseElse");
 			ptr = ptr->Next;
 			break;
 		case DOWHILE_:

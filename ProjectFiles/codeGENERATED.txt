@@ -2,17 +2,26 @@ MOV R0 ,
 MOV x , R0 
 MOV R1 , 0 
 MOV x , R1 
+StartCase: 
 MOV R2 , x 
-MOV R3 , 0 
-CMPEQ Temp1, R3 , R2 
-OpenIF 
+COMPEQVAL R2 
+JNZ Case 
+JMP CloseCase 
+Case: 
+MOV R3 , x 
+COMPEQVAL R3 
+JNZ Case 
 MOV R4 ,   
-MOV y , R4 
-MOV R5 , Temp1 
-MOV y , R5 
+MOV Bassel , R4 
+JMP CloseCase 
+Case: 
+MOV R5 , x 
+COMPEQVAL R5 
+JNZ Case 
 MOV R6 ,   
-MOV z , R6 
-MOV R0 , 5 
-MOV z , R0 
-n 
-ELSE 
+MOV Mufeed , R6 
+JMP CloseCase 
+DefaultCase: 
+MOV R0 ,   
+MOV Salah , R0 
+CloseSwitch: 

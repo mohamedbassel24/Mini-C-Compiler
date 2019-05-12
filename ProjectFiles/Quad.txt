@@ -1,10 +1,10 @@
  OpCode: 0  Arg1:   Arg2:   Result:x 
  OpCode: 1  Arg1:0  Arg2:   Result:x 
- OpCode: 33  Arg1:x  Arg2: 0 Result:Temp1 
- OpCode: 60  Arg1:IF   Arg2: OpenIF Result: 
- OpCode: 0  Arg1:   Arg2:   Result:y 
- OpCode: 1  Arg1:Temp1  Arg2:   Result:y 
- OpCode: 0  Arg1:   Arg2:   Result:z 
- OpCode: 1  Arg1:5  Arg2:   Result:z 
- OpCode: 60  Arg1:else  Arg2: n Result: 
- OpCode: 60  Arg1:IF   Arg2: ELSE Result: 
+ OpCode: 61  Arg1:SwitchStart  Arg2:  Result:x 
+ OpCode: 70  Arg1:2  Arg2: case Result:x 
+ OpCode: 0  Arg1:   Arg2:   Result:Bassel 
+ OpCode: 70  Arg1:2  Arg2: case Result:x 
+ OpCode: 0  Arg1:   Arg2:   Result:Mufeed 
+ OpCode: 71  Arg1:  Arg2:   Result:DEFAULTCase 
+ OpCode: 0  Arg1:   Arg2:   Result:Salah 
+ OpCode: 72  Arg1:IF   Arg2: ENDSWITCH Result: 

@@ -161,7 +161,7 @@ typedef union YYSTYPE
 {
 
 /* Line 1676 of yacc.c  */
-#line 139 "mylang.y"
+#line 140 "mylang.y"
 
     int IntgerValue;                 /* integer value */
 	float FloatValue;               /* float Value */
@@ -170,13 +170,14 @@ typedef union YYSTYPE
 	char * ID ;                    /*IDENTIFIER Value */
 	int* dummy;
 	struct TypeAndValue * X;
+	
 
 
 
 
 
 /* Line 1676 of yacc.c  */
-#line 180 "y.tab.h"
+#line 181 "y.tab.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */

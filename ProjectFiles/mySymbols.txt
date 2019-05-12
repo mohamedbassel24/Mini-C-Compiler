@@ -2,13 +2,15 @@ Used Identifiers :-
 x of type Integer
 
 UnUsed Identifiers :- 
-z of type Integer
-y of type Integer
+Salah of type Integer
+Mufeed of type Integer
+Bassel of type Integer
 
 Initilized Identifiers :- 
-z of type Integer
-y of type Integer
 x of type Integer
 
 UnInitilized Identifiers :- 
+Salah of type Integer
+Mufeed of type Integer
+Bassel of type Integer
 

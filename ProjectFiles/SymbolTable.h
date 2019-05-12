@@ -33,9 +33,13 @@
 #define CASE_ 70
 #define WHILE_ 20
 #define ELSE_ 80
+#define CLOSEELSE_ 81
 #define CLOSEWHILE_ 90
 #define CLOSEDOWHILE_ 91
 #define CLOSEFORLOOP_ 92
+#define OPENFUNC_ 100
+#define CLOSEFUNE_ 101
+#define CALLFUNC_ 63
 
 
 typedef struct TypeAndValue {
