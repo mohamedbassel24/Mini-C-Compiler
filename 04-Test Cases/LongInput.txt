@@ -1,0 +1,96 @@
+int compiler;
+compiler=5+6+4+3;
+bool compiling;
+string asd;
+const float num = 1.769;
+const int num2 = 1000000;
+const string welcome = "Compilers";
+const char wel = 'C';
+char weeee = '?';
+
+int x = 0;
+x ++;
+x = x+5;
+int y;
+bool z;
+int r = x / y;
+const float F = 4.18;
+string cufe = "fady";
+
+if (cufe == "fady" && x >= 10)
+{
+	print cufe;
+}
+
+if (z)
+{
+	x = r;
+	if (x == 5)
+	{
+		x = 0-r;
+	}
+}
+else
+{
+	x = x - r;
+}
+
+x = 0-y;
+r = y * 4;
+
+bool check = false;
+
+while ( z == true || z)
+{
+	z = false;
+	check = true;
+}
+
+float a;
+
+do 	{
+		a=1.0;
+	}
+while	(a<0.2);
+
+print a;
+
+print "x = wee";
+
+x = 0;
+
+for(int i = 0; i < 10; i++)
+{
+	x ++;
+	if ( x == 2)
+	{
+		x = 6;
+	}
+}
+
+if ( x != 100)
+{
+	print x;
+}
+
+if ( x <= 3)
+{
+	char v = 'f';
+	print v;
+}
+
+switch (x)
+{
+	case 1:
+		int Bassel;
+	break;
+
+	case 2:
+		int Mufeed;
+	break;
+   
+    default:
+		int Salah;
+	break;		
+}
+

@@ -1,8 +1,0 @@
-int a=0;
-int b=1;
-int func(int a,int b,int a,int b,int a,int b,int a,int b)
-{
-x=a+b;
-return x;
-}
-Func(a,b);

@@ -1,0 +1,3 @@
+ OpCode: 13  Arg1:5  Arg2: 0 Result:Temp1 
+ OpCode: 0  Arg1:   Arg2:   Result:x 
+ OpCode: 1  Arg1:Temp1  Arg2:   Result:x 

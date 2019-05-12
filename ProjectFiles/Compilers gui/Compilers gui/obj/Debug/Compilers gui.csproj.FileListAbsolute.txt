@@ -1,9 +1,0 @@
-C:\Users\Haru\Desktop\Comp\Mini-C-Compiler\ProjectFiles\Compilers gui\Compilers gui\bin\Debug\Compilers gui.exe.config
-C:\Users\Haru\Desktop\Comp\Mini-C-Compiler\ProjectFiles\Compilers gui\Compilers gui\bin\Debug\Compilers gui.exe
-C:\Users\Haru\Desktop\Comp\Mini-C-Compiler\ProjectFiles\Compilers gui\Compilers gui\bin\Debug\Compilers gui.pdb
-C:\Users\Haru\Desktop\Comp\Mini-C-Compiler\ProjectFiles\Compilers gui\Compilers gui\obj\Debug\Compilers gui.csprojResolveAssemblyReference.cache
-C:\Users\Haru\Desktop\Comp\Mini-C-Compiler\ProjectFiles\Compilers gui\Compilers gui\obj\Debug\Compilers_gui.Form1.resources
-C:\Users\Haru\Desktop\Comp\Mini-C-Compiler\ProjectFiles\Compilers gui\Compilers gui\obj\Debug\Compilers_gui.Properties.Resources.resources
-C:\Users\Haru\Desktop\Comp\Mini-C-Compiler\ProjectFiles\Compilers gui\Compilers gui\obj\Debug\Compilers gui.csproj.GenerateResource.Cache
-C:\Users\Haru\Desktop\Comp\Mini-C-Compiler\ProjectFiles\Compilers gui\Compilers gui\obj\Debug\Compilers gui.exe
-C:\Users\Haru\Desktop\Comp\Mini-C-Compiler\ProjectFiles\Compilers gui\Compilers gui\obj\Debug\Compilers gui.pdb

@@ -1,0 +1,13 @@
+{
+int weee;
+int y;
+int x;
+x=5.2;
+int z;
+z=6+5.2;
+
+float IM;
+char Complier;
+int x;
+}
+x=5;

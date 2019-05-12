@@ -1,0 +1,8 @@
+int Func(int y1,int y2)
+{
+int  dummy=0;
+return dummy;
+}
+int x1;
+int x2;
+int x3=Func(x1,x2);

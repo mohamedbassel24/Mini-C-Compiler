@@ -1,0 +1,8 @@
+MOV R0 , 5 
+MOV R6 , 0 
+DIV R6 
+MOV Temp1 , R0 
+MOV R0 ,   
+MOV x , R0 
+MOV R1 , Temp1 
+MOV x , R1 
